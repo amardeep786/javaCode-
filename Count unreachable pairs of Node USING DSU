@@ -1,0 +1,167 @@
+class Solution {
+
+    int parent[];
+    int rank[];
+
+    public long countPairs(int n, int[][] edges) {
+        
+
+        //********************USING DFS********************************//
+
+
+        // int totalEdge = edges.length;
+       
+        // long result = 0;
+        // if(totalEdge == 0)
+        // { 
+            
+        //     // return (long)((n*(n-1))/2);
+
+        //     return (long)n*(n-1)/2;
+        // }
+
+        // Map<Integer,ArrayList<Integer>> adj = new HashMap<>();
+
+        // for(int i=0;i<totalEdge;i++)
+        // {
+        //     int x = edges[i][0];
+        //     int y = edges[i][1];
+
+        //     adj.computeIfAbsent(x,k->new ArrayList<>()).add(y);
+        //     adj.computeIfAbsent(y,k->new ArrayList<>()).add(x);
+
+            
+
+        // }
+
+        // boolean[]visited = new boolean[n];
+
+        
+        // long remaining = n;
+
+        // for(int i=0;i<n;i++)
+        // {
+            
+            
+        //     if(!visited[i])
+        //     {
+                
+        //         long[] size = new long[1];
+        //         size[0]=0;
+
+        //         dfs(i,adj,visited,size);
+
+        //         result += size[0] * (remaining -size[0]);
+
+        //         remaining -= size[0];
+        //     }        
+
+            
+        // }
+
+        // return result;
+    // }
+
+
+
+    // void dfs(int curr , Map<Integer,ArrayList<Integer>> adj, boolean[]visited,long[] size)
+    // {
+    //     visited[curr] = true;
+    //     size[0] = size[0]+1 ;
+
+    //     if(adj.containsKey(curr))
+    //     {Iterator<Integer> itr = adj.get(curr).iterator();
+
+    //     while(itr.hasNext())
+    //     {
+    //         int v = itr.next();
+            
+
+    //         if(!visited[v])
+    //         {
+                
+    //             dfs(v,adj,visited,size);
+                
+                
+    //         }
+    //     }}
+
+
+
+    //*******************USING UNION FIND**************************************/
+
+    parent = new int[n];
+    rank = new int[n];
+
+    for(int i = 0;i<n;i++)
+    {
+        parent[i] = i;
+    }
+
+
+
+    Arrays.fill(rank,0);
+
+    for(int i=0;i<edges.length;i++)
+        {
+            int x = edges[i][0];
+            int y = edges[i][1];
+
+            union(x,y);
+
+
+
+        }
+
+        Map<Integer,Integer> map = new HashMap<>();   // stored componenet size of each component
+        for(int i =0;i<n;i++)
+        {
+            int papa = find(i);
+
+            map.put(papa,map.getOrDefault(papa,0)+1);
+        }
+
+        long result = 0;
+        long remainingNodes = n;
+
+        for(Map.Entry<Integer,Integer> entry : map.entrySet())
+        {
+            long size = entry.getValue();
+            result += (long)size * (remainingNodes-(long)size);
+            remainingNodes -= size;
+        }
+
+        return result;
+    }
+
+    void union(int x,int y)
+    {
+        int xParent = find(x);
+        int yParent = find(y);
+
+        if(xParent==yParent)
+        {return;}
+
+        if(rank[xParent]>rank[yParent])
+        {
+            parent[yParent] = xParent;
+        }
+        else if(rank[xParent]<rank[yParent])
+        {
+            parent[xParent] = yParent;
+        }
+        else
+        {
+            parent[xParent] = yParent;
+            rank[yParent]++;
+        }
+    }
+
+    int find(int x)
+    {
+        if(x==parent[x])
+        return x;
+
+        return parent[x] = find(parent[x]);
+    }
+}
