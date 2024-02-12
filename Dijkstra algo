@@ -1,0 +1,51 @@
+Implementation of Dijkstra ALGO
+in JAVA
+
+problem link :- https://www.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/1?itm_source=geeksforgeeks&itm_medium=article&itm_campaign=bottom_sticky_on_article
+**************************************************************************************
+
+ static int[] dijkstra(int V, ArrayList<ArrayList<ArrayList<Integer>>> adj, int S)
+    {
+        
+        int res[] = new int[V];
+        
+        Arrays.fill(res,Integer.MAX_VALUE);
+        res[S]=0;    // source distance with itself is 0
+        
+        // now i need a priority Q where i can store cost an node
+        
+        
+        PriorityQueue<Pair> pq = new PriorityQueue<>();  // min head
+        
+        
+        
+        
+        pq.add(new Pair(0,S)); //added in q
+        
+        while(!pq.isEmpty())
+        {
+            Pair temp = pq.poll();
+            
+            int cost = temp.cost;
+            int vertex = temp.node;
+            
+            for(var edge : adj.get(vertex))
+            {
+                int adjNode = edge.get(0);
+                int dist = edge.get(1);
+                
+                if(cost+dist < res[adjNode])
+                {
+                   res[adjNode]=cost+dist;
+                    pq.offer(new Pair(cost+dist,adjNode));
+                }
+            }     
+            
+            
+        }
+        
+        
+        return res;
+        
+        
+    }
