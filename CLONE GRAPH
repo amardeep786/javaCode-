@@ -1,0 +1,43 @@
+CLONE GRAPH
+
+class Solution{
+    Node cloneGraph(Node node){
+        
+        Node temp = new Node(node.val);
+        
+        //ab clone krna h recursively iske neighbours ko
+        // saath me ek map bna lete hain taaki koi node bn gya h
+        // to dubara nahi bnega
+        //map<node,node > ek purana node usk corresponding new node jo 
+        //hmne bnaya
+        Map<Node,Node> map = new HashMap<>();
+        map.put(node,temp);
+        
+        DFS(node,temp,map);
+        
+        return temp;
+        
+    }
+    
+    void DFS(Node node,Node temp,Map<Node,Node> map)
+    {
+        //original node k neighbours dhund kr clone krte jaao
+        
+        for(Node neigh : node.neighbors)
+        {
+            // ab do case ya to clone hua hoga ya to nai
+            
+            if(!map.containsKey(neigh))
+            {
+                Node cloneNeigh = new Node(neigh.val);
+                map.put(neigh,cloneNeigh);
+                temp.neighbors.add(cloneNeigh);
+                DFS(neigh,cloneNeigh,map);
+            }
+            else
+            {
+                temp.neighbors.add(map.get(neigh));
+            }
+        }
+    }
+}
