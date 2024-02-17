@@ -1,0 +1,94 @@
+class pair implements Comparable<pair>
+{
+    int cost;
+    int node;
+
+    pair(int cost,int node)
+    {
+        this.cost = cost;
+        this.node = node;
+    }
+
+    public int compareTo(pair other)
+    {
+        return Integer.compare(this.cost,other.cost);
+    }
+}
+
+
+
+
+
+class Solution {
+    public int networkDelayTime(int[][] times, int n, int k) {
+
+        int res[] = new int[n+1];       // to store min distance from source ie k here
+
+        Arrays.fill(res,Integer.MAX_VALUE);
+
+        res[k] = 0;
+
+
+        Map<Integer,ArrayList<pair>> map = new HashMap<>();
+        //make adjacency list
+        for(int i = 0;i<times.length;i++)
+        {
+            int temp[] = times[i];
+
+            if(!map.containsKey(temp[0]))
+            {
+                
+                map.put(temp[0],new ArrayList<>());
+            }
+            map.get(temp[0]).add(new pair(temp[2],temp[1]));
+        
+
+        }
+
+
+
+        
+
+    PriorityQueue<pair> pq = new PriorityQueue<>();
+
+    pq.offer(new pair(0,k));
+
+    while(!pq.isEmpty())
+    {
+        pair temp = pq.poll();
+
+        int cost = temp.cost;
+        
+
+        int vertex = temp.node;
+        
+
+
+        if(map.get(vertex)!= null)
+        for(var edges: map.get(vertex))
+        {
+           
+            int neighbour = edges.node;
+            
+            
+            int costNeigh = edges.cost;
+          
+
+            if(cost + costNeigh < res[neighbour])
+            {
+                
+                res[neighbour]=cost+costNeigh;
+                    pq.offer(new pair(res[neighbour],neighbour));
+            }
+
+
+        }
+    }
+
+    int ans = Integer.MIN_VALUE;
+        for (int i = 1; i <= n; i++)
+            ans = Math.max(ans, res[i]);
+
+        return ans == Integer.MAX_VALUE ? -1 : ans;
+    }
+}
