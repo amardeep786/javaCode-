@@ -1,0 +1,96 @@
+MEETING ROOM III
+**********************************************
+
+class Solution {
+    public int mostBooked(int n, int[][] meetings) {
+        
+        int roomsUsedCount[] = new int[n]; //initially n rooms and no room is used
+        
+
+        //sort by starting time
+        Arrays.sort(meetings,(arr1,arr2) -> {
+            return Integer.compare(arr1[0],arr2[0]);
+        });
+
+        //to store availablity time of room
+        long lastAvailableAt[] = new long[n];
+
+
+
+        for(int []meet : meetings)
+        {
+            int start = meet[0];
+            int end = meet[1];
+
+            int duration = end-start;
+
+            boolean found = false; //currently room is not found
+
+            // kuj variable jo ki sbse pehle khtm hone wale ka time 
+            // aur room no store krega
+            long earlyEndRoomTime = Long.MAX_VALUE;
+            int earlyEndRoom = 0 ;
+
+
+
+
+
+
+
+
+
+            for(int room = 0;room<n;room++)
+            {
+                //pehle dekho ki koi room availale hojaega kya isske start hone se pehle
+
+                //agar haan to uska last availble time iske start s kam hona chahiye
+
+                if(lastAvailableAt[room] <= start)
+                {
+                    found = true;
+                    lastAvailableAt[room] = end;
+                    roomsUsedCount[room]++ ;
+                    break;
+                }
+
+                //saare rooms booked hain to jo sbse pehle khtam hoga 
+                //to hum dekh rhe hain knsa pehle khtm hoga or uska room no kya h
+
+                if(lastAvailableAt[room] < earlyEndRoomTime)
+                {
+                    earlyEndRoomTime = lastAvailableAt[room];
+                    earlyEndRoom = room;
+
+                }
+
+
+
+            }
+
+            //yaha pe apne ko room nahi mila koi pr hmaare paas sbse pehle khtm hone 
+            //wale room ki detail hai 
+            if(!found)
+            {
+                lastAvailableAt[earlyEndRoom] += duration;
+                roomsUsedCount[earlyEndRoom]++;
+            }
+        }
+
+        //ab dekhlo kiska room jada use hua h
+        int resultRoom = -1 ;
+        int maxUse = 0;
+
+        for(int room = 0;room < n;room++)
+        {
+            if(roomsUsedCount[room] > maxUse)
+            {
+                maxUse = roomsUsedCount[room];
+                resultRoom = room ;
+
+        }
+
+    }
+
+    return resultRoom;
+    }
+}
