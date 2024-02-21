@@ -1,0 +1,30 @@
+BITWISE AND ->  LEFT  to RIGHT from 13 to 18
+
+******************************************************
+
+class Solution {
+    public int rangeBitwiseAnd(int left, int right) {
+        
+        //  say  00010101000
+        // 2nd no    00010101111
+        //  shift right jbtk equal na hojaae
+        //  at one time : both become 00010101
+        //fr isi ans ko jitny baar shift kia h wahi ans hai
+        // keep in mind  1&0 = 0 tb baaki no k last bit kuj b hoga ans m 0 hi hoga
+
+        //time complexity - O( log n) coz worst case me sarre bits right shift krte jauga
+       int shiftCount = 0;
+        while(left!=right)
+        {
+
+            // ek tra se longest common prefix nikaal lia 
+            shiftCount++ ;
+            left = left >> 1;
+            right = right >> 1;
+        }
+
+        return left << shiftCount;
+
+        
+    }
+}
