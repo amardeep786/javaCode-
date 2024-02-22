@@ -1,0 +1,100 @@
+KOSARAJU : 
+problem link : https://www.geeksforgeeks.org/problems/strongly-connected-components-kosarajus-algo/1
+
+//*****************************************************************************************************************************************//
+
+class Solution
+{
+    Stack<Integer> stack = new Stack<>();
+    //Function to find number of strongly connected components in the graph.
+    
+    public int kosaraju(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        
+        // store topological order somewhere because at the end we will apply DFS in this order
+        
+        boolean visited[] = new boolean[V];
+        
+        int result = 0;
+        
+        for(int i = 0; i<V;i++)          // call dfs to fill stack so that we cam store topological order
+        {
+            if(!visited[i])
+                DFS(adj,i,visited);
+        }
+        
+        ArrayList<ArrayList<Integer>> adjRev = doReverse(V,adj);            //reverse edges
+        
+        // //now again make visited false as we again have to apply DFS
+        
+        Arrays.fill(visited,false);
+        
+        while(!stack.isEmpty())
+        {
+            int i = stack.pop();
+            
+            if(!visited[i])
+            {DFSRev(adjRev,i,visited);
+                result++;
+            }
+        }
+        
+        return result ;
+    }
+   
+    
+    public ArrayList<ArrayList<Integer>> doReverse(int V,ArrayList<ArrayList<Integer>> adj)
+    {
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        
+        for (int i = 0; i < V; i++)
+        {
+            res.add(new ArrayList<>()); // Initialize ArrayList for each index
+            
+        }
+                
+                
+        for (int i = 0; i < V; i++) 
+        {
+              for(var edge : adj.get(i)) 
+                    {
+                        res.get(edge).add(i);
+                               
+                    }            
+        }
+        
+        
+        return res;
+    }
+    
+    public void DFS(ArrayList<ArrayList<Integer>> adj,int curr,boolean visited[])
+    {
+        visited[curr] = true;
+        
+       // Iterator itr = adj.get(curr).iterator();
+      
+        
+       for (var edge : adj.get(curr))
+        {
+           
+            if(!visited[edge])
+            DFS(adj,edge,visited);
+        }
+        stack.push(curr);
+        
+    }
+    
+    public void DFSRev(ArrayList<ArrayList<Integer>> adjRev,int curr,boolean visited[])
+    {
+        visited[curr] = true;
+        
+        for (var list : adjRev.get(curr))
+        {
+           
+            if( !visited[list])
+            DFSRev(adjRev,list,visited);
+        }
+        
+        
+    }
+}
