@@ -1,0 +1,179 @@
+EULER PATH AND CIRCUIT : https://www.geeksforgeeks.org/problems/euler-circuit-and-path/1
+*********************************************************************************************************************************************************************************************
+
+class Solution{
+    public int isEulerCircuit(int V, List<Integer>[] adj) 
+    {
+       //pehle ye dekh lete hain ki non zero degree wale vertec connected hain ki nahi 
+       
+       if(isConnected(V,adj) == false)
+       return 0;
+       
+       //yaha takk sbhi connected hain nonZero degree wale to ab oddDegree wale kitne hain
+       //agar oddDegree wale 2 hue to o euler path hai 
+       //agar 0 hue to euler circuit hai 
+       //agr > 2 hue to kuj nai h
+       
+       int count = 0;
+       
+       for(int i = 0;i<adj.length;i++)
+       {
+           if(adj[i].size() %2 != 0)
+           count++ ;
+       }
+       
+       if(count == 2)
+       return 1;
+       else if(count == 0)
+       return 2;
+       else return 0;
+       
+       
+       
+       
+       
+       
+    }
+    
+    public boolean isConnected(int V, List<Integer>[] adj)
+    {
+        //kisi ek non zero deggree wale ko dhund k DFS maar k dekhlo ki sbhi connected to haina 
+        
+        int nonZeroDegree = -1 ;
+        
+        for(int i = 0;i<adj.length;i++)
+        {
+            if(adj[i].size() != 0)  //non zero degree wala vertex chahiye
+            {
+                nonZeroDegree = i ;
+                break;
+            }
+        }
+        
+        boolean visited[] = new boolean[V];
+        DFS(adj,nonZeroDegree,visited); // agr connected hue sb tb to theek hai wrna unconnected ki degree dekho 
+           
+                                        //agr koi non zero degree wala reh gya to false bhejdo
+                                        
+        for(int i = 0 ; i < V;i++)
+        {
+            //agr kisi ki degree non zero hai or wo abhi tk visit nai hua to false krdo return 
+            //qki path ya circuit kuj b nai hoga
+            
+            if(adj[i].size()!= 0 && !visited[i])
+            {
+                return false;
+            }
+        }
+        
+        return true ;
+    }
+    
+    public void DFS ( List<Integer>[] adj , int curr ,boolean visited[])
+    {
+        visited[curr] = true;
+        
+        for(var neigh : adj[curr])
+        {
+            if(!visited[neigh])
+            DFS(adj,neigh,visited);
+            
+        }
+    }
+    
+    
+    
+}
+
+
+*****************************************************************************************************************************************************************************************
+
+QUE 2 ) https://www.geeksforgeeks.org/problems/euler-circuit-in-a-directed-graph/1
+
+class Solution
+{
+    public boolean isEularCircuitExist(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        
+       //pehle ye dekh lete hain ki non zero degree wale vertec connected hain ki nahi 
+       
+       if(V==1)return true;
+       
+       if(isConnected(V,adj) == false)
+       return false;
+       
+       //yaha takk sbhi connected hain nonZero degree wale to ab oddDegree wale kitne hain
+       //agar oddDegree wale 2 hue to o euler path hai 
+       //agar 0 hue to euler circuit hai 
+       //agr > 2 hue to kuj nai h
+       
+       int count = 0;
+       
+       for(int i = 0;i<adj.size();i++)
+       {
+           if(adj.get(i).size() %2 != 0)
+           count++ ;
+       }
+       
+       if(count > 0)
+       return false;
+       
+      return true;
+       
+       
+       
+       
+       
+       
+    }
+    
+    public boolean isConnected(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        //kisi ek non zero deggree wale ko dhund k DFS maar k dekhlo ki sbhi connected to haina 
+        
+        int nonZeroDegree = -1 ;
+        
+        for(int i = 0;i<adj.size();i++)
+        {
+            if(adj.get(i).size() != 0)  //non zero degree wala vertex chahiye
+            {
+                nonZeroDegree = i ;
+                break;
+            }
+        }
+        
+        if(nonZeroDegree == -1)                             { Modified part from above if 0 edges are there }
+        return true;
+        
+        boolean visited[] = new boolean[V];
+        DFS(adj,nonZeroDegree,visited); // agr connected hue sb tb to theek hai wrna unconnected ki degree dekho 
+           
+                                        //agr koi non zero degree wala reh gya to false bhejdo
+                                        
+        for(int i = 0 ; i < V;i++)
+        {
+            //agr kisi ki degree non zero hai or wo abhi tk visit nai hua to false krdo return 
+            //qki path ya circuit kuj b nai hoga
+            
+            if(adj.get(i).size()!= 0 && !visited[i])
+            {
+                return false;
+            }
+        }
+        
+        return true ;
+    }
+    
+    public void DFS ( ArrayList<ArrayList<Integer>> adj , int curr ,boolean visited[])
+    {
+        visited[curr] = true;
+        
+        for(var neigh : adj.get(curr))
+        {
+            if(!visited[neigh])
+            DFS(adj,neigh,visited);
+            
+        }
+    }
+    
+
