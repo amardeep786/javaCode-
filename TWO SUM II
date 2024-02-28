@@ -1,0 +1,33 @@
+TWO SUM : https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
+***********************************************************************************************************************
+
+class Solution {
+    public int[] twoSum(int[] numbers, int target) {
+        
+        int n = numbers.length;
+        int i = 0 ; int j = n-1;  //array sorted hai to kar skte hain
+
+        int res[] = new int[2];
+        while(i<j)
+        {
+            int sum = numbers[i]+numbers[j];
+            if(sum == target)     // agar ith and jth ka sum equal target hua to ans 
+            {res[0]=i+1;
+            res[1]= j+1;
+             break;
+            }
+            else if(sum>target) // agr sum bda hua to mtlb j wali side ko kam krdo as ans target s bda aa rha h 
+            {                      // array sorted hai to j-- krne s value ght kr target k paas aayegi
+                j-- ;
+                continue;
+            }else
+            {
+                i++ ;           // agr sum chhota hua to mtlb i wali side ko bdhao krdo as ans target s chhota aa rha h 
+                continue;       // array sorted hai to i++ krne s value bdh kr target k paas aayegi
+            }
+        }
+
+        return res;
+        
+    }
+}
