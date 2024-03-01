@@ -1,0 +1,27 @@
+MAXIMUM ALTERNATING SUBSEQUENCE : - https://leetcode.com/problems/maximum-alternating-subsequence-sum/
+"""""""""""""""""""""""""""""""""""""""""""BOTTOM UP '""""""""""""""""""""""""""""""""""""""""""""""""""""""'
+
+class Solution {
+    public long maxAlternatingSum(int[] nums) {
+
+        //BOTTOM UP
+
+        // kisi bhi index k paas 2 choice hai yaa to wo previous k elements k kis odd subsequence wale me add ho ya even length k subsequence wale me
+        //suppose agr elemnt 4 hai aur wo kisi subsequence m add hokar odd length bnaata h mtlb wo pehle s even length hoga say [1,2] pehle tha 
+        // ab [1,2,4] bn gya to 4 ki position even hogi to hum pehle k ans me 4 ko add krrege qki 4 aayega even plce p
+        //say [1,2,3] pehle tha ab 4 add hoke [1,2,3,4] bn gya tohh 4 odd pace p add hua mtlb 4 minus hoga jo b inka pehle ka ans tha
+        int n = nums.length;
+        long dp[][] = new long[n+1][2];  // 2 size isliy ki 0 pe even bne uska ans and 1 p odd
+
+        for(int i = 1 ; i<n+1;i++) // hrek element p traverse kr rhe h and 1 s isliy start kis dp[i-1] valid rhe
+        {
+            //even
+            dp[i][0] = Math.max(dp[i-1][1]-nums[i-1],dp[i-1][0]);  //agar elemnt lenge to purani value - curr element else purane even ta ka ans jo b max hai wahi ans hoga
+
+            //odd
+            dp[i][1] = Math.max(dp[i-1][0]+nums[i-1],dp[i-1][1]); //agar elemnt lenge to purani value + curr element else purane odd ta ka ans jo b max hai wahi ans hoga
+        }
+
+        return Math.max(dp[n][0],dp[n][1]); // last row m jo bhi maximum h wahi ans hoga
+    }
+}
