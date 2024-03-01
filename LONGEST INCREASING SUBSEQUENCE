@@ -1,0 +1,99 @@
+LIS : https://leetcode.com/problems/longest-increasing-subsequence/
+
+____________________________________________________________________________________________________
+
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+
+        // int output[] = new int[nums.length];
+
+        // output[0] = 1;
+
+        // for(int i = 1;i<nums.length;i++)
+        // {
+        //     output[i] = 1 ;
+
+        //     for(int j = i-1;j>=0;j--)
+        //     {
+        //         if(nums[j]>=nums[i])
+        //         continue;
+
+        //         int possibleAns = output[j]+1;
+
+        //         if(possibleAns > output[i])
+        //         output[i] = possibleAns;
+        //     }
+        // }
+        // return Arrays.stream(output).max().orElseThrow();
+
+        //*************************RECURSION METHOD ****************************************************************/
+    //     int n = nums.length;
+    //     int [][] dp = new int[n+1][n+1];
+
+    //     for(var row :dp)
+    //     {
+    //         Arrays.fill(row,-1);
+    //     }
+
+    //     return solve(nums,0,-1,dp);
+    // }
+
+    // public int  solve(int[] nums , int index , int prev,int [][] dp)  // prev is used to point last element ie added to our seq if curr element is greater than nums[p] only then we take it
+    // {
+    //     int n = nums.length;
+    //     if(index >= n)
+    //     {
+    //         return 0;
+    //     }
+
+    //     if(prev != -1 && dp[index][prev] != -1)
+    //     return dp[index][prev];
+    //     int take = 0 ;
+    //     if(prev == -1 || nums[index] > nums[prev])
+    //     {
+    //         take = 1 + solve(nums,index+1,index,dp);
+    //     }
+
+    //     int notPick = solve(nums,index+1,prev,dp);
+
+    //         if(prev != -1)
+    //             dp[index][prev] = Math.max(take,notPick);
+    //     return   Math.max(take,notPick);
+
+//******************************************************MEMOIZATION END********************************************************* */
+
+
+//******************************************************BOTTOM UP ********************************************************* */
+    
+    
+    int output[] = new int[nums.length];
+
+    Arrays.fill(output,1);
+
+    for(int i = 1;i<nums.length;i++)
+    {
+        for(int j = 0;j<i;j++)
+        {
+            if(nums[j]>= nums[i])
+            continue;
+
+             int possibleAns = output[j]+1;
+
+             if(possibleAns > output[i])
+             {output[i] = possibleAns;}
+
+            //output[i] = output[j]+1;
+        }
+    }
+    
+    
+    int max = 1;
+    for(var i : output)
+    {
+        max = Math.max(max,i);
+    }
+
+    return max;
+    
+    }
+}
