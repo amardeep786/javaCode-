@@ -1,0 +1,191 @@
+Maximum Balanced Subsequence Sum : https://leetcode.com/problems/maximum-balanced-subsequence-sum/description/
+LONGEST INCREASING SUBSEQUENCE VARIANT 
+********************************************************************************************************************************************
+
+// class Solution {
+
+
+//      Map<String,Long> map = new HashMap<>();  //take map to memoize and take long as integer overflow 
+//                                                 // ho rha h 
+//     public long maxBalancedSubsequenceSum(int[] nums) {
+        
+//         // pehle to hme saare balanced subsequence nikaalne hain
+//         // fr jo bhi maximum sum hoga among all possible subsequence wo ans hoga
+
+//         //step 1 : balanced ki condition hai ki nums[i]-nums[j] >= i - j
+//         //rearrange :  nums[i]-i >= nums[j]-j
+
+//         //  hrek value me se uska index subtract kre or uske peeche ki value me s uska index subtract kre
+//         //  to agr bda ans aaya mtlb ek valis subsequence to hai
+
+//         // mtlb hm isme longest increasing jesa dhund rhe h agr mila to valid subsequence 
+//         // to hme uss index k elements ko add krege or max sum dhundege
+
+
+
+
+
+//         //******METHOD 1 RECURSION + MEMO*************O(n^2)*************************************** */ 
+
+//         //since max value 10^9 tkk jaa rhi to utna bda array nai le skte to map lete hain usi s
+//         //memoize krege
+
+
+//         //agr arary me saare value negative ya zero hue to ans maximum value hogi uss array ki
+//         // qki negative ki kisi k saath sum ki to orr negative hi aaegae
+
+       
+//         boolean neg = true;
+
+//         for(var i : nums)
+//         {
+//             if(i > 0)
+//             {
+//                 neg = false;
+//                 break;
+//             }
+//         }
+
+//         if(neg)  //agr neg hai ya 0 h to max element return 
+//         return Arrays.stream(nums).max().orElseThrow(() -> new IllegalArgumentException("Array is empty"));
+//         else   // function call s longest increasing ka logic modify kro
+//             return solve(0,-1,nums);  
+
+//     }
+
+//     public long solve(int index,int prev,int[] nums)
+//     {
+//         int n = nums.length;
+
+//         if(index>= n)
+//         {
+//             return 0;
+//         }
+
+//         String key = index+"_"+prev;  // index + prev is key in String format
+
+//         if(map.containsKey(key))
+//         return map.get(key);
+
+
+//         long take = 0,notTake = 0;
+
+//         if(prev == -1 || nums[index]-index >= nums[prev]-prev)
+//         {
+//             take = nums[index] + solve(index+1,index,nums);  //take value and go ahead
+//         }
+
+//         notTake = solve(index+1,prev,nums);
+
+//         map.put(key,Math.max(take,notTake));
+
+//         return Math.max(take,notTake);
+
+//     }
+// }
+
+//*******RECURSION + MEMO ALSO GIVES TLE*************************************************** */
+
+
+//*******METHOD 2***BOTTOM UP***************************O(n^2)******************** */
+// class Solution {
+
+//     public long maxBalancedSubsequenceSum(int[] nums) {
+
+//         int n =nums.length;
+
+//         int max = Arrays.stream(nums).max().getAsInt();
+
+//         if(max <= 0)
+//         return max;
+
+//         long output[] = new long[n];
+
+//         for(int i = 0;i<n;i++)
+//         {
+//             output[i] = nums[i];
+//         }
+
+//         long res = output[0];
+//         for(int i = 1;i<n;i++)
+//         {
+//             for(int j= 0;j<i;j++)
+//             {
+//                 if(nums[i]-i>= nums[j]-j)
+//                 {
+//                     output[i] = Math.max(output[i],output[j]+nums[i]);
+//                     res = Math.max(res,output[i]);
+//                 }
+//             }
+//         }
+
+//         return res;
+//     }
+// }
+
+//*****************BOTTOM UP ALSO GIVES TLE ****************************************************** */
+
+//***    METHOD 3************** OPTIMAL LIS *****  O(nlogn) ******************/
+
+// to dono(Memo , Bottom up) hi n^2 le rhe hain hme orr kam krna hoga 
+
+// to ab mai hrek nums[i]-i ko map m hi store kraaleta hu wo bhi TreeMap me taaki sorted order me ho
+// value me uss point tk ka sum
+
+  // key : nums[i]-i and value sum of value
+// ab hum log n time hi dund lenge ki current s chhooti value konsi key ha or kiska max value h
+
+///steps ->
+//  map<nums[i]-i , sum > ie key and value
+// for every element we check if nums[j]-j <= nums[i]-i ie currently small value presemt or not
+// map me daalo nums[i]-i agr pehle s hi hai to  usk current sum ya abhi jo sum aay ah unk max s
+//update krdo
+
+class Solution {
+    public long maxBalancedSubsequenceSum(int[] nums) {
+
+            int n = nums.length;
+            // sbse pehle nums[i]-i ki value hi calculate krlete hai hrek element k liy
+            int arr[] = new int[n];
+
+            for(int i = 0;i<n;i++)
+            {
+                arr[i] = nums[i]-i;
+            }
+
+            TreeMap<Integer,Long> map = new TreeMap<>();
+            long ans = Integer.MIN_VALUE;
+            for(int i = 0;i<n;i++)
+            {
+                if(nums[i]<=0)
+                ans = Math.max(ans,nums[i]);
+                else
+                {
+                    long temp = nums[i];
+
+                    if(map.floorKey(arr[i])!= null)  // mtlb hme koi chhoti nums[i]-i ki value mili
+                    {
+                        temp += map.get(map.floorKey(arr[i]));
+                    }
+
+                    while(map.ceilingKey(arr[i])!= null && map.get(map.ceilingKey(arr[i]))<temp) //// mtlb hm wo saari entry delete kr rhe hai
+                    {
+                        map.remove(map.ceilingKey(arr[i]));   // current nums[i]-i se bdi hai and unke value me sum current wale s chhota h
+                    }                                         // eg   3 | 6 and 4| 5 entry hai agr koi 3 se pairing krega to 
+                                                            // wo 4 se nahi bnaega qki sum chhota milega as comp to 3 qki 3 ka sum 6 hai aur 4 ka sum 5 to hum 4 wali entry ko map s hta denge
+                if((map.floorKey(arr[i])== null) || map.get(map.floorKey(arr[i]))<temp)
+                {
+                    map.put(arr[i],temp);
+                }
+                 ans = Math.max(ans,temp);
+            }       
+                
+               
+
+            }
+
+            return ans;
+    }
+}
+
+
