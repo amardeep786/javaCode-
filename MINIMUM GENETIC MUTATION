@@ -1,0 +1,69 @@
+MINIMUM GENETIC MUTATION :  https://leetcode.com/problems/minimum-genetic-mutation/
+
+
+_++++++++++++++++++++++*************************************************************************
+
+class Solution {
+    public int minMutation(String startGene, String endGene, String[] bank) {
+        
+        String choices = "ACGT";
+
+        Set<String> bankSet = new HashSet(Arrays.asList(bank));  // taaki kam smy me bank me dekhle knsa valid 
+                                                                // hai knsa nai
+
+
+        Set<String>visited = new HashSet<>();  // ki koi string dubara na visit krne lge
+        Queue<String> que = new LinkedList<>();
+        que.offer(startGene);
+        visited.add(startGene);
+
+        int level = 0;
+
+        while(!que.isEmpty())
+        {
+           
+
+            int n = que.size();  // multiple match milega to que m daalo and for every match check 
+            
+           while(n-- != 0)
+            {
+                 StringBuilder temp = new StringBuilder(que.poll());
+
+                 if(temp.toString().equals(endGene))
+                 return level;        
+            
+                
+                for(int i = 0;i<choices.length();i++)
+                { 
+                    for(int j = 0;j<temp.length();j++)
+                    {
+                        
+                        StringBuilder neighbour = new StringBuilder(temp);  // is string me chnge krk check krte jaao
+                        neighbour.setCharAt(j,choices.charAt(i));
+
+
+                        
+                        if((!visited.contains(neighbour.toString())) && bankSet.contains(neighbour.toString()))
+                        {
+                            que.offer(neighbour.toString());
+                            //System.out.println(neighbour.toString());
+                            visited.add(neighbour.toString());
+                        }
+
+                        
+                    }
+                    
+                    
+                }
+
+            }
+ 
+            level++;
+        }
+
+
+        return -1;
+
+
+    }
+}
