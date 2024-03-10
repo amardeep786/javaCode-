@@ -1,0 +1,119 @@
+LONGEST STRING CHAIN : https://leetcode.com/problems/longest-string-chain/
+
+
+**************************************************************************************************************************************************************************************************
+
+
+
+///**********************RECURSION + MEMO ********************************************************************** */
+
+// class Solution {
+//     public int longestStrChain(String[] words) {
+        
+//         Arrays.sort(words,(a,b)->Integer.compare(a.length(),b.length()));
+
+//         int dp[][] = new int[1001][1001];
+
+//         for(var row : dp)
+//         Arrays.fill(row,-1);
+
+//         return solve(words,0,-1,dp); // 0 index and prev_element is -1
+//     }
+
+//     public int solve(String[] words , int index , int prev,int dp[][])
+//     {
+//         int n = words.length;
+//         if(index >= n)
+//         return 0;
+
+//         if(prev != -1 &&  dp[index][prev] != -1)
+//         return dp[index][prev];
+
+//         int take = 0;
+//         if(prev == -1 || isPre(words[prev],words[index]))
+//         {
+//             take = 1 + solve(words,index+1,index,dp);
+//         }
+
+//         int notTake = solve(words,index+1,prev,dp);
+
+//          if(prev != -1)
+//          dp[index][prev] = Math.max(take,notTake);
+
+//         return Math.max(take,notTake);
+//     }
+
+//     public boolean isPre(String a,String b)
+//     {
+
+//         int m = a.length();
+//         int n = b.length();
+
+//         if(m>= n || n-m != 1)
+//         return false;
+
+//         int i = 0,j=0;
+
+//         while(i<m && j<n)
+//         {
+//             if(a.charAt(i) == b.charAt(j))
+//             i++ ;
+
+//             j++ ;
+//         }
+
+//         return i==m;
+
+//     }
+// }
+
+///**********************BOTTOM UP********************************************************************** */
+
+class Solution {
+    public int longestStrChain(String[] words) {
+        Arrays.sort(words,(a,b)->Integer.compare(a.length(),b.length()));
+
+        int output[] = new int[words.length];
+
+        Arrays.fill(output,1);
+
+        int res = 1;
+
+        for(int i = 1 ; i<words.length;i++)
+        {
+            for(int j = 0;j<i;j++)
+            {
+                if(isPre(words[j],words[i]))
+                {
+                    output[i] = Math.max(output[i],output[j]+1);
+                    res = Math.max(res,output[i]);
+                }
+            }
+        }
+
+        return res;
+    }
+
+    public boolean isPre(String a,String b)
+    {
+
+        int m = a.length();
+        int n = b.length();
+
+        if(m>= n || n-m != 1)
+        return false;
+
+        int i = 0,j=0;
+
+        while(i<m && j<n)
+        {
+            if(a.charAt(i) == b.charAt(j))
+            i++ ;
+
+            j++ ;
+        }
+
+        return i==m;
+
+    }
+}
