@@ -1,0 +1,139 @@
+Largest Divisible Subset : https://leetcode.com/problems/largest-divisible-subset/description/
+
+******************************************************************************************************************************************************************************************************************
+
+// class Solution {
+    
+        
+        
+//         public List<Integer> largestDivisibleSubset(int[] nums) {
+//         Arrays.sort(nums);
+
+//         int n = nums.length;
+//         int[] t = new int[n];
+//         Arrays.fill(t, 1);
+
+//         int[] prevIdx = new int[n];
+//         Arrays.fill(prevIdx, -1);
+
+//         int lastChosenIndex = 0;
+//         int maxL = 1;
+
+//         for (int i = 0; i < n; i++) {
+//             for (int j = 0; j < i; j++) {
+//                 if (nums[i] % nums[j] == 0) {
+//                     if (t[i] < t[j] + 1) {
+//                         t[i] = t[j] + 1;
+//                         prevIdx[i] = j;
+//                     }
+
+//                     if (t[i] > maxL) {
+//                         maxL = t[i];
+//                         lastChosenIndex = i;
+//                     }
+//                 }
+//             }
+//         }
+
+//         List<Integer> result = new ArrayList<>();
+//         while (lastChosenIndex >= 0) {
+//             result.add(nums[lastChosenIndex]);
+//             lastChosenIndex = prevIdx[lastChosenIndex];
+//         }
+
+//         return result;
+//     }
+
+
+
+
+//     }
+
+//***********RECURSION + MEMO **************************************** */
+// class Solution {   
+        
+//         public List<Integer> largestDivisibleSubset(int[] nums) {
+
+//             ArrayList<Integer> list = new ArrayList<>();
+//             ArrayList<Integer> temp = new ArrayList<>();
+//             Arrays.sort(nums);
+
+//              solve(nums,list,temp,0,-1); //pev is -1 , index = 0            
+//             return list;
+//         }
+
+//         public void solve(int[] nums, ArrayList<Integer> list,ArrayList<Integer> temp ,int index,int prev)
+//         {
+//             int n = nums.length;
+//             if(index >= n)
+//             {
+//                 if(temp.size() > list.size())
+//                 {
+//                     list.clear();
+//                     list.addAll(temp);
+                    
+//                 }
+//                 return ;
+//             }
+
+//             //take
+//             if(prev == -1 || nums[index]%prev == 0)
+//             {
+//                 temp.add(nums[index]);
+//                 solve(nums,list,temp,index+1,nums[index]);
+//                 temp.remove(temp.size()-1);
+//             }
+
+//             solve(nums,list,temp,index+1,prev);
+//         }
+// }
+
+//**********************BOTTOM UP*****************************************************/
+
+class Solution {   
+        
+        public List<Integer> largestDivisibleSubset(int[] nums) {
+
+            Arrays.sort(nums);
+            int n = nums.length;
+            int dp[] = new int[n];
+            Arrays.fill(dp,1);
+
+            int prev[] = new int[n];;  // to keep track of last index chosen
+            Arrays.fill(prev,-1);
+
+            int lastChosenIndex = 0;  // kaha s shuru krna h print krna
+        int maxL = 1;  //max length abhi tkk 1 hai 0 index ka isliy last index = 1
+
+            for(int i = 0;i<n;i++)
+            {
+                for(int j = 0;j<i;j++)
+                {
+                    if(nums[i] % nums[j] == 0)
+                    {
+                        if(dp[i]<dp[j]+1)
+                        {prev[i] = j;
+                        dp[i] = dp[j]+1;}
+                        
+                    }
+
+                    if(dp[i]>maxL)
+                    {
+                        maxL = dp[i];
+                        lastChosenIndex = i;
+                    }
+                }
+            }
+
+            List<Integer> res = new ArrayList<>();
+
+            while(lastChosenIndex >= 0)
+            {
+                res.add(nums[lastChosenIndex]);
+                lastChosenIndex = prev[lastChosenIndex];
+            }
+        return res;
+
+            
+        }
+}
