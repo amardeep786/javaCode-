@@ -1,0 +1,51 @@
+TRAPPING RAIN WATER : https://leetcode.com/problems/trapping-rain-water/
+
+************************************************************************************************
+
+class Solution {
+    public int trap(int[] height) {
+        
+        int n = height.length;
+        int leftMax[] = getLeftMax(height,n);
+        int rightMax[] = getRightMax(height,n);
+        
+        int totalWater = 0;
+        for(int i = 0;i<n;i++)
+        {
+            int currStoredWater = Math.min(leftMax[i],rightMax[i]) - height[i]; //left ya right m s jo b kam                                                                       // utna paani store hoga - uska height
+            
+            totalWater += currStoredWater ;
+            
+        }
+        
+        return totalWater;
+    }
+    
+    public int[] getLeftMax(int[] height,int n)  //left me konsa max hai sbk liy nikaal lia 
+    {
+        int res[] = new int[n];
+        
+        res[0] = height[0];
+        
+        for(int i = 1;i<n;i++)
+        {
+            res[i] = Math.max(res[i-1] , height[i]);
+        }
+        
+        return res;
+    }
+    
+    public int[] getRightMax(int[] height,int n)  //right me konsa max hai sbk liy nikaal lia 
+    {
+        int res[] = new int[n];
+        
+        res[n-1] = height[n-1];  //rightmost s start krte h
+        
+        for(int i = n-2;i>=0;i--)
+        {
+            res[i] = Math.max(res[i+1] , height[i]);
+        }
+        
+        return res;
+    }
+}
