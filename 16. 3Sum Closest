@@ -1,0 +1,46 @@
+16. 3Sum Closest : https://leetcode.com/problems/3sum-closest/submissions/
+
+**********************************************************************************************************************************************************************************************
+
+class Solution {
+    public int threeSumClosest(int[] nums, int target) {
+        
+        
+        int closestSum = Integer.MAX_VALUE;
+        int n = nums.length;
+        
+        Arrays.sort(nums);          // taaki 2 pointer wala logic lga ske
+        
+        for(int i = 0 ; i<=n-3;i++)
+        {
+            
+            int j = i+1;
+            int k = n-1;
+            
+            while(j<k)
+            {
+                int sum = nums[i]+nums[j]+nums[k];
+                
+            if(Math.abs(target - sum) < Math.abs(target - closestSum))//agar current sum chota hai prevcalculated se
+                {
+                    closestSum = sum ;                          // toh update krdo closest sum ko 
+                }
+                
+                if(sum < target)   // agr sum chhota hai tp bde ki trf jaao 
+                {
+                    j++ ;
+                }
+                else                // agr sum bda hai to chhote ki trf jaao 
+                {
+                    k-- ;
+                }
+            }
+            
+            
+            
+            
+        }
+        
+        return closestSum ;
+    }
+}
