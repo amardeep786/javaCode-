@@ -1,0 +1,56 @@
+FACTORIAL OF LARGE NUMBER : https://www.geeksforgeeks.org/problems/factorials-of-large-numbers2508/1?itm_source=geeksforgeeks&itm_medium=article&itm_campaign=bottom_sticky_on_article
+
+*******************************************************************************************************************************************************************
+
+class Solution {
+    
+     int resSize = 1 ;
+     ArrayList<Integer> factorial(int N){
+        
+        int[] res = new int[10000];  // ek res ka array
+        
+        res[0]=1;   // 0th position p 1 add krdia
+        
+        for(int i = 2 ; i <= N;i++)   // 1 * 2*3*4 and so on
+        {
+            multiply(res,i);
+        }
+        
+        ArrayList<Integer> result = new ArrayList<>();  //res array me hmaara ans reverse me hoga to uska rev
+                                                        // krk hum apne result m daal rhe hain
+        for(int i = resSize-1;i>=0;i--)
+        {
+            result.add(res[i]);
+        }
+        
+        
+        return result;
+    }
+    
+     public void multiply(int[] res , int mul)
+    {
+        int carry = 0;
+        
+        int n = res.length;
+        
+        for(int i = 0;i < resSize;i++)
+        {
+            int result = mul * res[i];   // array k hrek element s multioly krk unit place array m daalo and 
+            result+=carry;              // carry ko bchao then add carry in next iteration
+            
+            res[i] = result%10;
+            
+            carry = result / 10 ;
+            
+           
+        }
+         while(carry > 0)  // carry may be 12 so store this in array too jo baad m bche hue carry honge
+            {
+                res[resSize] = carry%10 ;
+                carry /= 10;
+                resSize++;
+            }
+    }
+    
+    
+}
