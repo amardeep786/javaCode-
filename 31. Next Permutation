@@ -1,0 +1,82 @@
+31. Next Permutation : https://leetcode.com/problems/next-permutation/
+
+//*************************************************************************************************************************************************************************//
+
+class Solution {
+    public void nextPermutation(int[] nums) {
+        
+        
+        // observation : hm chaahege ki longer prefix match ho orr last wali values ko swap krde taaki just greater mil ske
+         //    [1,2,3,5]  toh iska [1,2 5,3] next permutaion hai isme 2 length ki common prefix hai 
+        // iss chiz ko hum last s dekhe toh  increasing hona chahiye from right to left orr kahi b dip aaya mtlb [6,2,4,3,1,0]  to 0 , 1 ,3 , 4 tkk increasing hai 
+        // and 2 dip lea dega graph me  to humm 3 ko just 2 se bde wale s swap krdege ie [6,3,4,2,1,0] ie 2 se bde 3 , 4 the pr hum 3 se swap kr rhe hain taaki original number
+        // k close rhen abb [6,3] k  baad hme minimum s minimum chahiye too isk baad wale part abhi b increasing hi hai [4,3,1,0] when view from right to isko reverse krdo 
+        // ya [6,3] k baad wale part ko sort krdo  dono chlega 
+        
+        // sort -> nlogn or reverse -> n to hum reverse krege
+        
+        
+        //Step 1 : find wo index jaha dip aa rha h 
+        
+        int dipIndex = -1 ;         //dipIndex wo hai jo jaha p dip aaya ie koi chhoti value mili from right side like [3,4,0] to right side s dekho tohh 3 chhota h 4 s to dip aaya
+        
+        int n = nums.length;
+        
+        for(int i= n-2;i>=0;i-- )
+        {
+            if(nums[i]<nums[i+1])
+            {
+                dipIndex = i;
+                break ;
+            }
+        }
+        
+        //Step 2 : dip index wali value ko isse just greater s swap kroo  since right me s pehli curent value s bdi value hi greater hogi kuki wo increasing me thi
+        // eg :  [6,2,4,3,1,0] dipIndex = 1 to element at 1 is 2 ab  to 4 and 3 dono bde hai pr right s first value jo ki 2 s bdi h wo hai 3 to wahi just grater hogi 2 se qki wo 
+        // increasing part tha  to swap with first value greater than 2 in right side which is 3
+        
+        //pr ye kaam tb hi krege jb koi dipIndex mila ho agr nahi mila mtlb jo given permutation hai wo sbs bdi hai [6,4,3,2,1,0] to iss case me iss array ko reverse krk bhej do
+        
+        if(dipIndex != -1){
+        for(int i = n-1;i>dipIndex;i--)
+        {
+            if(nums[i]>nums[dipIndex])
+            {
+                swap(nums,i,dipIndex);
+                break;
+            }
+        }
+        }
+        
+        
+        if(dipIndex != -1)
+        {
+            reverse(nums,dipIndex+1,n-1);  // dipIndex k aage s reverse kro agr dipIndex mila tohh
+        }else
+        {
+            reverse(nums,0,n-1);  // saara array reverse krdo agr dipIndex nahi mila 
+        }
+        
+    }
+    public void reverse(int[] nums , int i,int j)
+    {
+        if(i==j)return;
+        
+        int k = 0;
+        
+        for(int rev = i;rev <= (i+j)/2 ; rev++)
+        {          
+            swap(nums,rev,j-k);
+            k++;
+        }
+    }
+    
+    public void swap(int[] nums , int i,int j)
+    {
+        if(nums.length==1) return ;
+        
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
