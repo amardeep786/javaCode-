@@ -1,0 +1,77 @@
+Largest subsquare surrounded by X : https://www.geeksforgeeks.org/problems/largest-subsquare-surrounded-by-x0558/1
+
+*********************************************************************************************************************************************************
+
+class Solution {
+    int largestSubsquare(int n, char a[][]) {
+        
+        int hor[][] = new int[n][n];
+        
+     
+        
+        for(int i = 0;i<n;i++)    // check ki cconsecutive contigus kitna h maximim horizontally
+        {
+            for(int j = 0;j<n;j++)
+            {
+                if(a[i][j] == 'O')
+                {
+                    hor[i][j] = 0;
+                }else
+                {
+                    
+                    hor[i][j] = j==0?1 :1 + hor[i][j-1] ;
+                }
+            }
+        }
+        
+        
+        int ver[][] = new int[n][n];
+        
+        for(int i = 0;i<n;i++)    // check ki cconsecutive contigus kitna h maximim vertically
+        {
+            for(int j = 0;j<n;j++)
+            {
+                if(a[i][j] == 'O')
+                {
+                    ver[i][j] = 0;
+                }else
+                {
+                    
+                    ver[i][j] = i==0?1:1 + ver[i-1][j] ;
+                }
+            }
+        }
+        
+
+        int res = 0;
+        
+        //traval on matrix and check by side
+        
+        for(int i = n-1;i>=0;i--)
+        {
+            for(int j = n-1;j>=0;j--)
+            {
+                int possSide = Math.min(hor[i][j],ver[i][j]);
+                
+                while(possSide > res)
+                {
+                   
+                    
+                    if(possSide <= ver[i][j-possSide+1] && possSide <= hor[i-possSide+1][j])  // poss side - jaoge to waha pr utni value 
+                    {                                                                       // yaa usse jada milni chahiye
+                        res = possSide;
+                        break;
+                        
+                    }else
+                    {
+                        possSide-- ;
+                    }
+                }
+            }
+        }
+        
+        return res;
+        
+        
+    }
+};
