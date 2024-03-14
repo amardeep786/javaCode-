@@ -1,0 +1,135 @@
+10. Regular Expression Matching : https://leetcode.com/problems/regular-expression-matching/description/
+
+************************************************************************************************************************************************************************************************************
+
+class Solution {
+    public boolean isMatch(String s, String p) {
+        
+        int stringLength = s.length();
+        int patternLength = p.length();
+        
+        
+        return solve(s,p,0,0,stringLength,patternLength);
+        }
+    
+        public boolean solve(String s, String p , int index1,int index2,int length1,int length2)
+        {
+            if(index2 == length2)  // agar dono string or pattern ek hi smy p index k baahr hue toh ek match hogya
+            {
+                if(index1== length1)
+                    return true;
+                else
+                    return false;
+            }
+
+            if(index2+1 < length2 && p.charAt(index2+1) == '*')
+                {
+                    // 2 cases take or not take
+                    if(index1 < length1 && (s.charAt(index1) == p.charAt(index2) || p.charAt(index2)=='.'))
+                    {
+                        boolean take = solve(s,p,index1+1,index2,length1,length2);
+                        
+                        
+                        boolean notTake = solve(s,p,index1 ,index2+2,length1,length2);
+                        
+                        return take || notTake ;
+                    }
+                    else  // agr * hua pe pr pehla charcter match nahi hua to hum maan lenge ki * ko 0 baar lia hai orr 2 aage bdh k check krege 
+                    {
+                        return solve(s,p,index1,index2+2,length1,length2);
+                    }
+                    
+                }
+            
+            // return (p.charAt(index2) == '.' || index1 < length1 && (s.charAt(index1) == p.charAt(index2)) && solve(s,p,index1+1,index2+1,length1,length2));
+            return (index1 < length1 && (p.charAt(index2) == '.' || s.charAt(index1) == p.charAt(index2)) && solve(s,p,index1+1,index2+1,length1,length2));
+                //pehle index1 less than check krna h wrna aakhir m dot hua or string pehle hi out of bound h to ye false dega
+            
+        }     
+    }
+
+
+//***********************************MY METHOD ****************************************************************************************/
+
+class Solution {
+    public boolean isMatch(String s, String p) {
+        
+        int stringLength = s.length();
+        int patternLength = p.length();
+        
+        
+        return solve(s,p,0,0,stringLength,patternLength);
+        }
+    
+        public boolean solve(String s, String p , int index1,int index2,int length1,int length2)
+        {
+            if(index2 == length2)  // agar dono string or pattern ek hi smy p index k baahr hue toh ek match hogya
+            {
+                if(index1== length1)
+                    return true;
+                else
+                    return false;
+            }
+
+            if(index2+1 < length2 && p.charAt(index2+1) == '*')
+                {
+                    // 2 cases take or not take
+                    if(index1 < length1 && (s.charAt(index1) == p.charAt(index2) || p.charAt(index2)=='.'))
+                    {
+                        boolean take = solve(s,p,index1+1,index2,length1,length2);
+                        
+                        
+                        boolean notTake = solve(s,p,index1 ,index2+2,length1,length2);
+                        
+                        return take || notTake ;
+                    }
+                    else  // agr * hua pe pr pehla charcter match nahi hua to hum maan lenge ki * ko 0 baar lia hai orr 2 aage bdh k check krege 
+                    {
+                        return solve(s,p,index1,index2+2,length1,length2);
+                    }
+                    
+                }
+            
+            // return (p.charAt(index2) == '.' || index1 < length1 && (s.charAt(index1) == p.charAt(index2)) && solve(s,p,index1+1,index2+1,length1,length2));
+            return (index1 < length1 && (p.charAt(index2) == '.' || s.charAt(index1) == p.charAt(index2)) && solve(s,p,index1+1,index2+1,length1,length2));
+                //pehle index1 less than check krna h wrna aakhir m dot hua or string pehle hi out of bound h to ye false dega
+            
+        }     
+    }
+
+
+//***************************************************************************************************************************/
+
+// class Solution {
+//     public boolean isMatch(String s, String p) {
+//         int stringLength = s.length();
+//         int patternLength = p.length();
+        
+//         return solve(s, p, 0, 0, stringLength, patternLength);
+//     }
+    
+//     public boolean solve(String s, String p , int index1, int index2, int length1, int length2) {
+//         if (index2 >= length2) {
+//             // If the pattern is exhausted, check if the string is also exhausted.
+//             return index1 >= length1;
+//         }
+
+//         if (index2 + 1 < length2 && p.charAt(index2 + 1) == '*') {
+//             // Handling '*' character
+//             if (index1 < length1 && (s.charAt(index1) == p.charAt(index2) || p.charAt(index2) == '.')) {
+//                 // Case when character preceding '*' matches
+//                 // Recursive calls to check both taking and not taking the character preceding '*'
+//                 boolean take = solve(s, p, index1 + 1, index2, length1, length2);
+//                 boolean notTake = solve(s, p, index1, index2 + 2, length1, length2);
+//                 return take || notTake;
+//             } else {
+//                 // Case when character preceding '*' doesn't match
+//                 // Move forward in the pattern as '*'
+//                 return solve(s, p, index1, index2 + 2, length1, length2);
+//             }
+//         }
+
+//         // Regular character or '.' case
+//         return (index1 < length1 && index2 < length2 && (p.charAt(index2) == '.' || s.charAt(index1) == p.charAt(index2))) && solve(s, p, index1 + 1, index2 + 1, length1, length2);
+//     }
+// }
