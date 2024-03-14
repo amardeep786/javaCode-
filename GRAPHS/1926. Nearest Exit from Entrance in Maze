@@ -1,0 +1,71 @@
+1926. Nearest Exit from Entrance in Maze :https://leetcode.com/problems/nearest-exit-from-entrance-in-maze/description/
+
+*********************************************************************************************************************************************************
+
+class Solution {
+    public int nearestExit(char[][] maze, int[] entrance) {
+        
+        Queue< int[]> que = new LinkedList<>();
+        que.offer(entrance);
+
+        maze[entrance[0]][entrance[1]] = '+';
+
+        int m = maze.length;  //rows
+        int n = maze[0].length; //columns
+
+        int start_x = entrance[0];
+        int start_y = entrance[1];
+
+        int shortestDist = 0 ;
+        // int currDist = 0;
+
+        while(!que.isEmpty())
+        {
+            int N = que.size();
+
+            while(N-- != 0){
+                int [] curr = que.poll();
+                int curr_x = curr[0];
+                int curr_y = curr[1];
+               // System.out.println(!Arrays.equals(curr,entrance));
+
+               //!Arrays.equals(curr,entrance) works and curr_x != start_x || curr_y != start_y is not 
+
+                if((!Arrays.equals(curr,entrance)) && (curr_x == 0  || curr_y == 0 || curr_x == m-1 || curr_y == n-1))
+                {
+                    return shortestDist;
+                    
+                }
+                
+                if(curr_y-1 >=0 && maze[curr_x][curr_y-1]=='.')  //left
+                {
+                    que.offer(new int[]{curr_x,curr_y-1});
+                    maze[curr_x][curr_y-1]='+';  // to mark visited 
+                }
+                
+                if(curr_y+1 <n && maze[curr_x][curr_y+1]=='.')  //right
+                {
+                    que.offer(new int[]{curr_x,curr_y+1});
+                    maze[curr_x][curr_y+1]='+';
+                }
+                
+                if(curr_x-1 >=0 && maze[curr_x-1][curr_y]=='.')  //up
+                {
+                    que.offer(new int[]{curr_x-1,curr_y});
+                    maze[curr_x-1][curr_y]='+';
+                }
+                
+                if(curr_x+1 <m && maze[curr_x+1][curr_y]=='.')   //down
+                {
+                    que.offer(new int[]{curr_x+1,curr_y});
+                    maze[curr_x+1][curr_y]='+';
+                }
+            }
+            shortestDist++ ;
+
+        }
+
+        return -1 ;
+
+    }
+}
