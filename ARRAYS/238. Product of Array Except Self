@@ -1,0 +1,49 @@
+238. Product of Array Except Self : https://leetcode.com/problems/product-of-array-except-self/description/
+
+*********************************************************************************************************************************************************************************************
+
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        
+        //*******APPROACH 1****************/
+
+        // do product of all elements and for every element do product/ element bu this uses division and we are not allowed to do so
+
+        //*******APPROACH 2****************/
+
+        //take 2 arrays for leftProduct and rightProduct and for every element we store its left product and rightProduct
+
+        // and do left[i] * right[i] for every element 
+
+        // it will work but we use only result array to achieve this ie O(1) space
+
+        //*******APPROACH 3****************/.
+
+        int n = nums.length ;
+
+        int res[] = new int[n];
+
+        res[0] = 1;  //initially assume 1 is cumulative product
+        for(int i = 1;i<n;i++)
+        {
+            res[i] = res[i-1]*nums[i-1];  ///stored left product of all elements
+        }
+
+        //take right product variable and use this as right product
+
+        int rightProduct = 1;
+
+        int i = n-1;
+
+        for(;i>=0;i--)
+        {
+            res[i]=res[i]*rightProduct ;   //rightProduct * left product jo ki array me hi tha
+            rightProduct *=nums[i];         //rightproduct ko nums[i] se multiply krk increase krdia and same process
+        }
+
+        return res;
+
+
+
+    }
+}
