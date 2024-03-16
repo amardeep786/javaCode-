@@ -1,0 +1,90 @@
+2075. Decode the Slanted Ciphertext : https://leetcode.com/problems/decode-the-slanted-ciphertext/
+
+*************************************************************************************************************
+
+// class Solution {
+//     public String decodeCiphertext(String encodedText, int rows) {
+        
+//         // first find number of columns 
+//         // since rows are given and encoded text is given then 
+//         //maximum cols can be length of encodedtext/rows 
+
+//         int cols = (int)Math.ceil(encodedText.length()/rows) ;
+//         //System.out.println(cols);
+
+//         // lets place encoded Text in matrix 
+
+//         char[][] matrix = new char[rows][cols];
+
+//         int k = 0;
+
+//          for(int i = 0;i<rows;i++)
+//         {
+//             for(int j = 0;j<cols;j++)
+//             {
+//                 matrix[i][j] = encodedText.charAt(k++) ; //observation ki text ka charAt (i+j) matrix k i+j index p hai
+//             }
+//         }
+
+//         // matrix bnn k tyaar hai ab diagonally traverse krk value collect kro and leading trailing blanks ha dena 
+
+//         //
+
+//         StringBuilder sb = new StringBuilder();
+
+//         Map<Integer,StringBuilder> map = new LinkedHashMap<>() ; // key me index i-j store krege and value me jo charcter milta jaega wo 
+//                                                                 // linked hash map s charcter order m append honge 
+//         for(int i = 0;i<rows;i++)
+//         {
+//             for(int j = 0;j<cols;j++)
+//             {
+//                 if(!map.containsKey(i-j))
+//                 {
+//                     map.put(i-j,new StringBuilder());
+//                 }
+//                 map.get(i-j).append(matrix[i][j]);
+//             }
+//         }
+
+//         // apne pas ab various stringbuilder bn gye hain map me sbko append kro ab fr leading andd trailing blanks hta dena
+
+//         for(Map.Entry<Integer,StringBuilder> entry:map.entrySet())
+//         {
+//             sb.append(entry.getValue());
+//         }
+
+//         //remove trailing zeroes
+
+        
+
+//         //return sb.toString().trim();  // trim remove both front whitespace and back whitespace but i want only trailing whitespace to 
+//                                         //.. be removed
+
+//        return  sb.toString().replaceAll("\\s+$","");  /*  \ skip and \s is for whitespace and + is for one or more and $ -> at end of string  */
+
+//     }
+// }
+
+/******************METHOD 2 EASY ************************************************* */
+
+
+class Solution {
+    public String decodeCiphertext(String encodedText, int rows) {
+
+        int length = encodedText.length();
+        int cols = length/rows;
+
+        StringBuilder result = new StringBuilder();
+
+        for(int i = 0;i<cols;i++)
+        {
+            for(int j = i;j<length;j=j+cols+1)  // kisi cell me col Add krege to usk neeche phoch jaaege and +1 krege to diagonally
+            {
+                result.append(encodedText.charAt(j));
+            }
+        }
+
+        return result.toString().stripTrailing();  //strip trailing remove trailing whitespace , strip removes from everywhere and strip leading removes 
+                                                    // leading whitespace
+        }
+}
