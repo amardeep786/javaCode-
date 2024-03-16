@@ -1,0 +1,59 @@
+1329. Sort the Matrix Diagonally : https://leetcode.com/problems/sort-the-matrix-diagonally/description/
+
+*******************************************************************************************************************************************
+
+class Solution {
+    public int[][] diagonalSort(int[][] mat) {
+        
+
+        //2D me diagonally trvaerse krege up to down to [i-j] constant hoga and down to up and left to ight to [i+j]
+
+        // map to store [i-j] as key and values in arraylist 
+
+        Map<Integer, ArrayList<Integer>> map = new HashMap<>();
+
+        //traverse matrix and store diagonally values together
+        int rows = mat.length;
+        int cols = mat[0].length ;
+
+        for(int i = 0;i<rows;i++)
+        {
+            for(int j = 0;j<cols;j++)
+            {
+                if(!map.containsKey(i-j))
+                {
+                    map.put(i-j,new ArrayList<>());
+                }
+                map.get(i-j).add(mat[i][j]);  //putting key [i-j] and arraylist m values which ae at diagonal
+            }
+        } 
+
+
+        // ab map m hrek arraylist ko sort krdo
+        for(Map.Entry<Integer,ArrayList<Integer>> entry : map.entrySet())
+        {
+            Collections.sort(entry.getValue());  // by reference aaya h arraylist to sort hojaega map m bhi
+        }
+
+        //ab matrix me fr s value daal do 
+
+        for(int i = 0;i<rows;i++)
+        {
+            for(int j = 0;j<cols;j++)
+            {
+                mat[i][j] = map.get(i-j).remove(0);  // map s pehle value nikaal k matrix m daal do isme shifting b ho rhi h
+            }                                       // hum matrix s last s travel krk map k arraylist s last value daalege to 
+        }                                           //thoda kamm costly hoga because no shifting required then
+
+
+        return mat;
+
+
+
+
+
+
+
+
+    }
+}
