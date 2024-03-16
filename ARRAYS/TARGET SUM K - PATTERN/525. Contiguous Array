@@ -1,0 +1,42 @@
+525. Contiguous Array : https://leetcode.com/problems/contiguous-array/description/
+
+Ques - Given a binary array nums, return the maximum length of a contiguous subarray with an equal number of 0 and 1.
+
+***************************************************************************************************************************************
+
+class Solution {
+    public int findMaxLength(int[] nums) {
+        
+        // isko hum number of substring with target sum K se krskte hain 
+        //yaha pr count store krne k bjaaye hum index store krlenge or max subarray nikaalte rhege
+
+        //logic : agr hum 0 ko -1 ki tra treat krege tohh hume wo largest sub Array nikaalna h jaha p sum 0 ho 
+        // qki  equal 0 and 1 converted to equal -1 and 1 and sum to 0
+
+        Map<Integer,Integer> map = new HashMap<>();
+
+        map.put(0,-1);  // abhi humne sum 0 dekha hai orr currently -1 index p hai
+
+        int cumSum = 0;
+        int largest = 0;
+
+        for(int i = 0;i<nums.length;i++)
+        {
+            cumSum += (nums[i]==0?-1:1);  //treat 0 as -1 
+
+            if(map.containsKey(cumSum))
+            {
+                largest = Math.max(largest,i-map.get(cumSum));
+            }
+            else{map.put(cumSum,i);}  // why ELSE me reason below
+
+            //map.put(cumSum,i); // isko seedha hi nahi daal skte qki for [0 1 0 1] ye 0 ki index uodate krdega ie 2 pr hme largest subarray
+                                // chahiye  to hm pehli baar jo mila usko update nahi krege 
+                                //iskli agr key mili to map m no change agr nahi mili to map m daalo to 
+                                // if k baad  jo put wali line hai use else m daal do 
+        }
+
+        return largest;
+
+    }
+}
