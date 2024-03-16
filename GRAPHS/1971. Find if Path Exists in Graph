@@ -1,0 +1,91 @@
+1971. Find if Path Exists in Graph : https://leetcode.com/problems/find-if-path-exists-in-graph/description/
+
+********************************************************************************************************************************************************************
+// class Solution {
+//     public boolean validPath(int n, int[][] edges, int source, int destination) {
+        
+//         // source s dfs maardo agar destination visited hua to path hai else nai 
+
+//        boolean visited[] = new boolean[n];
+
+//        //create list
+//        ArrayList<Integer> adj [] = new ArrayList[n];
+
+//        for(int i = 0;i<n;i++)
+//        {
+//         adj[i] = new ArrayList<>();
+//        }
+
+//        for(var edge : edges)
+//         {
+//             adj[edge[0]].add(edge[1]);
+//             adj[edge[1]].add(edge[0]);
+//         }
+
+//         dfs(adj,visited,source);
+
+//         if(visited[destination] == true)
+//         return true;
+
+//         return false;
+//     }
+
+
+//     public void dfs(ArrayList<Integer> adj [],boolean visited[],int source)
+//     {
+//         visited[source] = true;
+
+//         for(var neigh : adj[source])
+//         {
+//             if(!visited[neigh])
+//             dfs(adj,visited,neigh);
+//         }
+//     }
+// }
+
+//*******************BY DSU*************************************************** */
+
+//logic ki hrek edge s component bnaalo orr sorce destination ka parent dekhlo same hai to yes else no
+class Solution {
+
+    //int element[];
+    int parent[];
+    public int find(int parent[],int x)
+    {
+        if(parent[x] == x) return x;
+        return parent[x] = find(parent ,parent[x]);
+    }
+
+    public void union(int parent[],int x,int y)
+    {
+        int parOfX = find(parent ,x);
+        int parOfY = find(parent ,y);
+
+        parent[parOfX] = parOfY;
+    }
+
+    public boolean validPath(int n, int[][] edges, int source, int destination) {
+
+        //element = new int[n];
+        parent = new int[n];
+        for(int i = 0;i<n;i++)
+        {
+            parent[i] = i;
+
+        }
+
+        // for eveery edge sbka union krte jao
+
+        for(var edge : edges)
+        {
+            union(parent,edge[0],edge[1]);
+        }
+
+
+
+        return find(parent,source)==find(parent,destination);
+
+        }
+
+
+}
