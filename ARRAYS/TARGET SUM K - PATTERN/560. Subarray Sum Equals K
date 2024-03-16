@@ -1,0 +1,33 @@
+560. Subarray Sum Equals K : https://leetcode.com/problems/subarray-sum-equals-k/ 
+
+**********************************************************************************************************************************
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        
+        Map<Integer,Integer> map = new HashMap<>(); // to store prefix sum and and its count
+        int sum = 0;
+        int count = 0 ;
+        map.put(0,1);
+        
+        for(int i = 0; i < nums.length ;i++)
+        {
+            sum += nums[i];
+
+            // whether we have seen sum-target in map or not
+
+            if(map.containsKey(sum-k))   // agr pehle b kbhi same sum aaya h orr abhi baad m bhi mtlb beech ka sum K hoga 
+            {
+                count += map.get(sum-k);   // count me value add krdo taaki total aaye [1,1,1] and target = 2 pehle map me (1-2) = -1->1 baar dikha aaya 
+                                            // jb next 1 aaya to total sum 2 and 2-2 = 0 and 0 tha hmaare map me to count 1 hogya hmare map me hai mtlb total 1 baar target mila 
+                map.put(sum,map.getOrDefault(sum,0)+1);
+            }
+            else
+            {
+                map.put(sum,map.getOrDefault(sum,0)+1);
+            }
+        }
+        
+        return count;
+        
+    }
+}
