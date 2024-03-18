@@ -1,0 +1,95 @@
+SORT COLORS : 
+
+********************************************************************************************************************
+
+// class Solution {
+//     public void sortColors(int[] nums) {
+        
+//         //******METHOD 1***************O(NlogN) */
+
+//         //Arrays.sort(nums);
+        
+
+        
+//     }
+
+// }
+
+//***********************TWO PASS********************************************************************************************** */
+
+// class Solution {
+//     public void sortColors(int[] nums) {
+        
+//         //Method 2 : take another array of same size and keep count of zeroes ones and twos and fill new array
+
+//         int count0 = 0,count1 =0,count2 =0;
+
+//         for(int i =0 ;i<nums.length;i++)
+//         {
+//             if(nums[i] == 0)
+//             count0++ ;
+//             else if(nums[i] == 1)
+//             count1++;
+//             else count2++ ;
+
+//         }
+
+//         int i = 0;
+//         while(count0 != 0)
+//         {
+//             nums[i++] = 0;
+//             count0-- ;
+//         }
+//         while(count1 != 0)
+//         {
+//             nums[i++] = 1;
+//             count1-- ;
+//         }
+//         while(count2 != 0)
+//         {
+//             nums[i++] = 2;
+//             count2-- ;
+//         }
+
+        
+
+        
+//     }
+
+// }
+
+//**************************ONE PASS SOLUTION ***************************************METHOD3***************************/
+
+class Solution {
+    public void sortColors(int[] nums) {
+        
+       int i = 0,j=0,k= nums.length-1 ;
+
+       while(j<=k)
+       {
+            if(nums[j]==2)
+            {
+                swap(nums,j,k);  // bdi value to k k paas honi chahiye isliy swap krke k pas bhej dia 2 ko
+                k--;
+            }else if(nums[j] == 1)  // agr 1 hai to j sirf aage bdh jaega 
+            {
+                j++ ;
+            }else
+            {
+                swap(nums,i,j); // agar 0 hai toh  hoskta h j aage chla gya ho 1 ko dekh kr or baad m 0 mila toh 
+                i++;            // i and j ko swap krdia  bad dono ab aage chle gye
+                j++;
+            }
+       }
+        
+
+        
+    }
+    public void swap(int[] nums , int i,int j)
+    {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+}
