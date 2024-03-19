@@ -1,0 +1,79 @@
+621. Task Scheduler : https://leetcode.com/problems/task-scheduler/
+
+********************************************************************************************************************
+
+class Solution {
+    public int leastInterval(char[] tasks, int n) {
+        
+        //*****METHOD 1******************************************** */
+
+        // logic : jo jaada baar task aaye hain unko pehle arange kro taaki koi gaps aaye bhi to usme dusre tasks ko insert kr
+        // denge wrna agr kam frequency wale task ko pehle khtm krdenge to last m jaada task walo k beech m gap aayega or hme CPU ko idle rkhna pdega
+
+        //STEP 1 : sbhi task ki frequency nikaal liya or usko priority (max-heap ) m daal do
+
+        int freq[] = new int[26];
+
+        for(char ch : tasks)
+        {
+            freq[ch-'A']++ ;
+        }
+
+        //put in max heap and hme character s mtlb nahi h bs frequency s hi kaam ho jaega
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.reverseOrder()); // max heap
+
+        for(int i : freq)
+        {
+            if(i>0)
+            {
+                pq.add(i);
+            }
+        }
+
+        // STEP 1 yaha tkk khtam hogya h  ab ek time variable le lete hai jo ki ans hoga
+        int time = 0;
+
+        // kisi ek task ki baari n+1 time p aayegi ie 1 uska khud ka + n time wait krrega 
+        //..or haan agr n+1 task ho hi na to uski jaga idle apne aap jaega 
+        // orr hme ye kaam tbtk krna h jbtk que khaali na hojaaye
+
+        while(!pq.isEmpty())
+        {
+            List<Integer> temp = new ArrayList<>();
+            for(int i = 1 ; i<= n+1;i++)  // jitne bhi top k n+1 frequency h unko 1 se ghtaado 
+            {
+                //check krlo kahi pq empty to nahi tbhi krna h 
+                if(!pq.isEmpty())
+                {int fre = pq.poll();
+                fre--;
+                temp.add(fre);}
+            }
+
+            // abhi bhi jinki frequency  0 s jaada h unko frse que m daalna pdega 
+
+            for(Integer i : temp)  // jb wapis daal dia toh ye jo n+1 task schedule hue hain time itne s bdhega b toh .
+            {
+                if(i>0)
+                pq.add(i);
+            }
+
+            // agr pq empty hogya toh jitna list m fre tha utna hi time judega wrna to n+1 time judega qki abhi b task hain 
+            //  suppose ki n+1 = 10 hai but abb list m 1 task k baad queue khaali hogya to hm last m 1 hi jodege na ki 10
+
+            if(pq.isEmpty())
+            {
+                time += temp.size();
+            }else
+            {
+                time += n+1 ;
+            }
+
+            //isk baad s fr s loop chlega jbtk que khaali naa hojaaye 
+
+        }
+
+        // aakhir m time return krdo bss
+        return time ;
+
+    }
+}
