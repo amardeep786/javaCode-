@@ -1,0 +1,81 @@
+2007. Find Original Array From Doubled Array : https://leetcode.com/problems/find-original-array-from-doubled-array/
+
+******************************************************************************************************************************************
+
+class Solution {
+    public int[] findOriginalArray(int[] changed) {
+        
+        int n = changed.length;
+        if(n%2 == 1)return new int[]{};
+        int index = 0;
+        int res[] = new int[n/2];
+
+        //set duplicates hta dega but we need duplicates to hmne map use kia 
+
+//         Set<Integer> set = new HashSet<>();
+
+//         for(int i : changed)
+//         {
+//             set.add(i);
+//         }
+
+//         Iterator itr = set.iterator();
+//         while(itr.hasNext())
+//         {Integer i = (Integer)itr.next();
+//             if(set.contains(2*i))
+//             {
+//                 res[index++] = i ;
+//                 itr.remove();
+//                 itr.remove();
+//             }
+//         }
+
+//         if(set.size() == 0)
+//             return res;
+        
+//         return new int[]{};
+        
+//********************************using MAP****************//
+        // int n = changed.length;
+        // if(n%2 == 1)return new int[]{};
+        
+        // suppose pehle 6 aagya and uska double 12 nahi h to return nahi hona h ..we have to check ki kahi wohi khud kisi
+        //double naa ho isliy do sort
+        
+        Arrays.sort(changed);
+        
+        Map<Integer,Integer> map = new HashMap();
+        
+        
+        for(int i = 0;i<n;i++)   //frequency aa gyi agr ab kisi ka match hai to uski + iski dono ki freq ghtegi 
+        { 
+            map.put(changed[i],map.getOrDefault(changed[i],0)+1);
+        }
+        
+        //int res[] = new int[n/2];
+        
+        
+        // ab for every element of array check in map 
+        
+        for(int i = 0;i<n;i++)
+        {
+            if(map.containsKey(changed[i]) && map.get(changed[i]) == 0)  // agar changed[i] hai orr greater than 0 hai tbhi uska twice check kro 
+                continue;
+            
+            if(!map.containsKey(2* changed[i]) || map.get(2*changed[i]) == 0)  // agar kisi ka twice hai hi nai to return ho jaao 
+            {
+                return new int[]{};  // this possibility ki y khud kisi ka double hoga we eliminated isliy return
+            }
+            else
+            {
+                if(map.get(2*changed[i])>0)   // agar twice bhi hai to dono ki freq ghta do 
+                {res[index++] = changed[i];
+                    map.put(changed[i],map.get(changed[i])-1);
+                map.put(2* changed[i],map.get(2* changed[i])-1);}
+            }
+        }
+        return res;
+        
+        
+    }
+}
