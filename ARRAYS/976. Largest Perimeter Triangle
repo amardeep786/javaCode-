@@ -1,0 +1,38 @@
+976. Largest Perimeter Triangle : https://leetcode.com/problems/largest-perimeter-triangle/
+
+*****************************************************************************************************************************************
+
+class Solution {
+    public int largestPerimeter(int[] nums) {
+        
+        
+        //hme largest perimeter chahiye to hme largest 3 sides chahiye  
+        //but hme ye b to check krna h ki 3 sides se triangle bnega b ki nai 
+        
+        //conditions for 3 sides formed to be triangle :
+        // a+b > c
+        // b+c > a
+        // c+a > b
+        
+        //BRUTE FORCE ME HUM 3 FOR LOOPS LGA K HREK 3 SIDES UTHA K DEKH LENGE KI CONDITION SATISFY HO RHA H KI NAI 
+        // JISKA HOGA USME MAXIMUM PERIMETER NIKAAL LENGE BUT IT IS O(N^3)
+        
+        
+        //**************method 2 *********************************************************//
+        
+        //HUM SORT KRLETE HAIN TAAKI 3 CONDITION CHECK KRNE KI JRURAT NAI H and it is O(nlogn)
+        // AGAR 2 CHHOTE SIDES KA SUM THIRD S BDA AAGYA TO BAAKI BAAKI 2 CONDITION TO APNE AAP SATISFY HO JAAEGI
+        
+        Arrays.sort(nums);
+        int n = nums.length;
+        for(int i = n-3;i>=0;i--)
+        {
+            if(nums[i]+nums[i+1] > nums[i+2])
+            {
+                return nums[i]+nums[i+1]+nums[i+2];
+            }
+        }
+        
+        return 0;
+    }
+}
