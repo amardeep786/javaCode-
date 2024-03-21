@@ -1,0 +1,31 @@
+334. Increasing Triplet Subsequence : https://leetcode.com/problems/increasing-triplet-subsequence/
+
+*********************************************************************************************************************************************
+
+class Solution {
+    public boolean increasingTriplet(int[] nums) {
+        
+        int min1 = Integer.MAX_VALUE;
+        int min2 = Integer.MAX_VALUE;
+        
+        for(int min3 = 0;min3<nums.length;min3++)
+        {
+            if(nums[min3] <= min1)    //pehle min1 se chhota koi mila ki nai ye check krooo 
+            {
+                min1 = nums[min3];
+                // min2 = Integer.MAX_VALUE;
+                
+            }else if(nums[min3]<=min2) // agar min1 s chhota nai mila frr min2 se chhota koi mila ki nai ye check krooo 
+            {                       //equality ki condition isliy ki [1,1,1] agya to second ko hm min2 m daal denge jbki wo min1 hi hai abhi tkk
+                min2 = nums[min3];
+            }else                   // agr dono false hai mtlb iss if m aagye to hme do min s bda number mil gya to true return krdo
+            {
+                return true;
+            }
+        }
+        
+        return false;       //agr nai mila 
+        
+        
+    }
+}
