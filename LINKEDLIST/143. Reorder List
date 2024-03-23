@@ -1,0 +1,119 @@
+143. Reorder List : https://leetcode.com/problems/reorder-list/
+
+**************************************************************************************
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+// class Solution {
+//     public void reorderList(ListNode head) {
+
+//         if(head == null || head.next == null)
+//         return ;
+
+//         ListNode middle = middleNode(head);
+//         ListNode secondHead = reverseList(middle);
+//         ListNode copy = head;
+
+//         while(copy != null && secondHead != null)
+//         {
+//             ListNode temp = copy.next;
+//             copy.next = secondHead;
+//             copy = temp;
+//             temp = secondHead.next;
+//             secondHead.next = copy;
+//             secondHead = temp;
+//         }
+
+//         if(copy != null)
+//         {
+//             copy.next = null;
+//         }
+        
+//     }
+
+//     public ListNode reverseList(ListNode head) {
+        
+//         ListNode prev = null;
+//         if(head == null ) return head;
+//         ListNode present = head;
+//         ListNode Next = head.next;
+
+//         while(present != null)
+//         {
+//             present.next = prev;
+//             prev = present;
+//             present = Next;
+//             if(Next != null)
+//             Next = Next.next;
+//         }
+
+//         head = prev;
+//         return head;
+
+
+
+
+
+//     }
+
+//     public ListNode middleNode(ListNode head) {
+
+//         ListNode fast = head;
+//         ListNode slow = head;
+
+//         while(fast!= null && fast.next != null )
+//         {
+//             slow = slow.next;
+//             fast = fast.next.next;
+//         }
+
+//         return slow;
+        
+//     }
+//}
+
+///************************METHOD 2 USING RECURSION ****************************************************************//
+class Solution {
+    ListNode current;
+    public void reorderList(ListNode head) {
+        
+        //mai recursively last node tkk phochta hu orr returning me jo pointer hai orr pehle node ka pointer hoga  dono ki value add krte jaageee
+        
+        current = head;
+        
+        solve(head);
+        
+    }
+    
+    public void solve(ListNode head)
+    {
+        if(head == null)
+            return ;
+        
+        solve(head.next);
+        
+        //logic
+        ListNode temp = current.next;
+        if(temp == null)
+        {
+            return;
+        }
+        else if(current == head)
+            {   head.next = null;
+                return;
+        }
+        
+        
+        current.next = head;
+        head.next = temp == head ? null : temp;
+        current = temp;
+    }
+}
