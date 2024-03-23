@@ -1,0 +1,47 @@
+443. String Compression : https://leetcode.com/problems/string-compression/description/
+
+********************************************************************************************************************************************************************
+
+class Solution {
+    public int compress(char[] chars) {
+        
+        int n = chars.length;
+
+        int i=0,index = 0 ;  //yehi return krege kuki yehi length p hoga 
+        while(i<n)
+        {
+            char ch = chars[i];   // current character
+            int count = 0;        // count of current char
+        
+            while( i< n && (ch == chars[i]))
+            {
+                count++;
+                i++ ;
+            }
+            
+            //current charter k brabr nai hoga chars[i]
+            // to assign kro ab
+            
+            chars[index++] = ch;
+            
+            if(count >1)
+            {
+                String temp = Integer.toString(count);  //agar count 1 se jaada h tb strinf bna k index m daalo
+                int t = temp.length();
+                int p = 0;
+                while(t!= 0)
+                {
+                    chars[index++] = temp.charAt(p);
+                    p++ ;
+                    t--;
+                }
+            }
+
+        }
+
+        return index;
+
+
+
+    }
+}
