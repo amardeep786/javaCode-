@@ -1,0 +1,81 @@
+VALID SUDOKU : https://leetcode.com/problems/valid-sudoku/
+
+*************************************************************************************************************
+
+// class Solution {
+//     public boolean isValidSudoku(char[][] board) {
+//         return isValid(board);
+//     }
+
+//     boolean isValid(char[][] board) {
+//         for (int i = 0; i < 9; i++) {
+//             for (int j = 0; j < 9; j++) {
+//                 if (board[i][j] != '.' && !isSafe(board, i, j, board[i][j])) {
+//                     return false;
+//                 }
+//             }
+//         }
+//         return true;
+//     }
+
+//     boolean isSafe(char[][] board, int row, int col, char num) {
+//         // Check the row
+//         for (int i = 0; i < 9; i++) {
+//             if (i != col && board[row][i] == num) {
+//                 return false;
+//             }
+//         }
+
+//         // Check the column
+//         for (int i = 0; i < 9; i++) {
+//             if (i != row && board[i][col] == num) {
+//                 return false;
+//             }
+//         }
+
+//         // Check the subgrid
+//         int subgridRowStart = 3 * (row / 3);
+//         int subgridColStart = 3 * (col / 3);
+
+//         for (int i = subgridRowStart; i < subgridRowStart + 3; i++) {
+//             for (int j = subgridColStart; j < subgridColStart + 3; j++) {
+//                 if (i != row && j != col && board[i][j] == num) {
+//                     return false;
+//                 }
+//             }
+//         }
+
+//         return true;
+//     }
+// }
+
+
+//***********METHOD 2********************************************************/
+
+class Solution {
+    public boolean isValidSudoku(char[][] board) {
+        Set<String> set = new HashSet<>();
+
+        for(int i = 0;i<9;i++)
+        {
+            for(int j = 0;j<9;j++)
+            {
+                if(board[i][j] == '.')
+                continue ;
+
+                String row = "mujhe "+ board[i][j] + "mila , row = "+ i+" par ";
+                String col = "mujhe "+ board[i][j] + "mila , col = "+ j+" par ";
+                String box = "mujhe "+ board[i][j] + "mila , subgrid = "+ i/3+" and "+j/3+" par ";
+
+                if(set.contains(row)||set.contains(col)||set.contains(box))
+                return false ;
+
+                set.add(row);
+                set.add(col);
+                set.add(box);
+            }
+        }
+
+        return true;
+    }
+}
