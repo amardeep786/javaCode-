@@ -1,0 +1,88 @@
+287. Find the Duplicate Number : https://leetcode.com/problems/find-the-duplicate-number/description/
+
+**********************************************************************************************************************************
+
+//issue y hai ki ek number jitne mrzi baaar repeat hoskta hai
+// class Solution {
+//     public int findDuplicate(int[] nums) {
+        //int n = nums.length;  //iske ander jitne integers hai unki range 1 - (n-1)
+
+        // int totalSum = 0;
+
+        // for(int i :nums)
+        // {
+        //     totalSum += i;
+        // }
+
+        // int totalSumShouldBe =  n*(n-1)/2 ;  //issue y hai ki ek number jitne mrzi baaar repeat hoskta hai
+
+//        // return totalSum -totalSumShouldBe ;
+//     }
+// }
+
+//**********METHOD 1************************** */
+
+// hum ek hashmap lekr kr skte hain but iss space complexity is O(n) orr hme O(1) m krna hai
+
+//**********METHOD 2 ************************** */
+
+// dusra approac ye h ki hrek element k liy ye dekhlo ki koi same element array m present hai ki nai
+// pr ye O(n^2) time le jaayega  orr hme O(1) me krna hai 
+
+//**********METHOD 3 ************************** */
+// ek method y bhi hai ki hrek element k paas jaakr uss index wale number ko negative krdo 
+//jb fr s kisi index p gye or pehle hi negative number mila mtlb koi negative number tha jisse humne uss index k number
+// ko negative bnaya tha or frse wo number aagya mtlb wo number hi duplicate hai 
+// pr ye hmaare array ko midify krega and hm y nai chahte 
+
+//************OPTIMAL METHOD ******************************************* */
+
+//hare and tortoise method
+// kese pta lga ki hare and tortoise s hoga ?
+
+// to hume duplicate nikaalne ko bola hai 
+// hrek number [1,n] hai to hrek number ek valid index bhi hai to hum index ko as a pointer use krk duplicate nikaal skte hai
+
+
+////////////////////////////////////**********WORKING SOLUTION********************///////////////////////////////////////////////////////////
+class Solution {
+    public int findDuplicate(int[] nums) {
+        int slow = nums[0];
+        int fast = nums[0];  //initially dono start ko krege 
+
+        //ab fast ko 2 se orr slow ko ek s aage bdhao
+
+        // while(slow != fast)  //isme ye galti hai ki initially hmne dono ko equal rkha hai to y condition hmesa 
+        // {                       //false hogi to hm do while lga dete hai ek bar atlesat chle fr aage conditon dekhege
+        //     slow = nums[slow];
+        //     fast = nums[nums[fast]];
+        // }
+
+        do
+        {   slow = nums[slow];
+            fast = nums[nums[fast]];
+            }
+        while(slow != fast);
+
+        //yaha p slow and fast brabr hogya mtlb cycle to hai or in other words duplicate to hai 
+
+        //ab hme starting of cycle ya duplicate konsa hai y pta lgana hai
+
+        // to fast ko wahi rehne do and slow ko start p le aao and jbtk dono equal na hojaye 
+        // dono ko ek ek s aage bdhaate rho
+
+        slow = nums[0] ; //slow frse start pr gya
+
+        while(slow != fast)
+        {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+
+        //ab dono wahi khde honge jo duplicate hoga to slow ya fst kuj b return krdo
+        return slow;
+    }
+}
+
+
+
