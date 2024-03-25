@@ -1,0 +1,35 @@
+Print N-bit binary numbers having more 1s than 0s : https://www.geeksforgeeks.org/problems/print-n-bit-binary-numbers-having-more-1s-than-0s0252/1
+
+*************************************************************************************************************************************************
+class Solution {
+    ArrayList<String> NBitBinary(int N) {
+        
+        ArrayList<String> res = new ArrayList<>();
+        
+        help(N,res,new StringBuilder("1"),1,0);
+        
+        Collections.sort(res,Comparator.reverseOrder());
+        
+        return res;
+    }
+    public void help(int N , ArrayList<String> res,StringBuilder sb,int one,int zero)
+    {
+        
+        if(sb.length()==N)
+        {
+            res.add(sb.toString());
+            return ;
+        }
+        
+        if(one>zero)    // 1 jaada hai 0 se toh 0 append kr skte hain 
+        {
+            sb.append("0");
+            help(N,res,sb,one,zero+1);
+            sb.deleteCharAt(sb.length()-1);
+        }
+        
+        help(N,res,sb.append("1"),one+1,zero);  // or 1 toh krna hi h chaahe ek ho ya zero pichhle wala
+        sb.deleteCharAt(sb.length()-1);
+        
+    }
+}
