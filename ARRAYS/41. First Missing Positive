@@ -1,0 +1,63 @@
+41. First Missing Positive : https://leetcode.com/problems/first-missing-positive/description/
+
+************************************************************************************************************************************************
+
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        int n = nums.length;
+
+        // hme pehla positive missing number chahiye jo ki array me missing ho
+
+        //observation 1 : ki negative and 0 hmaare kaam k nai h to unhe hm ignore krdenge
+
+        // [5,6,7] isme array ka size 3 hai but sbhi number 3 s bde hain to mtlb ans 1 hoga inko ibhi ignore kr
+        //skte hain
+
+        // to hum jo bhi number negative hain unhe 1 s replace krdenge qki [-5] kahi aaya to uska absolute bhi array
+        // s baahr jaa skta hai 
+
+        //logic yehi hai ki overall hme [1,n] wale number s hi mtlb hai to hm isko as a index bhi use kr skte hain 
+
+        // hm negative number ya 0 ko 1 se replace krdege to hoskta hai 1 array m hota nai but hm kisi negative
+        //ko 1 s replace krde orr hmaara ans kuj orr aa jaaye 
+        // to hm pehle yehi check krege ki 1 hai ya nai array me + saath k saath hi negative ya jo size = n s bde hain
+        //un numbers ko 1 bna denge 
+
+        boolean contains1 = false ;
+        for(int i = 0;i<n;i++)
+        {
+            if(nums[i]==1)
+            {
+                contains1 = true;
+            }
+
+            if(nums[i] <= 0 || nums[i] > n)  //negativve and greater than n ko 1 bna dia
+            {
+                nums[i] = 1 ;
+            }
+        }
+
+        if(contains1 == false)
+        return 1;
+
+        for(int i = 0 ;i<n;i++)
+        {
+            if(nums[Math.abs(nums[i])-1] < 0)   // agr koi pehle hi negative hai tohh use kuj nai kro
+            {
+                continue ;
+            }
+            else            //wrna uss index p jaake use negative krdo taaki yaad rhe ye number mil chuka h pehle b
+            {
+                nums[Math.abs(nums[i])-1] *= -1;
+            }
+        }
+
+        for(int i = 0;i<n;i++)    // ab dekhlo koi +ve number to nai reh gya hai 
+        {
+            if(nums[i] > 0)         // agr hai mtlb uss index + 1 wala number missing hoga tbi waha nai 
+            return i+1 ;            //phoch paaye isliy i+1 return krdo
+        }
+
+        return n+1 ;   // agr sbhi number negative h array m tohh n+1 hi least possible number hoga jo missing hoga
+     }                   //[1,2,3] size b 3 hai to 4 is missing number 
+}
