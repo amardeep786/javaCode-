@@ -1,0 +1,43 @@
+713. Subarray Product Less Than K : https://leetcode.com/problems/subarray-product-less-than-k/description/
+
+****************************************************************************************************************************************************************************************
+
+class Solution {
+    public int numSubarrayProductLessThanK(int[] nums, int k) {
+        if(k<=1)   // corner case hai ki 1 ya 0 ya uss kam laa hi nai skte 
+        return 0;
+        int n = nums.length;
+        int product = 1;
+        int i = 0, j = 0;
+        int count = 0;
+        while(j<n)    //normal 2 pointer approach
+        {
+            product *= nums[j] ;
+
+            if(product < k)
+            {
+                count += j-i+1 ;  // j-i_1 gives number of subarray ending at index j
+                
+            }
+            else
+            {
+                while(product >= k)
+                {
+                    product /= nums[i];
+                    i++ ;
+                }
+
+                count+= j-i+1;  // j-i_1 gives number of subarray ending at index j
+                                // [5,2] and k = 12 soo {5},{2},{5,2} ie 3 and when i is at 0 and j is at 1 
+                                //formula gives j-i+1 = 1-0+1 = 2 mtlb index 2 tkk hmaare paaas 2 subaary hoga 
+                                // ie {2},{5,2}
+            }
+            j++ ;
+        }
+
+
+        return count ;
+
+
+    }
+}
