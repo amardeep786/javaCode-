@@ -1,0 +1,35 @@
+1544. make-the-string-great : https://leetcode.com/problems/make-the-string-great/
+
+*********************************************************************************************************************************************
+
+class Solution {
+    public String makeGood(String s) {
+        
+        int n = s.length();
+
+        StringBuilder res = new StringBuilder();
+        res.append(s.charAt(0));
+        for(int i = 1;i<n;i++)
+        {
+            if(res.length() == 0)  //jb b length 0 hai tb bs res m daal k continue kro 
+            {
+                res.append(s.charAt(i));
+                continue;
+            }
+            char ch = res.charAt(res.length()-1) ;  //har baar last char nikala
+
+            if((int)ch == (int)s.charAt(i)+32  || (int)ch == (int)s.charAt(i)-32)  // ekha ki usi ka capital ya small to ni h string me
+            {
+                res.deleteCharAt(res.length()-1);  // agr hai tp res s delte krdo 
+                continue;
+            }
+            else
+            {
+                res.append(s.charAt(i));  //wrna append kro
+            }
+
+        }
+
+        return res.toString();
+    }
+}
