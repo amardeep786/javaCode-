@@ -1,0 +1,107 @@
+2962. Count Subarrays Where Max Element Appears at Least K Times : https://leetcode.com/problems/count-subarrays-where-max-element-appears-at-least-k-times/description/
+
+***********************************************************************************************************************************************************
+
+class Solution {
+    public long countSubarrays(int[] nums, int k) {
+        
+        int n = nums.length;
+        int maxi = Integer.MIN_VALUE ;
+        for (int num : nums)
+            maxi = Math.max(maxi, num);
+        int i = 0,j= 0 ,countOfMax = 0;
+        long res = 0 ;
+        while(j<n)
+        {
+            if(nums[j] == maxi)
+            {
+                countOfMax++ ;
+            }
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+          
+          /*
+          
+            if(countOfMax >= k)  //jese hi max ka count >= k hua to waha tkk + uske baad k sbhi element b subarray m 
+            {                      // contribute krege
+                  res += n-j ;   // jaha p j hai usk baad k saare element hi mere ans m add honge
+                  i++ ;
+            }
+
+            while(countOfMax >= k)
+            {
+                if(nums[i] == maxi)
+                {                                       ///  MISTAKE HAI ISS LOGIC ME KI hme IF KI JGEH SEEDHA WHILE
+                    countOfMax -- ;                             // LGA K CHECK KRNA HOGA
+                }                               //qki agr i maxi ko point krra hai to hum if m ans update krne k baad 
+                i++ ;                           // i++ krk aage move kr ja rhe hain to while loop m count of max utna hi 
+                res += n-j ;            //rhega but in reality ye ek s ghtna cahiye 
+            }
+            j++ ;
+
+            */
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        
+        //DUBARA LOGIC 
+
+         if(countOfMax >= k)   
+            {                     
+                  res += n-j ;
+                  if(nums[i] == maxi)   // ye update kia hai 
+                  {
+                    countOfMax -- ;
+                  }
+                  i++ ;
+            }
+
+            while(countOfMax >= k)
+            {
+                if(nums[i] == maxi)
+                {                                       
+                    countOfMax -- ;                             
+                }                              
+                i++ ;                         
+                res += n-j ;           
+            }
+            j++ ;
+        
+        
+        }
+
+        return res;
+    }
+}
+
+//********************* METHOD 2 *****************WITHOUT SLIDING PROTOCOL**********************************************//
+
+// class Solution {
+//     public long countSubarrays(int[] nums, int k) {
+        
+//         int n = nums.length;
+//         int maxi = Integer.MIN_VALUE ;
+//         for (int num : nums)
+//             maxi = Math.max(maxi, num);
+
+//         long result = 0;
+
+//         ArrayList<Integer> index = new ArrayList<>(); //to store indices
+
+//         int countMax = 0;
+
+//         for(int i = 0;i<n;i++)
+//         {
+//             if(nums[i] == maxi)
+//             {
+//                 index.add(i);
+//                 countMax++ ;
+//             }
+
+//             if(countMax >= k)
+//             {
+//                 result +=  index.get(index.size()-k) +1;
+//             }
+//         }
+
+//         return result;
+//     }
+// }
