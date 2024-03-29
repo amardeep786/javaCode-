@@ -1,0 +1,87 @@
+918. MAXIMUM SUM CIRCULAR SUBARRAY : https://leetcode.com/problems/maximum-sum-circular-subarray/description/
+
+******************************************************************************************************************************************
+
+class Solution {
+    public int maxSubarraySumCircular(int[] nums) {
+        
+        //**********BRUTE FORCE***************************************************** */
+
+        // (*) maximum sum nikaal lo using kadane♥ 
+        //  array ko left shift kro ek baar and find max using kadanes
+        //repeat this step
+        // ek limited time k baad same original configuration aajaegi to jo b max hoga wahi ans hoga
+
+
+        // we apply kadanes n times so complexity O(n^2)
+
+
+        //**********************OPTIMAL METHOD******************************************************/
+
+        // yaa to maximum sum array m hoga beech m kahi 
+        // yaaa to aadha ek corner or adha ek corner m hoga
+
+        // to hum yehi dono nikaal k jo b dono ka max hoga wahi return kr dege
+
+        // steps :
+        // 1) find maximum sum using kadanes in given array -----> equation i
+
+        // 2) find minimum sum using kadanes in given array kiuki agr minimum sum find krlia to
+        // 3) total sum - minimum sum  = maxSum jo ki corners m present hoskta hai ya hoga ---> equation ii
+
+        // 4) find max of equation (i) and equation(2) wahi max hoga 
+
+        int between = kadanesMax(nums,nums.length);
+
+        //ab total sum and minisum nikaalte hain
+
+        int totalSum = 0 ;
+
+        for(int i : nums)
+        {
+            totalSum += i ;
+        }
+
+        //find minimum sum
+        int miniSum = kadanesMin(nums,nums.length);
+
+        int cornerMax = totalSum - miniSum ;
+
+        if(between < 0)    //agar saare elements negative ha to beech k maxsum b negative hai to wahi ans hoga 
+        return between;  // [-3,-2,-3] isme between = -2 and cornerSumMax = 0 hoga and agr blindly dono ka max return 
+                            // kru to 0 ans aajae but 0 toh hai hi nai array me so agr between < 0 hai 
+                            //mtlb sbi elements negative the  to wahi ans hoga kiuki orr num add krne prr ans chhota hi hoga
+                            //coz sbhi elements hi negative hain 
+        return Math.max(between,cornerMax);  //wrna corner ya beech k max m s jo b bda ho
+
+
+    }
+
+    int kadanesMax(int nums[],int n )
+    {
+        int sum = nums[0];
+        int maxSum = nums[0];
+
+        for(int i = 1;i<n;i++)
+        {
+            sum = Math.max(sum+nums[i],nums[i]);
+            maxSum = Math.max(sum,maxSum);
+        }
+
+        return maxSum;
+    }
+
+    int kadanesMin(int nums[],int n )
+    {
+        int sum = nums[0];
+        int minSum = nums[0];
+
+        for(int i = 1;i<n;i++)
+        {
+            sum = Math.min(sum+nums[i],nums[i]);
+            minSum = Math.min(sum,minSum);
+        }
+
+        return minSum;
+    }
+}
