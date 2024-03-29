@@ -1,0 +1,98 @@
+Euler Circuit in an Undirected Graph : https://www.geeksforgeeks.org/problems/euler-circuit-in-a-directed-graph/1
+
+*************************************************************************************************************************************
+
+class Solution {
+    public boolean isEularCircuitExist(int v, ArrayList<ArrayList<Integer>> adj) {
+    
+    //euler circuit
+    //sbhi non zero degree wale connected hone chahiye 
+    // qki disconnected hue to to hum dusre component tkk kese jaaege or agr gye tohh start and end node tkk kese 
+    // brabr kese kregee
+    
+    //condition for euler circuit :  non zero degree wale connected ho 
+    //sbhi ki degree even honi chahiy 
+    
+    //euler path k liy non zero wale ka connected hona jruri nai hai
+    // bss usme even degree wale vertex exactly 2 hone chahiy taaki end me ek jgeh s nikle orr dusre odd wale p
+    //jaa kr ruk jaaye 
+    
+    // STEP 1 :  check ki non zero wale connected hain ki nai 
+    
+        if(v ==1) return true;
+        
+        if(isConnected(adj , v) == false)
+        {
+            return false ;   //circuit nai hoga ki connected nai h toh start == end nai kr paaege
+        }
+        
+        //mtlb ki sb connected hain too bss ab hme yehi dekhna h ki sbhi even degree hain ya nai 
+        
+        for(int i = 0;i<v;i++)
+        {
+            if(adj.get(i).size() %2 != 0)
+            {
+                return false ;  //mtlb ki koi odd degree wala mil gya 
+            }
+        }
+        
+        //agr upr wala return nai chla mtlb ki sbhi even degree k the to return true krdo 
+        return true;
+    }
+    
+    public boolean isConnected(ArrayList<ArrayList<Integer>> adj,int v)
+    {
+        //kese check krege ki connnected hai ki nai non zero wale 
+        //to koi b ek vertex uthao non zero wala orr dfs lga do ek baare m ssaare visited hai ya nai 
+        // visited array m dekh kar pta lgg jaega
+        
+        int vertex = -1 ;
+        
+        // jruri nai h edges m 0 wala ho hi ..hme non zero degree wala chahiye
+        
+        
+        for(int i = 0;i<v;i++)
+        {
+            if(adj.get(i).size()!= 0)
+             vertex = i ;  //koi b ek vertex jo ki kisi s connected hai usko utha lia or dfs
+            break ;
+            
+        }
+        
+        //ye b to dekhna h ki koi non zero waala mila b ya nai wrna index bound ka exception aayega 
+        //agr vertex ki value -1 hi rhi tohh
+        
+        if(vertex == -1)
+        return true ;
+        
+        boolean visited[] = new boolean[v];
+         
+        dfs(adj,visited,vertex) ;  //yaha s dfs maar k check kro ki kon connected hai kon nai
+        
+        //ab hmaare paas visited array me aagya h kn kn visited hai kn kn nai 
+        // agr to saare non zero wale visited hai to return true krdo mtlb sbb connected hai else nai 
+        
+        for(int i = 0;i<v;i++)
+        {
+            if(adj.get(i).size() != 0 && !visited[i])
+            {
+                return false ;
+            }
+        }
+        
+        return true ;
+        
+    }
+     public void dfs(ArrayList<ArrayList<Integer>> adj ,boolean visited[] , int vertex )
+     {
+         visited[vertex] = true ;
+         
+         for(var neigh : adj.get(vertex))
+         {
+             if(!visited[neigh])
+             {
+                 dfs(adj,visited,neigh);
+             }
+         }
+     }
+}
