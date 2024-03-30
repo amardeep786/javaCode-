@@ -1,0 +1,85 @@
+974 . Sub-Array sum divisible by K : 
+
+leetcode : https://leetcode.com/problems/subarray-sums-divisible-by-k/description/
+gfg : https://www.geeksforgeeks.org/problems/sub-array-sum-divisible-by-k2617/1
+
+*************************************************************************************************************************************
+
+// class Solution {
+//     public int subarraysDivByK(int[] nums, int k) {
+        
+//         //*********BRUTE FORCE********************************************8 */
+
+//         // hrek subarays nikaalo and sbhi me i to j ka sum krk check krlo ki sum divisible hai ki nai 
+         
+//          // hrek possible subaray - O(n^2) nd sbhi ka um O(N) so total -O(n^3)
+
+
+//          //******BETTER APPROACH************O(n^2 ) approach*************************************** */
+
+//         //  isme hum jo upr wale m baar baar sum nikaal rhe the usey cumulative sum pehle hi store krleneg
+//         //  issse hum sum ko O(1) m hojaega toohh total = O(n^2)
+
+//         int count = 0; 
+//         int n  = nums.length;
+
+
+//         for(int i = 1;i<n;i++)  //cumulative sum
+//         {
+//             nums[i] = nums[i]+nums[i-1];
+//         }
+
+//         for(int i = 0;i<n;i++)
+//         {
+//             for(int j = i;j<n;j++)
+//             {
+//                 int sum = i==0? nums[j]: nums[j]-nums[i-1];  // sum from i to j bss cumulative m ghta dia
+
+//                 if(sum%k == 0)
+//                 count++ ;
+//             }
+//         }
+
+//         return count ;
+
+//         //*********ye bhi TLE de rha h******************************************************* */
+//     }
+// }
+
+//********THIRD APPROACH *********Best Approach************************* */
+
+
+//  logic:  s1 % k = x  and s2 % k = x then  s1-s2 is multiple of k ie s1-s2 = kx
+//   to yaha s jo b multiple hoga k ka wahi divisible b hoga 
+
+class Solution {
+    public int subarraysDivByK(int[] nums, int k) {
+
+        Map<Integer,Integer> map = new HashMap<>(); //to store frequency of remainder and its count
+
+        map.put(0,1);
+
+        int cumSum = 0 ;
+        int count = 0;
+        int n = nums.length ;
+        for(int i  = 0;i<n;i++)
+        {
+            cumSum += nums[i] ;  //cumulative sum 
+
+            int rem = cumSum % k ;
+            if(rem < 0)
+            {
+                rem = rem+k ;
+            }
+            if(map.containsKey(rem))  //agr yehi remainnder pehle kahi dekha h to ans m add kro kiuki inka diff 
+            {                           // multiple of k hoga or we can say it is divisible by k                    
+                count += map.get(rem);
+            }
+            map.put(rem,map.getOrDefault(rem,0)+1);
+
+        }
+
+        return count ;
+
+    }
+}
