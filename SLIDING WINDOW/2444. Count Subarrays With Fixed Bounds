@@ -1,0 +1,43 @@
+2444. Count Subarrays With Fixed Bounds : https://leetcode.com/problems/count-subarrays-with-fixed-bounds/description/
+
+*****************************************************************************************************************************************
+
+class Solution {
+    public long countSubarrays(int[] nums, int minK, int maxK) {
+        
+        // hme ek hi baar me nums p traverse krte jaaege orr waha tkk kaa min wale ka index orr maxWale ka index 
+        // bhi maintain krege
+
+        // agr koi culprit hua mtlb minK s chhota ya maxK s bda tohh uska bhi index rkhege 
+
+        // hmesa smaller index of minK ya maxK me s culprit ko subtract kregee taaki waha tkk hmne minK and maxK b
+        // dekha hoga or hme culprit b pta hoga to smaller index - culprit is no of subarays formed with minK and maxK
+    
+    
+        long res = 0;
+        int minP = -1 , maxP = -1 , culprit = -1 ;  //abhi min Position,max or culprit sbka index -1 hai
+        int n = nums.length;
+        for(int i = 0;i<n;i++)
+        {
+            if(nums[i]<minK || nums[i]>maxK)
+            {
+                culprit = i ;
+            }
+            if(nums[i] == minK)
+            {
+                minP = i;
+            }
+            if(nums[i] == maxK)
+            {
+                maxP = i;
+            }
+
+            int smaller = Math.min(minP , maxP);
+            int validSubarrays = smaller - culprit ;
+
+            res += validSubarrays<=0?0:validSubarrays ;  // iss case s agr culprit beech m hua to validsubaray 0
+        }                                               //yaa to negative hua to ans m 0 add krege
+
+        return res;
+    }
+}
