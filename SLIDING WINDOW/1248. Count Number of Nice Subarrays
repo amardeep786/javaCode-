@@ -1,0 +1,65 @@
+1248. Count Number of Nice Subarrays : https://leetcode.com/problems/count-number-of-nice-subarrays/description/
+
+************************************************************************************************************************************
+
+class Solution {
+    public int numberOfSubarrays(int[] nums, int k) {
+        
+        //exactly k  ==  atmost(k)-atmost(k-1) ; qki j-i_1 se hum atmost nikaleege to exactly k liy y wala approach
+    
+    int i = 0,j=0;
+    int n = nums.length ;
+    int result1 = 0;
+    int oddCount = 0;
+    while(j<n)
+    {
+        if(nums[j]%2 == 1)
+        {
+            oddCount++ ;
+        }
+
+        while(oddCount > k)
+        {
+           if(nums[i] %2 == 1)
+                oddCount-- ;
+
+                i++ ;
+        }
+        if(oddCount <= k)
+        result1 += j-i+1;
+        
+        j++ ;
+
+    }
+
+    int result2 = 0;  //now for k-1 
+     oddCount = 0;
+     i=0;j=0;
+    while(j<n)
+    {
+        if(nums[j]%2 == 1)
+        {
+            oddCount++ ;
+        }
+
+        while(oddCount > k-1)
+        {
+            
+            if(nums[i] %2 == 1)
+                oddCount-- ;
+
+                i++ ;
+        }
+        if(oddCount <= k-1)
+        result2 += j-i+1;
+        
+        j++ ;
+
+    }
+
+    return result1 - result2 ;
+
+
+
+    }
+}
