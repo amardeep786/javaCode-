@@ -1,0 +1,78 @@
+Find Indexes of a subarray with given sum : https://www.geeksforgeeks.org/problems/subarray-with-given-sum-1587115621/1?page=1&sortBy=submissions
+
+**************************************************************************************************************************************************
+
+class Solution
+{
+    ArrayList<Integer> res = new ArrayList<>();
+    //Function to find a continuous sub-array which adds up to a given number.
+     ArrayList<Integer> subarraySum(int[] arr, int n, int s) 
+    {
+        
+        //simple sliding window hai bss s == 0 k liy hme pehle check krna pdega ki sum k brabr hua ya nai 
+        //s>1 k liy baaad m to if else lga k same code krdia
+        
+        
+        if(s==0)
+        {
+            int i = 0,j=0;
+            int currSum = 0;
+            // ArrayList<Integer> res = new ArrayList<>();
+            while(j<n)
+            {
+                currSum += arr[j];
+                 
+                if(currSum == s)
+                {
+                    res.add(i+1);
+                    res.add(j+1);
+                    return res;
+                }
+                
+                if(currSum > s)
+                {
+                    while(currSum > s)
+                    {
+                        currSum -= arr[i];
+                        i++ ;
+                    }
+                }
+                
+                j++ ;
+            
+        }
+    }
+     else   
+        {   int i = 0,j=0;
+            int currSum = 0;
+    
+            while(j<n)
+            {
+                currSum += arr[j];
+                 
+                
+                if(currSum > s)
+                {
+                    while(currSum > s)
+                    {
+                        currSum -= arr[i];
+                        i++ ;
+                    }
+                }
+                
+                if(currSum == s)
+                {
+                    res.add(i+1);
+                    res.add(j+1);
+                    return res;
+                }              
+                j++ ;
+        
+            }
+            
+        }
+        
+        res.add(-1);
+        return res;
+    }
+}
