@@ -1,0 +1,29 @@
+58. Length of Last Word : https://leetcode.com/problems/length-of-last-word/description/
+
+********************************************************************************************************************************************
+
+class Solution {
+    public int lengthOfLastWord(String s) {
+       
+
+       //******METHOD 1 USING SPLIT **************************/
+        // String str[] = s.split("\\s+");
+        // return str[str.length-1].length();
+
+
+        
+
+        //******METHOD 2 **************************/
+
+        //last s travel kro agar koi character hai to length++ krdo orr agr space h to bs dekhlo ki len>0
+        // hai ki nai agar hai to yehi ans h wrna loop chlega
+
+        int length = 0;
+        for(int i = s.length()-1;i>=0;i--)
+        {
+            if(s.charAt(i) !=' ') length++ ;  //means koi character mila
+            else if(length != 0) break;  //mtlb space mila to dekhlo ki length koi mili hai ya nai 
+        }                                  // agr != 0 mtlb koi string mili hai and wahi ans h
+        return length;
+    }
+}
