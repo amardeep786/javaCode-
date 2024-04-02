@@ -1,0 +1,40 @@
+55. Jump Game : https://leetcode.com/problems/jump-game/description/
+
+********************************************************************************************************************
+
+class Solution {
+    public boolean canJump(int[] nums) {
+        
+        boolean visited[] = new boolean[nums.length];
+
+        Queue<Integer> que = new LinkedList<>();
+        visited[0] = true;
+        que.offer(0);
+
+        while(!que.isEmpty())   //BFS lga k dekh lia ki end tkk phoch rha h ki nai orr hrek index ko
+        {                       //visited krdia 
+            int n  = que.size();
+
+            while(n-- != 0)
+            {
+                int temp = que.poll();
+
+                if(temp == nums.length-1)
+                return true;
+
+                for(int i = 1;i<= nums[temp];i++)
+                {
+                    int next = temp+i ;
+
+                    if(next < nums.length && !visited[next])
+                    {
+                        visited[next] = true;
+                        que.offer(next);
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+}
