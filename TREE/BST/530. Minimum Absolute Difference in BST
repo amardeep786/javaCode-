@@ -1,0 +1,43 @@
+530. Minimum Absolute Difference in BST : https://leetcode.com/problems/minimum-absolute-difference-in-bst/description/
+
+******************************************************************************************************************************************************************************************
+
+class Solution {
+    int arr[];
+    int index = 0;
+    public int getMinimumDifference(TreeNode root) {
+        
+        int totalNodes = count(root);
+        arr = new int[totalNodes];
+        fill(root);   //array aagya ye sorted aagya h isliy O(n) m pair b dhund lenge
+        
+        int abso = Integer.MAX_VALUE ;
+        for(int i = 0;i<totalNodes-1;i++)    //min b do saath wale elements k beech hoga 
+        {
+            if(Math.abs(arr[i]-arr[i+1]) < abso)
+            {
+                abso = Math.abs(arr[i]-arr[i+1]) ;
+            }
+        }
+        
+        return abso;
+    }
+    
+    public int count(TreeNode root)
+    {
+        if(root == null)
+        return 0;
+        
+        return 1+count(root.left)+count(root.right);
+    }
+    public void fill(TreeNode root)
+    {
+        if(root == null)
+        return ;
+        
+        fill(root.left);
+        arr[index++] = root.val ;
+        fill(root.right);
+        
+    }
+}
