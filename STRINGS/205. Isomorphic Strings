@@ -1,0 +1,53 @@
+205. Isomorphic Strings : https://leetcode.com/problems/isomorphic-strings/description/
+
+**************************************************************************************************************************
+
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        
+        //****** USING MAP**************************/
+
+
+    //   Map<Character,Character> map1 = new HashMap<>();  // to store mapping from s->t
+    //   Map<Character,Character> map2 = new HashMap<>();  // to store mapping from t->s
+
+    //   for(int i = 0;i<s.length();i++)
+    //   {
+    //     Character ch1 = s.charAt(i);
+    //     Character ch2 = t.charAt(i);
+    //     //agr map1 m hai to dusre m hoga hum aise hi put hi kr rhe hain ..false ki condition h ki 
+    //     //kisi me hai pr dusre character k brabr nai h 
+    //     if((map1.containsKey(ch1) && map1.get(ch1)!= ch2) ||  (map2.containsKey(ch2)&&map2.get(ch2)!= ch1))
+    //     {
+    //         return false ;
+
+    //     }
+    //     // else if((!map1.containsKey(ch1)) ^ (!map2.containsKey(ch2)))  //xor krdia ki agr ek m hai mapping ek m nai
+    //     // {
+    //     //     return false ;   //jrurt nai h
+    //     // }
+
+    //     map1.put(ch1,ch2);
+    //     map2.put(ch2,ch1);
+    //   } 
+
+    //   return true;
+
+    //****** USING ARRAY**************************/
+
+      int tempS[] = new int[127];
+      int tempT[] = new int[127];
+
+      for(int i = 0;i< s.length();i++)
+      {
+        if(tempS[s.charAt(i)] != tempT[t.charAt(i)])
+        return false;
+
+        tempS[s.charAt(i)] = i+25;  //koi bhi same value assign krdi 0 k allwa taaki pta rhe jinki same value hai
+        tempT[t.charAt(i)] = i+25 ; //wo mapped hai aapas me i+1,2,3, kuj b likh skte hain
+      }
+
+      return true ;   //agr kbhi b false nai h to sahi h
+
+    }
+}
