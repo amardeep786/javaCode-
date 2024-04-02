@@ -1,0 +1,54 @@
+45. Jump Game II : https://leetcode.com/problems/jump-game-ii/description/
+
+********************************************************************************************************************
+
+class Solution {
+    public int jump(int[] nums) {
+        
+        int n = nums.length;
+        boolean visited[] = new boolean[n];  //to mark visited a particular index
+        visited[0] = true;  //coz initially we are at 0 so visited
+
+        Queue<Integer> que = new LinkedList<>();
+        que.offer(0);
+
+        int count = 0;
+        while(!que.isEmpty())
+        {
+            int size = que.size();
+
+           // System.out.print(size+" ");
+            while(size-- != 0)
+            {
+                int index = que.poll();
+                if(index == n-1)
+                    return count;
+                
+                int num = nums[index];
+
+                for(int i = 0;i<= num;i++)
+                {
+                    int next = index + i ;
+
+                    if(next >= n)
+                    {
+                        break ;
+                    }
+                    //System.out.print(next+" ");
+                    if(!visited[next])
+                    {
+                        que.offer(next);
+                        visited[next] = true ;
+                    }
+                }
+
+            }
+
+            count++ ;
+            
+        }
+
+        return count ;
+
+    }
+}
