@@ -1,0 +1,145 @@
+547. Number of Provinces  : https://leetcode.com/problems/number-of-provinces/description/
+
+***********************************************************************************************************************************
+
+// class Solution {
+//     int count = 0,n=0;
+//     public int findCircleNum(int[][] isConnected) {
+//          n = isConnected.length;
+        
+//         boolean[] visited = new boolean[isConnected.length];
+
+//         //make graph 
+
+//         // Map<Integer,ArrayList<Integer>> adj = new HashMap<>();
+
+//         // for(int i = 0;i<n;i++)
+//         // {
+//         //     ArrayList<Integer> neighbour = new ArrayList<>();
+//         //     for(int j = 0;j<n;j++)
+//         //     {
+//         //         if(isConnected[i][j] == 1 )
+//         //         {neighbour.add(j);}
+//         //         //neighbour.put(j,i);
+//         //     }
+
+//         //     adj.put(i,neighbour);
+//         // }
+
+
+
+//         //use given list
+
+//         for(int i = 0;i<n;i++)
+//         {
+            
+//             if(!visited[i])
+//            { DFS(isConnected,i,visited);
+//             count++;
+//             }
+//         }
+
+//         return count;
+
+//     }
+
+//     public void DFS( int[][] isConnected,int u , boolean[] visited)
+//     {
+//         visited[u] = true;
+
+//         // if(adj.containsKey(u))
+//         // {Iterator<Integer> it = adj.get(u).iterator();
+
+//         // while(it.hasNext())
+//         // {
+//         //     int v = it.next();
+
+//         //     if(!visited[v])
+//         //     DFS(adj,v,visited);
+//         // }}
+
+
+
+//         //traverse neighbour using loop
+//         for(int v=0;v<n;v++)
+//         {
+//             if(!visited[v] && isConnected[u][v] == 1)
+//             DFS(isConnected,v,visited);
+//         }
+//     }
+// }
+
+
+//**************USING DSU**************************************************************************************** */
+
+
+class Solution {
+    int parent[];
+    int size[];          //size array we implement but it not used so we can remove it
+    public int findCircleNum(int[][] isConnected) {
+        
+        int n = isConnected.length;
+        parent = new int[n];
+        size = new int[n];
+        
+        for(int i = 0;i<n;i++)
+        {
+            parent[i] = i ;
+            size[i] = 1 ;
+        }
+        int count = 0;
+        for(int i = 0;i<n;i++)
+        {
+            for(int j = 0;j<n;j++)
+            {
+                if(isConnected[i][j] == 1)
+               {    if(find(i) == find(j))
+                        continue ;
+                    else
+                        union(i,j);
+                }
+            }
+        }
+        
+       for(int i = 0;i<n;i++)
+       {
+           if(i == parent[i])
+               count++;
+       }
+        return count;
+        
+    }
+    
+    public int find(int x)
+    {
+        if(x == parent[x])
+            return x;
+        
+        return parent[x] = find(parent[x]);
+    }
+    
+    void union(int x,int y)
+    {
+        
+        int par_x = find(x);
+        int par_y = find(y);
+        
+        if(par_x == par_y)
+            return ;
+        
+        if(par_x < par_y)
+        {
+            parent[par_y] = par_x ;
+            size[x] += size[par_y];
+        }
+        else if(par_x > par_y)
+        {
+            parent[par_x] = par_y ;
+            size[y] += size[par_x];
+        }else
+        {
+            parent[par_x] = par_y ;
+            size[y] += size[par_x];
+        }
+    }
+}
