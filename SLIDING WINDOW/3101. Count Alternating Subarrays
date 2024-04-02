@@ -1,0 +1,30 @@
+3101. Count Alternating Subarrays : https://leetcode.com/problems/count-alternating-subarrays/description/
+
+****************************************************************************************************************************************
+
+class Solution {
+    public long countAlternatingSubarrays(int[] nums) {
+        
+        int i = 0,j=0;
+        int n = nums.length;
+        long res = 0;
+        while(j<n)
+        {
+            while(j<n-1 && nums[j]!= nums[j+1])
+            {
+                j++ ;
+            }
+
+            //j or j+1 equal hai mtlb abhi tkk ka jo b alternating milta h uska ans nikaal lo
+
+            long length = j-i+1 ;
+
+            res+= (length * (length+1)/2) ;  // itne m 1 length + 2 length wale + sb hojege
+
+            j++;
+            i=j;
+        }
+
+        return res ;
+    }
+}
