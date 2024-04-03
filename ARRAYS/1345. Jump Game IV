@@ -1,0 +1,79 @@
+1345. Jump Game IV : https://leetcode.com/problems/jump-game-iv/description/
+
+*********************************************************************************************************************************************
+
+class Solution {
+    public int minJumps(int[] arr) {
+
+       int n = arr.length;
+       //simple bfs s hojaga prr hum uss indx p b ja skte hain jaha arr[i] == arr[j] ho
+       // iss chij k liy ek separate map rkhna pdega wrna nai pta kr paege
+
+       Map<Integer,ArrayList<Integer>> map = new HashMap<>();
+
+       for(int i = 0;i<n;i++)
+       {
+            if(!map.containsKey(arr[i]))
+            map.put(arr[i],new ArrayList<>());
+
+            map.get(arr[i]).add(i);
+       }
+
+       // hrek numbr k corresponding usk saare index aagye hain
+       // ab jaha next index ka logic hoga wahi ise b lga denge
+
+       boolean visited[] = new boolean[n]; 
+       visited[0] = true;
+
+       Queue<Integer> q = new LinkedList<>();
+       q.offer(0);
+
+       int minSteps = 0;
+
+       while(!q.isEmpty())
+       {
+            int size = q.size();
+            while(size -- != 0)
+            {
+                int i = q.poll();
+
+                if(i == n-1)
+                return minSteps ;
+
+                int left = i-1;
+                int right = i+1 ;
+
+                if(left >= 0 && !visited[left])    // left 
+                {
+                    q.offer(left);
+                    visited[left] = true ;
+                }
+
+                if(right <= n-1 && !visited[right])   //right 
+                {
+                    q.offer(right);
+                    visited[right] = true ;
+                }
+
+                // or wo indexes bhi daalne h jaha jaha same value h
+
+                if(map.get(arr[i]) != null)
+                {for(var ind : map.get(arr[i]))  // iss entry ko map s remove b krna pdega wrna ye baar baar
+                {                               // kbhi fr se arr[i] aaya to usk sbhi index ko check krega 
+                    if(!visited[ind])           // jbki y sb visited ek baar mhogye the 
+                    {                           // isliy iss entry ko map s nikaal denge
+                        q.offer(ind);
+                        visited[ind] = true;
+                    }
+                }
+
+                map.remove(arr[i]);}
+            }
+
+            minSteps++ ;
+
+       }
+
+        return -1;
+    }
+}
