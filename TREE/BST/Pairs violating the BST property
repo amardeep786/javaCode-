@@ -1,0 +1,133 @@
+Pairs violating the BST property : https://www.geeksforgeeks.org/problems/pairs-violating-bst-property--212515/1
+
+***************************************************************************************************************************************
+
+class Solution {
+     int[] arr ;
+     int arrIndex=0;
+    public  int pairsViolatingBST(int n, Node root) {
+        
+    //store inorder traversal ye sorted hua to 0 wrna count number of inversions  wahi violating pair honge
+        
+        int totalNodes = countNodes(root);
+         arr = new int[totalNodes];
+         inOrder(root );
+         
+        //  for(int i : arr)
+        //  System.out.print(i+" ");
+         
+         return mergeSort(arr,0,n-1);  //for counting inversions
+    }
+    
+     int countNodes(Node root) {
+        if (root == null)
+            return 0;
+        return 1 + countNodes(root.left) + countNodes(root.right);
+    }
+    
+     void inOrder(Node root )
+    {
+        if(root == null)
+        {
+            return;
+        }
+        
+        inOrder(root.left);
+        arr[arrIndex++] = root.data;
+        inOrder(root.right);
+    }
+    
+     int mergeSort(int[] arr ,int leftIndex , int rightIndex)
+    {
+        //int left = leftIndex,rightIndex = n-1;
+        
+        int count = 0; 
+        if(leftIndex < rightIndex)
+        {
+            int mid = leftIndex + (rightIndex-leftIndex)/2 ;
+            
+            count += mergeSort(arr,leftIndex,mid);    //left s jo ans aaya 
+            count += mergeSort(arr,mid+1,rightIndex); //right s jo ans aaya 
+            
+            count+= merge(arr,leftIndex,mid,rightIndex);  ////abhi ka jo ans h
+        }
+        //System.out.println(count);
+        return count;
+    }
+    
+    // static int merge(int arr[] , int left, int mid , int right)
+    // {
+    // //   int i  = left , j = mid+1 ;
+       
+    //   int first[] = Arrays.copyOfRange(arr,left,mid+1);
+    //   int second[] = Arrays.copyOfRange(arr,mid+1,right+1);
+       
+    //   int i = 0; //point to first array
+    //   int j = 0; //point to second array
+       
+    //   int k = 0 ; // ye array ko update krega future calls k liye 
+       
+    //   int ans = 0;
+    //   while(i<first.length && j < second.length)
+    //   {
+    //       if(first[i] < second[j])
+    //       {
+    //           arr[k++] = first[i];
+    //           i++;
+    //       }else
+    //       {
+    //           arr[k++] = second[j];
+    //           ans += mid-i ;
+    //           j++;
+    //       }
+           
+    //   }
+       
+    //   while(i<first.length)
+    //   {
+    //       arr[k++] = first[i];
+    //       i++ ;
+    //   }
+       
+    //   while(j<second.length)
+    //   {
+    //       arr[k++] = second[j];
+    //       j++ ;
+    //   }
+        
+    //     return ans;
+    //}
+    
+     int merge(int arr[], int left, int mid, int right) {
+    int[] temp = new int[right - left + 1];
+    int i = left, j = mid + 1, k = 0;
+    int ans = 0;
+
+    while (i <= mid && j <= right) {
+        if (arr[i] <= arr[j]) {
+            temp[k++] = arr[i++];
+        } else {
+            // If arr[i] is greater than arr[j], it forms inversions with all elements
+            // from arr[i] to arr[mid]
+            ans += mid - i + 1;
+            temp[k++] = arr[j++];
+        }
+    }
+
+    while (i <= mid) {
+        temp[k++] = arr[i++];
+    }
+
+    while (j <= right) {
+        temp[k++] = arr[j++];
+    }
+
+    // Copy sorted elements from temp back to arr
+    for (i = left, k = 0; i <= right; i++, k++) {
+        arr[i] = temp[k];
+    }
+
+    return ans;
+}
+
+}
