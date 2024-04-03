@@ -1,0 +1,62 @@
+Kth common ancestor in BST : class Solution {
+    public int kthCommonAncestor(Node root, int k, int x, int y) {
+        
+        int totalAncestor = 1 ;
+        
+        Node temp = root;
+        
+        while(root != null)
+        {
+            if(root.data > x && root.data >y)
+            {
+               totalAncestor++ ;
+               root = root.left;
+            }
+            else if(root.data < x && root.data <y)
+            {
+               totalAncestor++ ;
+               root = root.right;
+            }else
+                break ;   //yaha s x and y dono alg alg subtree m hai to aage koi common ancestor milega hi nai 
+        }
+        
+        //hmaare paas totalAncestors ka count aagya h
+        
+        // [5,15,3,12,1]  ye common ancestors the x and y ke 
+        // and k = 2 tha to hme second from bottom chahiye
+        //to 12 hoga to kese aaya ye 
+        //total - k to 5-2 = 3 ie 12, 1 ancestor ko chhor k baaki sb ancestors + 1 kedia to 12 ancestor p phoch jaege
+        // so total - k + 1  our requiree ancestor
+        
+        totalAncestor = totalAncestor-k+1 ;
+        
+        int count = 1 ;  // ab frse hum common ancestor nikaalte hain but iss baar jo totalAncestors 
+                        //yaa jo hmaari requireed value thi bss wahi tkk nikaalege
+        
+        //root to change hogaya tha pichhle loop m to frse root ko restore krdo
+        
+        root = temp;
+        
+        while(root != null)
+        {
+            if(count == totalAncestor)
+                return root.data;
+          if(root.data > x && root.data >y)
+            {
+               count++ ;
+               root = root.left;
+            }
+            else if(root.data < x && root.data <y)
+            {
+               count++ ;
+               root = root.right;
+            }else
+                break ;   //yaha s x and y dono alg alg subtree m hai to aage koi common ancestor milega hi nai 
+        }  
+        
+            
+        return -1 ;
+        
+
+    }
+}
