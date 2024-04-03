@@ -1,0 +1,54 @@
+1254. Number of Closed Islands : https://leetcode.com/problems/number-of-closed-islands/description/
+
+***********************************************************************************************************************************************
+
+class Solution {
+    int m , n;
+    public int closedIsland(int[][] grid) {
+        
+        m = grid.length;
+        n = grid[0].length ;
+
+
+        // 2 loop lete hain for traversing matrix
+        int count = 0;
+        for(int i = 0;i<m;i++)
+        {
+            for(int j = 0;j<n;j++)
+            {
+                //jaha b land h waha s dhundna shuru krna h
+                if(grid[i][j] == 0)
+                {
+                   if( dfs(grid,i,j)== true)
+                   count++ ;
+                }
+            }
+        }
+        return count ;
+
+    }
+
+    boolean dfs(int[][] grid,int row,int col)
+    {
+        // jb b baahr chle gye to wo island nahi hoga tohh false
+        if(row < 0 || row >= m|| col < 0 || col >= n)
+        return false;
+
+        //agar aise hi aage bdhte bdhte paani aaya to true
+        if(grid[row][col] == 1)
+        return true ;
+
+        //agar kisi state p gye to dubara nai jana h to visited mark krdo 
+        //by making it 1
+
+        grid[row][col] = 1;
+
+        //agar land hai aage bhi to recursively dfs krdo 4 direction me
+        boolean left = dfs(grid,row,col-1);
+        boolean right = dfs(grid,row,col+1);
+        boolean up = dfs(grid,row-1,col);
+        boolean down = dfs(grid,row+1,col);
+
+        return left && right && up && down ;  // chaaro trf s paani milege ie true hoga tbhi true kroo
+    }
+}
