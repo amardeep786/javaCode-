@@ -1,4 +1,8 @@
-Kth common ancestor in BST : class Solution {
+Kth common ancestor in BST : https://www.geeksforgeeks.org/problems/kth-common-ancestor-in-bst/1
+
+********************************************************************************************************************************************
+
+class Solution {
     public int kthCommonAncestor(Node root, int k, int x, int y) {
         
         int totalAncestor = 1 ;
