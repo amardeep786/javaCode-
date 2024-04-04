@@ -1,0 +1,30 @@
+Sum of all substrings of a number :: https://www.geeksforgeeks.org/problems/sum-of-all-substrings-of-a-number-1587115621/1
+
+******************************************************************************************************************************************8
+
+class Solution
+{
+    //Function to find sum of all possible substrings of the given string.
+    public static long sumSubstrings(String s)
+    {
+        long result = 0 ,prev = 0 , mod = 1000000007;
+        
+        // [123] => 2 jo hai 2 baar contri kr rha h 
+        // 2 and 12 so hrek number ko usk indx s multiply kr rhe h with 1-based indexing
+        
+        //aur
+        
+        //jo ans aarha h use prev m daalte jaao liuli usko 10 s into krk ans m add hota jaega
+        for(int i = 0;i<s.length();i++)
+        {
+            long current  =  (prev*10)%mod + (s.charAt(i)-'0')*(i+1)%mod ;
+            
+            result =(result+ current)%mod ;
+            
+            prev = current;
+        }
+        
+        return result;
+        
+    }
+}
