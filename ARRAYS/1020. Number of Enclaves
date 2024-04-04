@@ -1,0 +1,77 @@
+1020. Number of Enclaves :: https://leetcode.com/problems/number-of-enclaves/description/
+
+**********************************************************************************************************************************************
+
+class Solution {
+    public int numEnclaves(int[][] grid) {
+        
+        int n = grid.length;
+        int m = grid[0].length;
+
+        for(int i = 0;i<n;i++)         /// bss boundary p jo 1 hai waha s dfs lga kr baaki 1 ko 0 bna k visited krdia 
+        {
+            for(int j = 0; j < m;j++)
+            {
+                 if(i == 0 && grid[i][j] == 1)
+                 {
+                    dfs(grid,i , j) ;
+                 }
+                 if(i == n-1 && grid[i][j] == 1)
+                 {
+                    dfs(grid,i , j) ;
+                 }
+                 if(j == 0 && grid[i][j] == 1)
+                 {
+                    dfs(grid,i , j) ;
+                 }
+                 if(j == m-1 && grid[i][j] == 1)
+                 {
+                    dfs(grid,i , j) ;
+                 }
+
+            }
+        }
+
+            //ab yaha tkk saaare land jo ki outer ya outer s reachable h unko hta diy ab bss 1 count krlo innder wale
+             
+            int count = 0;
+            for(int i = 0;i<n;i++)
+            {
+                    for(int j = 0; j < m;j++)
+                    {
+                        if(grid[i][j] == 1)
+                        count++ ;
+                    }
+            }
+
+            return count ;
+
+        }
+    
+
+    public void dfs(int[][] grid , int row , int col)
+    {
+        //grid[row][col] = 0;
+        int n = grid.length;
+        int m = grid[0].length;
+
+        if(row < 0 || row >= n || col < 0 || col >= m)  //out of bound hue to return kr jaao 
+        {
+            return ;
+        }
+
+        if(grid[row][col] == 0)  // koi pehle hi sea h to return
+        return;
+
+        //nahi to 4 direction m jaao orr current ko visited mark krddo
+
+        grid[row][col] = 0;
+
+        dfs(grid,row+1 , col) ;
+        dfs(grid,row-1 , col) ;
+
+        dfs(grid,row , col+1) ;
+        dfs(grid,row , col-1) ;
+
+    }
+}
