@@ -1,0 +1,38 @@
+Strictly Increasing Array :: https://www.geeksforgeeks.org/problems/convert-to-strictly-increasing-array3351/1
+
+**********************************************************************************************************************************************
+
+class Solution
+{
+    public int min_operations(int []arr)
+    {
+         // bss hme yehi dekhna h ki kitne dip hai bde se chhote ie 5,2 ie 1 dip
+         //iski jgeh ye count krlete hain ki kitne pehle hi incresing yaani ki sahi order m hai
+         // fr total length me s sahi wale ghta denge to wo ans aajaega
+         
+         int n = arr.length;
+         int LIS[] = new int[n] ;
+         int maxIncreasingLength = 1;
+         //initially ek ek element khud me incresing hain to sbko 1 s initialize krdo
+         
+         for(int i = 0;i<n;i++)
+         {
+             LIS[i] = 1;
+         }
+         
+         for(int i = 1;i<n;i++)
+         {
+             for(int j = 0;j<i;j++)
+             {
+                 // increasing kb hoga jb i-j <= arr[i]-arr[j] ho ie currindex - prev indexes <= currentelement - prevelement ho
+                 if(arr[i] > arr[j]  && i-j<= arr[i]-arr[j])
+                 LIS[i] = Math.max(LIS[i],LIS[j]+1);
+             }
+             
+             maxIncreasingLength = Math.max(maxIncreasingLength , LIS[i]);
+         }
+         
+         // ab jitne incresing the to total m so wo ghtaado 
+         return n-maxIncreasingLength;
+    }
+}
