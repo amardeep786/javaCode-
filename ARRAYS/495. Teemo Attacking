@@ -1,0 +1,40 @@
+495. Teemo Attacking : https://leetcode.com/problems/teemo-attacking/description/
+
+*************************************************************************************************************************************************
+
+class Solution {
+    public int findPoisonedDuration(int[] timeSeries, int duration) {
+        
+        //Set<Integer> set = new HashSet<>();
+        int n = timeSeries.length;
+        //*************FIRST APPROACH IN MIND****************************** */
+        // for(int i = 0;i<n;i++)
+        // {
+        //     int left = timeSeries[i];
+        //     int range = left + duration - 1;
+            
+        //     for(int j = left;j<=range;j++)
+        //     {
+        //         if(set.contains(j))continue;
+        //         set.add(j);
+        //     }
+        // }
+        // return set.size();
+
+        //*************BETTER APPROACH ****************************** *//
+
+        // hrek consecutive time k beech m gap dekhlo ...agar ye duration s jaada hai to obviously duration add hoga ans me
+        // agr inka diff kam hai to fr jitna diff s wahi add hoga qki duration s pehle wo difference smy tk behosh hoga
+        // orr last value k baad wo duration tkk definitely behosh rhega too jo final time aaega usme duration add krdenge
+
+        int totalTime = 0;
+
+        for(int i = 0;i<n-1;i++)
+        {
+            totalTime += Math.min(timeSeries[i+1]-timeSeries[i] , duration);
+        }
+
+        return totalTime + duration ;
+
+    }
+}
