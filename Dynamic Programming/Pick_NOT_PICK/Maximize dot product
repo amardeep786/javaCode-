@@ -1,0 +1,70 @@
+Maximize dot product  : https://www.geeksforgeeks.org/problems/maximize-dot-product2649/1
+
+**********************************************************************************************************************************************************
+
+class Solution
+{
+    int count = 0;
+	public int maxDotProduct(int n, int m, int a[], int b[]) 
+ 	{ 
+        
+        int[][]dp = new int[n+1][m+1];
+        
+        
+            for(var j : dp)
+            {
+                Arrays.fill(j,-1);
+            }
+        
+        int i = 0, j = 0 ;
+        return help(a,b,i,j,n,m , n-m , dp);
+
+	} 
+	
+	public int help(int[]a,int [] b,int i,int j,int n,int m ,int diff,int[][]dp)
+	{
+	    if(j == m || i == n) 
+	    return 0;
+	    
+	    if(dp[i][j] != -1)
+	    return dp[i][j] ;
+	    
+	    int pick = 0,notPick = 0;
+	     pick = a[i]*b[j] + help(a,b,i+1,j+1,n,m,diff,dp);
+	     
+	    if(diff>0)      //coz b ka size max A k brabr hoskta h jb pick nahi kr rhe mtlb 0 insert kr rhe tohh ye condition
+	     notPick = help(a,b,i+1,j,n,m,diff-1,dp) ;    //nahi lgaege to B ka size > A b hoskta h
+	    
+	    dp[i][j] = Math.max(pick,notPick);
+	    return Math.max(pick,notPick);
+	    
+	    ////////********MY METHOD*********************************************??//
+	    
+	    // 	    int res = 0;
+        // 	    int idx = m-1 ;
+        	    
+        // 		for(int i = m-1;i>=0;i--)  //for 1 element of b
+        // 		{   
+        // 		       int max1 = 0;
+        		       
+        		    
+        // 		    int chnge = -1 ;
+        // 		    int max = 0;
+        // 		    for(int j = n-1;j>=0;j--) // poore A me s max nikal k -1 krdo
+        // 		    { 
+        // 		        if(a[j] > max)
+        // 		        {
+        // 		            max = a[j];
+        // 		            chnge = j;
+        		            
+        // 		        }
+        // 		    }
+        // 		    a[chnge] = -1 ;
+        // 		    System.out.println(max  + " ");
+        // 		    if(idx>=0 )
+        // 		    res+= max*b[idx--];
+        // 		}
+        		
+        // 		return res;
+	}
+}
