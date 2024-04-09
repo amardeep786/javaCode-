@@ -1,0 +1,56 @@
+Minimum Points To Reach Destination : https://www.geeksforgeeks.org/problems/minimum-points-to-reach-destination0540/1
+
+*************************************************************************************************************************************
+
+class Solution {
+    public int minPoints(int points[][], int m, int n) {
+        
+        
+        //BFS maar k last tkk phocho 
+        //agr shortest path negative m aaya to mod of negative  + 1 ans else 1;
+        
+        //problem jb b minus m ans tha or kisi value n usey positive bna dia tohh ans 1 bolegege but it is 
+        //something else
+        
+        //use DP to explore paths
+        
+        
+        // hum backtrack krte hue ans form krte jaaage suppose last cell me -5 hai to 1 point bchna b chahiye
+        // after consuming -5 toh 1-(-5) = 6 points hone chahiye last me 
+        
+        // agr ans negative h kisi cell ka to usey upr wale s pr sirf 1 hona chahiye qki aage ka ye dekh lega
+        
+        int dp[][] = new int[m+1][n+1];
+        
+        for(var i:dp) Arrays.fill(i,-1);
+        return help(0,0,m,n,points,dp);
+        
+        
+        
+        
+    }
+    public int help(int i,int j,int m,int n,int points[][],int dp[][])
+    {
+        if(i == m-1 && j==n-1)
+        {
+            return 1-points[i][j];
+        }
+        
+        if(dp[i][j] != -1)return dp[i][j];
+        
+        if(i==m || j==n)
+        return Integer.MAX_VALUE ;
+        
+        int col = help(i,j+1,m,n,points,dp);
+        int row = help(i+1,j,m,n,points,dp);
+        
+        // ab jo bhi minimum dega usi rste ko pkdna hai 
+        
+        int mini = Math.min(row,col);
+        
+        // ab ek cell ki requirement dekhlo agr -ve hai to wo aage ka handle krlega usey uske peeche s se 1
+        //chahiy bss else usey  mini - uss cell ki value chahiye
+        
+        return dp[i][j]=Math.max(1 , mini - points[i][j]);
+    }
+}
