@@ -1,0 +1,37 @@
+228. Summary Ranges :: https://leetcode.com/problems/summary-ranges/description/
+
+*********************************************************************************************************************
+
+class Solution {
+    public List<String> summaryRanges(int[] nums) {
+        
+        int n = nums.length;
+
+        if(n==0)
+        return new ArrayList<String>();
+
+        int start = nums[0];
+        
+        List<String> res = new ArrayList<>();
+        for(int i = 0;i<n;i++)
+        {
+            while(i+1<n && nums[i+1]-nums[i]==1) //agr diff 1 ka hai toh consecutive hai
+            {
+                i++;
+            }
+
+            String temp = "";
+            if(start!= nums[i])
+             temp = ""+start+"->"+nums[i] ;
+            else
+             temp = Integer.toString(start) ;
+
+            res.add(temp);
+            if(i+1<n)
+            start = nums[i+1];
+
+        }
+
+        return res;
+    }
+}
