@@ -1,0 +1,95 @@
+3108. Minimum Cost Walk in Weighted Graph :: https://leetcode.com/problems/minimum-cost-walk-in-weighted-graph/description/
+
+***********************************************************************************************************************************************
+
+class Solution {
+
+    //  ek logic : hm agr jaada numbers ka AND kre to hme chhota number milne k chances hain 
+
+    // ie  A & B = c   and  C & D = E toh E <= C  to E hmesa A & B s kam hi hoga since walk pucha hai 
+    // aise b soch skte hain ki AND common area deta h toh jitne jaada number aaege utna comon ght hona shuru hojaega 
+
+
+    //mtlb hum vertex ya edge repeat kr skte hain to hm jaaada s jaaada edges lena chahege taaki AND krege to 
+    //ans kam s km aaega 
+
+    // to hm jitne b connected hain unko ek component m daal k poore component ka AND b store kraana chahege
+
+    int parent[];
+    int BitwiseAnd[];   // ye hrek component ka bitwise And ie cost store krta jaega 
+
+    int find(int x)
+    {
+        if(x == parent[x])
+        return x;
+
+        return parent[x] = find(parent[x]);
+    }
+
+    void union(int[] temp)
+    {
+        int a = temp[0];
+        int b = temp[1];
+        int weight = temp[2];
+
+        int parA = find(a);
+        int parB = find(b);
+
+        if(parA == parB)    //initially if they are in same set tb to simple bss cureent u and v k edge ka weight ko 
+        {                       //previously ans s And krke ans update krdo
+            BitwiseAnd[parA] &= weight ;
+        }else
+        {
+            parent[parA] = parB;
+            BitwiseAnd[parB] &= BitwiseAnd[parA];   //else components ka bitwise unk parent m store tha hi to unka and
+            BitwiseAnd[parB] &= weight ;   // current edge ka AND hi total ans hogya
+        }
+    }
+
+    public int[] minimumCost(int n, int[][] edges, int[][] query) {
+        
+         parent = new int[n];
+
+         for(int i = 0;i<n;i++)
+         {
+            parent[i] = i ;  //every node is parent of itself
+         }
+        BitwiseAnd = new int[n];
+         Arrays.fill(BitwiseAnd , -1) ;  //sbhi ko minus 1 s initialise krdia (coz -1 ko kisi k saath AND kro to same hi ans milega  ) 
+                                        // end m jo b -1 honge uske hissaab s connected-disconnected dekh lenge
+         for(var edge:edges)
+         {
+            union(edge);  // sbhi ka union krdo ..parent same hai ya nai h uska logic union me hi likh dia h
+         }
+
+            // yaha tkk hmaare parent or bitwiseAND array fill hogya hoga tooh bss 
+            // hrek query k points ko dekhlo
+         // ab bss hrek query k liy dekh lo 
+
+    int result[] = new int[query.length];
+    int idx= 0 ;
+    for(var que : query)
+    {
+        int u = que[0];
+        int v = que[1];
+
+        int parU = find(u);
+        int parV = find(v);
+
+        if(u == v)
+        {
+            result[idx++] = 0 ;  // agr same vertices hai to ans 0 hoga
+        }
+        else if(parU != parV)
+        {
+            result[idx++] = -1 ;
+        }else
+        {
+            result[idx++] = BitwiseAnd[parU];
+        }
+    }
+
+    return result;
+    
+    }
+}
