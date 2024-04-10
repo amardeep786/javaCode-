@@ -1,0 +1,107 @@
+934. Shortest Bridge :: https://leetcode.com/problems/shortest-bridge/description/
+
+_**************************************************************************************************************************
+
+class Solution {
+
+    int directions[][] = {{0,1},{0,-1},{1,0},{-1,0}};
+
+    public int shortestBridge(int[][] grid) {
+        
+        // 1 logic ki sbse pehle ek 1 dhundo or waha se DFS krdo isse saare continuous 1 explore ho jaega 
+        // fr jo jo bhi 1 k indexes aaye hain waha s BFS maar k dhundlo ki pehla 1 kitne steps  m mil rha h 
+        //utne hi bits ko flip krege to bridge bn jaega
+
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        Queue<int[] > que = new LinkedList<>();  // to store indexes of 1
+
+        boolean visited[][] = new boolean[rows][cols];
+
+
+        boolean flag = false;
+        for(int i = 0;i< rows;i++)
+        {
+            for(int j = 0;j<cols;j++)
+            {
+                if(grid[i][j] == 1)
+                {
+                    flag = true;
+                    DFS(i,j,grid,rows,cols,que,visited);
+                    
+                    break;
+                }
+            }
+            if(flag)   // jb 1 mila to dusre loop s bhi baahr nikal jaao else aage dhundo
+            break;
+        }
+
+        // yaha takk hmaare paas ek que aagyi h jisme 1 component k saare 1 k indexes aagye hain
+
+        //ab que k indexes s BFS maardo taaki kisi dusre 1 takk ka shortest path aajaaye
+
+        // for(var i:que)
+        // {
+        //     System.out.println(i[0]+" "+i[1]);
+        // }
+
+        int steps = 0;            //******BFS ***************************************** */
+        while(!que.isEmpty())
+        {
+            int n = que.size();
+            System.out.println(n);
+
+            while(n-- != 0)
+            {
+                int temp[] = que.poll();
+                int i = temp[0];
+                int j = temp[1];
+
+            for(var dir:directions)
+            {
+                int newRow = i+dir[0];
+                int newCol = j + dir[1];
+
+            if(newRow<0 || newRow >= rows || newCol < 0 || newCol >= cols || visited[newRow][newCol] )
+            {
+                continue;
+            }
+
+            //agar 4ro constraint valid hai tohh chle jaao 
+            
+            if(grid[newRow][newCol] == 1)
+            return steps;
+
+            visited[newRow][newCol]=true;
+            que.offer(new int[]{newRow,newCol});
+
+            }
+        }
+
+        steps++;
+
+    }
+    return steps;
+    
+}
+
+
+    public void DFS(int i,int j,int[][]grid , int rows,int cols,Queue<int[] > que ,boolean visited[][])
+    {
+
+        if(i<0 || i==rows || j<0 || j==cols || grid[i][j]== 0 || visited[i][j])
+        return ;
+
+        que.offer(new int[]{i,j});
+        visited[i][j] = true ;
+        // ab 4 directions m jaana h 
+        for(var dir:directions)
+        {
+            int newRow = i+dir[0];
+            int newCol = j + dir[1];
+            DFS(newRow,newCol,grid,rows,cols,que,visited);
+            
+        }
+    }
+}
