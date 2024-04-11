@@ -1,0 +1,29 @@
+561. Array Partition :: https://leetcode.com/problems/array-partition/description/
+
+*************************************************************************************************************
+
+
+class Solution {
+    public int arrayPairSum(int[] nums) {
+        
+        Arrays.sort(nums);
+        int n = nums.length;
+
+        //approach mai chahuga ki smallest element ka pair second smallest s bne isse minimum wala second mini ko compenste krege
+        // aur maximize elements k liy bde element bche rhege 
+        // [1,6,5,2] = (1,2) and (5,6) ki pairing aching hogi and ans = 1+5 = 6
+        // agr (1,6) and (2,5) ki pairing krte toh 1 6 ko kha jata and 2 5 ko  and ans = 1+2 = 3
+
+        int ans = 0;
+
+        for(int i = 0;i<n;i+=2)
+        {
+            ans += nums[i];
+
+        }
+
+        return ans;
+
+
+    }
+}
