@@ -1,0 +1,24 @@
+1877. Minimize Maximum Pair Sum in Array::  https://leetcode.com/problems/minimize-maximum-pair-sum-in-array/description/
+
+***************************************************************************************************************************************
+
+class Solution {
+    public int minPairSum(int[] nums) {
+        
+        // hme maximum sum ko kam s kam laana hai 
+        // to hum approach me hrek bde element ko chhote element k saath pair krege kiuki end me sbka max nikalna hai 
+        // to agr to bde ka joda to max m wahi ans aajaega and hoskta h ye minimised naa hoo
+        // to hrek bde element ko chhote element k saath pair kr denge 
+
+        Arrays.sort(nums);
+        int n = nums.length;
+
+        int ans = Integer.MIN_VALUE ;
+        for(int i = 0;i<n/2;i++)
+        {
+            ans = Math.max(nums[i]+nums[n-i-1],ans);
+        }
+
+        return ans;
+    }
+}
