@@ -1,0 +1,58 @@
+2551. Put Marbles in Bags :: https://leetcode.com/problems/put-marbles-in-bags/description/
+
+*****************************************************************************************************************************************
+
+class Solution {
+    public long putMarbles(int[] weights, int k) {
+        
+        // Observtion :  suppose k = 2 hai and [1,3,5,1]
+        // possible pairs : [1] and[3,5,1] = score-> (1+1) and (3+1) = 6
+        //  [1,3] and [5,1] score -> 4+6 = 10
+        // [1,3,5] and [1] so score -> (1+5) and(1+1) = 8
+
+        // diff bw mini and maxi = 10-6 = 4 
+
+        //observation : 1st element and last element hreak partition me aayege  to jb ans return krege minus krke
+        //   tohh ye elements fr s minus hojaege to inko hum nahi lenge pehle hi 
+        //
+        //  in above example if i remove 1st and last element from every partition then
+        //  score becomes [1+3] = 4--------------equation 1
+        //  score -> 3+5 = 8--------------equation 2
+        //  score -> 5+1 = 6--------------equation 3
+        // ABHI B MINI + maxi ka diff = 8-4 = 4 hi hai 
+
+        // in scores ko dhyaan s dekhe tohh kya hai 1+3 then 3+5 then 5+1  in equation 1,2 and 3
+        // ie consecutive elements of array ka hi sum hai 
+
+        // so logic is hrek consecutive ka sum nikaal lo 
+        // fr usey sort krlo taaki smallest largest easily mil jaaye 
+        // fr k-1 pairs ka sum left se and k-1 pairs ka sum last s nikaal k difference return krdo 
+        // qki  k=2 hai to ek hi division m array 2 parts m toot jaega
+        // k= 3 hai to 2 bars rrkhege tb array 3 parts m divide hoga and so on
+
+        int n = weights.length;
+        List<Integer> list = new ArrayList<>();
+
+        for(int i = 0;i<n-1;i++)
+        {
+            list.add(weights[i]+weights[i+1]);
+        } 
+
+        Collections.sort(list);
+
+        long minSum = 0 , maxSum = 0 ;
+        for(int i = 0;i<k-1;i++)
+        {
+            minSum+= list.get(i);
+            maxSum += list.get(n-i-1);
+        }
+
+        return maxSum - minSum ;
+
+
+    }
+}
+
+
+
+ 
