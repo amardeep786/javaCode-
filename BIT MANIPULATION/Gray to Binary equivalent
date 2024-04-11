@@ -1,0 +1,49 @@
+Gray to Binary equivalent  :: https://www.geeksforgeeks.org/problems/gray-to-binary-equivalent-1587115620/1
+
+*********************************************************************************************************************************************************************************************
+
+class Solution{
+    
+    // function to convert a given Gray equivalent n to Binary equivalent.
+    public static int grayToBinary(int n) {
+        
+        
+        // question m bola h kisi number ka gray code hoga orr uss code ka decimal value dia hoga ie  n
+        // jese 1st example m 4 given hai to 4-> 100 orr iska gray codde kya hoga ie 100 -> 110
+        
+        // to y jo nya gray code aaya iski decimal value kya hogi wahi pucha h ?
+        
+        // SOLUTION : - 
+        
+        // 4 ka gray code chaiye to pehle uska binary likha then uspe gray to binary k logic se actual binary 
+        // bnaaya ie 100 actuall binary aaya 4 ka keh rha ab iska gray nikalo ie 111 iska ans  7 
+        // to hum pehle given number ka binary nikal lenge [ fr isse gray nikalege   ]
+        // fr hum jo binary ka decimal ans hoga
+        
+        
+        
+        
+        
+        
+        
+        StringBuilder res = new StringBuilder();
+        //convert int to binary
+        String binary = Integer.toBinaryString(n);   // number ko uski binary form m bnaane k liye 
+        
+        
+       int len = binary.length();
+       
+       res.append(binary.charAt(0));        //MSB copied
+       
+       //ab baaki elements ka xor store krwao
+       
+       for(int i = 1;i<len;i++)
+       {
+           res.append(Integer.toString(res.charAt(i-1)-'0' ^ binary.charAt(i)-'0'));  //-'0' is for getting number 
+       }
+        
+        return Integer.parseInt(res.toString(),2);   // string ko uske integer m convert krne k liye , 2 is radix 
+    }
+       
+}
+
