@@ -1,0 +1,31 @@
+2740. Find the Value of the Partition  :: https://leetcode.com/problems/find-the-value-of-the-partition/
+
+******************************************************************************************************************************
+
+class Solution {
+    public int findValueOfPartition(int[] nums) {
+        
+        // approach ki sort krdo or middle -1 element ko left m daalo and moddle +1 ko right me 
+        // isss max left s aajaeg aor mini right s and diff bhi minimum hoga
+
+        // upr wala logic galt ans dega qki minimum diff kahi bhi hoskta hai
+
+        // sort krne k baaad hrek element ka mini diff dekhlo jaha mini aaya wahi s maan lege ki divide kia h 
+        //aur ans mini aagya
+
+        Arrays.sort(nums);
+        int n = nums.length;
+
+        int ans = Integer.MAX_VALUE ;
+
+        for(int i = 0;i<n-1;i++)
+        {
+            ans = Math.min(ans , Math.abs(nums[i]-nums[i+1]));
+        }
+
+
+        return ans;
+    }
+
+    
+}
