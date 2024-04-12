@@ -1,0 +1,65 @@
+542. 01 Matrix  :: https://leetcode.com/problems/01-matrix/description/
+
+*******************************************************************************************************************************************
+
+class Solution {
+    int [][] direction = {{0,1},{0,-1},{1,0},{-1,0}};
+    public int[][] updateMatrix(int[][] mat) {
+
+        // approach y h ki hrek 0 pr distance 0 krdo 
+        // or hrek 1 se BFS lga k dekhlo kaha 0 sbse pehle aa rha h  but worst csae m 
+        // bhot baar BFS lgana pd skta h  ie (n*m) times BFS
+
+
+        //2nd approach ki hrek 0 s BFS lgaao and hrek cell tk ka ans store krte jaao 
+        //  toh jb bhi 1 milegi hum pichle cell ki cost me 1 add krke  uss cell ka ans update kr denge 
+
+
+        int rows = mat.length;
+        int cols = mat[0].length ;
+
+        int [][] res = new int[rows][cols];
+        for(var i : res)
+        Arrays.fill(i,-1);
+
+        Queue<int[] > que = new LinkedList<>();
+
+        for(int i = 0;i<rows;i++)
+        {
+            for(int j = 0;j<cols;j++)
+            {
+                if(mat[i][j] == 0)
+                {
+                    res[i][j] = 0 ;
+                    que.offer(new int[]{i,j});
+                }
+            }
+        }
+
+        // que m 0 k coordinates aagye hain 
+
+        while(!que.isEmpty())
+        {
+            int[] temp = que.poll();
+            int i = temp[0];
+            int j = temp[1];
+
+            for(var dir : direction)
+            {
+                int newi = i + dir[0];
+                int newj = j + dir[1];
+
+                if(newi >= 0 && newi < rows && newj>=0 && newj<cols && res[newi][newj] == -1)
+                {
+                    res[newi][newj] = 1 + res[i][j];
+                    que.offer(new int[]{newi,newj});
+                }
+            }
+
+
+        }
+
+        return res;
+        
+    }
+}
