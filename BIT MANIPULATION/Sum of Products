@@ -1,0 +1,60 @@
+Sum of Products :: https://www.geeksforgeeks.org/problems/sum-of-products5049/1
+
+*********************************************************************************************************************
+
+class Solution {
+    static long pairAndSum(int n, long arr[]) {
+        
+        
+        //count krlo ki sbhi numbers me knsi place p bit kitne value set hai
+        // eg  132 -> total 2 baari 1 hai unit place pe int given numbers and  3 baari given number k 2nd place set hai
+        
+        // something like that 10 , 11, 111 to may be given number honge : 2 , 3 , 7 [in binary -> 10,11,111]
+        
+        // now jitne bhi number the unme s kisi 2 k unit place p 1 tha to mtlb 1 pair or jb inka AND hoga
+        // to te 2^0 yaani k 1 contribute krege baaki sbme y  0 contribute krege
+        
+        // to bss knsi place p kitne baar 1 hai to ussey 1 kamm pair honge orr wo 2^place ko add krege
+        
+        
+        int bits[] = new int[32];
+        Arrays.fill(bits, 0);
+        
+        for(int i = 0;i<n;i++)
+        {
+            long num = arr[i];
+            int count = 0;
+            while(num != 0)
+            {
+                if((num & 1) == 1)
+                { 
+                    bits[count]++ ;
+                    
+                }
+                count++;
+                
+                num = num >> 1;
+            }
+            
+        }
+        
+        //hmara bits array filll hogya hoga 
+        
+        // ab uspe travel krk 1 ghta k and placevalue s multiply
+        
+        long ans = 0;
+        
+        for(int i = 0;i<32;i++)
+        {
+            long pair = bits[i];
+            
+            pair-- ;               // agar value 4 hai toh  3 pair honge
+            
+            long combination = pair*(pair+1)/2 ;
+            
+            ans += combination * (long)Math.pow(2,i);
+        }
+        
+        return ans;
+    }
+}
