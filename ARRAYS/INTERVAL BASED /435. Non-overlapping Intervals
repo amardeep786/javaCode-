@@ -1,0 +1,52 @@
+435. Non-overlapping Intervals :: https://leetcode.com/problems/non-overlapping-intervals/description/
+
+*******************************************************************************************************************************************
+
+class Solution {
+    public int eraseOverlapIntervals(int[][] intervals) {
+        
+        Arrays.sort(intervals , (a,b)-> a[0]-b[0]);
+
+        int n = intervals.length;
+
+        if(n==1)
+        return 0;
+
+        int i = 0, j = 1, count = 0 ;
+
+        while(j<n)
+        {
+            int curr[] = intervals[i];
+            int next[] = intervals[j];
+
+            int cs = curr[0],ce = curr[1],ns = next[0],ne = next[1] ;   //current start , current end , next start , next end
+
+            // 3 cases
+
+            if(ce <= ns)  // non-overlapping
+            {
+                i=j ;    // ab i ki aage kisi s overlapping nai hogi qki sorted hai  to isko b bdha do
+                j++ ;    //kucj ni krna h bs j ko aage bdha do
+            }
+            else     // overlapping 
+            {
+                
+                    if(ce > ne )   // agr current end bda h next end s to current ko delete krdo else next ko 
+                    {
+                        i = j ;    //current ko delete krdia or i ab j ki jegh aagya
+                        j++ ;
+                        count++ ;
+                    }
+                    else         // j walae ko delete kia to i wahi reh gya 
+                    {
+                        j++ ;
+                        count++ ;
+                    }
+
+            }
+            
+        }
+
+        return count ;
+    }
+}
