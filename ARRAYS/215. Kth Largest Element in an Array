@@ -1,0 +1,130 @@
+215. Kth Largest Element in an Array  :: https://leetcode.com/problems/kth-largest-element-in-an-array/description/
+
+*****************************************************************************************************************************
+
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        
+        //*******USING SORTING************(  NLOGN  )******************** */
+
+        //sort krk k-1th index p jo value h usey return krdo
+
+        // Arrays.sort(nums);
+        // return nums[nums.length - k];
+
+
+
+        //*****USING QUICK SELECT ie partition algorithm *********************************** */
+
+        int n =nums.length;
+        int left = 0, right = n-1 ;
+        int pivot = 0 ;
+        while(true)  // tbtk chlaate rena h jbtk pivot index k-1 k brabr naa aajae 
+        {
+             pivot = quick(nums , left , right) ;
+        
+            if(pivot == k-1)
+            {
+                break ;
+            }else if(pivot > k-1)
+            {
+                right = pivot-1;
+            }else
+            {
+                left = pivot+1 ;
+            }
+        }
+
+
+        return nums[pivot];
+
+    }
+
+    public int quick(int nums[],int left,int right)
+    {
+
+        int pivotElement = nums[left];
+        
+        int i  = left+1 ;
+        int j = right ;
+         
+        while(i <= j)
+        {
+            if(nums[i] < pivotElement && nums[j] > pivotElement)   // swapkrdo 
+            {
+                swap(nums , i, j);
+
+                i++;
+                j-- ;
+            }
+
+            if(nums[i] >= pivotElement)
+            {
+                i++ ;
+            }
+            if(nums[j]<= pivotElement)
+            {
+                j-- ;
+            }
+        }
+
+        //last m ith and index ko swap krdo
+
+        swap(nums, left , j );
+
+        // for(int idx = i ; idx <= j;idx++)
+        // {
+        //     System.out.print(nums[idx]+" ");
+        // }
+
+        // System.out.println(j+" a  ");
+        return j;
+    }
+
+    public void swap(int nums[],int i , int j )
+    {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+
+
+
+// ************************************WORKS FINE ********************************************************
+// public class Solution {
+//     public int findKthLargest(int[] nums, int k) {
+//         int n = nums.length;
+//         int left = 0, right = n - 1;
+//         int pivot = -1;
+//         while (true) {
+//             pivot = quick(nums, left, right);
+//             if (pivot == n - k) {
+//                 break;
+//             } else if (pivot < n - k) {
+//                 left = pivot + 1;
+//             } else {
+//                 right = pivot - 1;
+//             }
+//         }
+//         return nums[pivot];
+//     }
+
+//     public int quick(int[] nums, int i, int j) {
+//         int index = i; // Set index to i
+//         int pivot = nums[index]; // Set pivot to nums[index]
+//         while (i < j) {
+//             while (i < j && nums[j] >= pivot) {
+//                 j--;
+//             }
+//             nums[i] = nums[j];
+//             while (i < j && nums[i] <= pivot) {
+//                 i++;
+//             }
+//             nums[j] = nums[i];
+//         }
+//         nums[i] = pivot;
+//         return i;
+//     }
+// }
+
