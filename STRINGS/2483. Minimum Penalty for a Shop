@@ -1,0 +1,182 @@
+2483. Minimum Penalty for a Shop :: https://leetcode.com/problems/minimum-penalty-for-a-shop/description/
+
+*******************************************************************************************************************************************
+
+class Solution {
+    public int bestClosingTime(String str) {
+        
+        //*****BRUTE FFORCE*******************(  O(n^2)  )************************************************** */
+    
+        // hum hrek possibility p shop ko bnd krege orr dekhege ki ussey pehle kitne N hai mtlb shop open and customer nahi aaye 
+        // ussk baaad kitne YES hai mtlb shop off and customer aaye 
+        // or minimum penalty + minimum time maintain krk chlege
+
+        // int n = str.length();
+
+        // int minPenalty = Integer.MAX_VALUE ;
+        // int minHour = Integer.MAX_VALUE ;
+
+        // for(int i = 0;i<n;i++)
+        // {
+        //     // i-1 se 0 tkk kitne N hai wo dekhna h
+
+        //     int j = i-1;
+        //     int penalty = 0;
+
+        //     while(j>=0)
+        //     {
+        //         if(str.charAt(j) == 'N')
+        //         penalty++;
+
+        //         j-- ;
+        //     }
+
+            // ab i se lekar n-1 tkk kitne y hain
+
+        //     j = i ;
+        //     while(j < n)
+        //     {
+        //         if(str.charAt(j) == 'Y')
+        //         penalty++;
+
+        //         j++ ;
+        //     }
+
+        //     if(penalty < minPenalty)
+        //     {
+        //         minPenalty = penalty;
+        //         minHour = i ;
+        //     }
+        // }  
+
+        // shop end me bhi bnd hoskty h ie str length = 7 hai to 7 p b bnd hoskty hai 
+        // mtln ussey pehle sb open h 
+        //mtlb poore string m kitne N hai wo b ek baar check krna pdega 
+
+        // int count = 0;
+        // for(int i = 0;i<n;i++)
+        // {
+        //     if(str.charAt(i) == 'N')
+        //     count++ ;
+        // }  
+
+        // if(minPenalty > count)
+        // {
+        //     minPenalty = count;
+        //     minHour = n ;
+        // } 
+
+        // return minHour;
+
+        //********GIVES TLE*********************coz every time peeche jaakr count kr rhe hain *********** */
+
+
+
+
+
+
+//   **********APPROACH 2*************************bss ab baar baar count krne ki jgeh array m store kr lenge  */
+//   ************complexity (O(n))   but space b O(N) lgega************************//
+
+
+        // int n = str.length();
+        // int[]  countLeftNo = new int[n+1];
+        // int[]  countRightYes = new int[n+1];
+
+        // countLeftNo[0] = 0 ;   // 1st index s pehle kuj nai h toh 0
+
+        // for(int i = 1;i<=n;i++)
+        // {
+        //     if(str.charAt(i-1) == 'N')
+        //     {
+        //         countLeftNo[i] = countLeftNo[i-1] + 1;
+        //     }
+        //     else
+        //     {
+        //         countLeftNo[i] = countLeftNo[i-1] ;
+        //     }
+        // }
+
+        // countRightYes[n] = 0 ;  // last index k baad koi Y nai h to 0
+
+        // for(int i = n-1;i>=0;i--)
+        // {
+        //     if(str.charAt(i) == 'Y')    // i se lekr end tkk
+        //     {
+        //         countRightYes[i] = countRightYes[i+1] + 1;
+        //     }
+        //     else
+        //     {
+        //         countRightYes[i] = countRightYes[i+1] ;
+        //     }
+        // }
+
+
+        // // hmaare paas hrek time p k pehle ka no or baad ka yes aagya hai to ans nikalo
+
+        // int minPenalty = Integer.MAX_VALUE ;
+        // int minTime = Integer.MAX_VALUE ;
+        // for(int i = 0;i<=n;i++)
+        // {
+        //     int currPenalty = countRightYes[i] +  countLeftNo[i] ;
+        //     if(currPenalty < minPenalty )
+        //     {
+        //         minPenalty = currPenalty ;
+        //         minTime = i ;
+        //     }
+        // }
+
+        
+
+        // return minTime  ;
+        
+
+// *****************ABOVE SOLUTION ACCEPTED *************
+
+
+//*****3rd approach will take O(1) space************ */
+
+    // ek sliding window le skte hain window k ander closed wale or baahr open wale 
+    // agr poore array ko window m le to sbi closed , penalty = no of yes
+    // fr ek shift kia ..or jo eleement window k baahr hua mtlb wo open time m hai 
+    // agr yes wala baahr hua to penalty ghtegi kuki ab bnd m ek kam yes h
+    // agr no wala baahr hua too penalty bdhegi ki open k time p no customer 
+
+    int n = str.length() ;
+    
+
+    int penalty = 0;   
+        for(int i = 0;i<n;i++)  // shop 0th hour p bnd hui
+        {
+            if(str.charAt(i) == 'N')
+            penalty++ ;
+        }
+         
+    int minPenalty = penalty ;
+    int minPenaltyTime = 0 ;
+    
+    for(int i = 0;i<n;i++)  // window shift krte jaao
+    {
+        if(str.charAt(i)=='Y')
+        {
+            penalty-- ;
+        }
+        else
+        {
+            penalty++;
+        }
+
+         if(penalty < minPenalty )
+            {
+                minPenalty = penalty ;
+                minPenaltyTime = i+1 ;
+            }
+
+
+    }
+
+    return minPenaltyTime ;
+
+    
+    }
+}
