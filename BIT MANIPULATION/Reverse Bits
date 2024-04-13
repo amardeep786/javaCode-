@@ -1,0 +1,49 @@
+Reverse Bits  :: https://www.geeksforgeeks.org/problems/reverse-bits3556/1
+
+*******************************************************************************************************************************************
+
+class Solution {
+        static Long reversedBits(Long x) {
+            
+            StringBuilder sb = new StringBuilder();
+            
+            for(int i = 0;i<= 31;i++)
+            {
+                // if((x & (1L<<i)) == 1)      // ye comparison ye to check krega ki ith bit of x is set or not but 
+                // {                            //  == 1 ki wgeh s ye ab check krega ki ith bit k allwa baaki sb 0 hone chahiye tbi ans 1 hoga 
+                                                // qki ye ab dekhega ki result 1 hai ki nai but hme ith bit ko 1 dekhna h isliye ye wrong ans de rha h 
+                //     sb.insert(0, '1');
+                // }
+                // else
+                // {
+                //     sb.insert(0, '0');
+    
+                // }
+                
+            if((x & (1L << i)) != 0)  // to hmne y dekh  lia ki non zero hai ith bit toh 1 else 0
+            {
+                sb.insert(0, '1');
+            }
+            else
+            {
+                sb.insert(0, '0');
+            }
+            }
+            
+            
+        
+            // ab ye binary format aaagya + ab hm same string ko left s dekhege or maanege ki 2 ki pow 0 ,1 and so one 
+            long ans = 0;
+            for(int i = 0;i<= 31;i++)
+            {
+                if(sb.charAt(i) == '1')
+                ans += (long)Math.pow(2,i);
+            }
+            
+            
+            return ans ;
+            
+            
+        }
+        
+    }
