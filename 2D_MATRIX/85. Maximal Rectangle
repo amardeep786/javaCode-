@@ -1,0 +1,155 @@
+85. Maximal Rectangle  :: https://leetcode.com/problems/maximal-rectangle/description/
+
+*********************************************************************************************************************************
+
+class Solution {
+    public int maximalRectangle(char[][] matrix) {
+
+        //LOGIC : 
+
+        //  agar 1D array hota to kese nikaalte maximum area 
+        // then agli row ko iss row m add krk fr s 1D array bnaado ab iska areaa dekhlo ..similarly for all rows
+
+        // bss jb b jis row ko add krk rhe honge usme agr kisi entry ki value zero hai tohh new 1D m bhi wo zero hoga qki upr wali values
+        // hwe m rhegi similar to largest area histogram 
+
+        //eg [1,0,1,0,0]  ->area = 1
+        //   [1,0,1,1,1]  -> indono ko jod k 1 row bnau toh [2,0,2,1,1] -> ab iska max. area = 3 ie 1-1 wale 3 
+        //   
+        //   [2,0,2,1,1]
+        //   [1,1,1,1,1] -> 3rd row
+
+        //  [3,1,3,2,2] -> new array with max area = 3 (2-2 wale blocks coz 3 me bhi 2 toh hai hi)
+
+        //  [3,1,3,2,2] -> old row
+        //  [1,0,0,1,0] -> last row  so new row [4,0,0,3,0] -> (1+0 = 1 hona chahiye pr neeche 0 hai to baaki building hawe m rhegi not poss. so 0)
+
+        // iss tra s sbka max area = 6 jo ki example test case m hai with output 6
+
+
+        //step-1 :
+
+        int rows = matrix.length;
+        int cols = matrix[0].length ;
+
+        // 1D array taaki har baar isi ko update krege 
+
+        int[] temp = new int[cols];
+
+        for(int i = 0;i<cols;i++)
+        {
+            temp[i] = matrix[0][i] == '1'?1:0 ;
+        }
+
+        int maxArea = getArea(temp);
+
+        for(int i = 1;i<rows;i++)
+        {
+            for(int j = 0;j<cols;j++)
+            {
+                // System.out.print(i+" "+ j);
+                // System.out.println();
+                if(matrix[i][j]=='0')
+                {
+                    temp[j] = 0 ;
+                }else
+                {
+                    temp[j] = 1 + temp[j];
+                }
+            }
+
+            maxArea = Math.max(maxArea, getArea(temp));
+        }
+
+
+        return maxArea ;
+
+
+    }
+
+    public int getArea(int[] temp)
+    {
+        // next smaller element ka  index dekho 
+        // prev smaller element ka index dekhlo 
+
+        // **********   [next smaller index - prev smaller index - 1]    **********is no of elements that gives width or current number kitne bdi width k rectangle me h
+        // height to current value bta degi to height * width
+
+        int[] NSE = getNextSmallerElement(temp);
+        int[] PSE = getPrevSmallerElement(temp);
+
+        int area = Integer.MIN_VALUE ;
+
+        for(int i  = 0;i<temp.length;i++)
+        {
+            area = Math.max(area , temp[i] * (NSE[i]-PSE[i]-1));  
+        }
+
+        return area ;
+    }
+
+    private int[] getNextSmallerElement(int []temp)
+    {
+        Stack<Integer> stack = new Stack<>();
+        int n = temp.length;
+        int res[] = new int[n];
+        
+        for(int i = n-1;i>=0;i--)
+        {
+            if(i== n-1)
+            {
+                stack.push(n-1); 
+                res[i] = n ;
+                
+            }else
+            {
+                //jab takk right me bde element mil rhe hain unhe pop krte jaana h //
+                // hm indexes store kr rhe hain  to element b nikaal lenge indexes s
+
+                while(!stack.isEmpty() && temp[stack.peek()] >= temp[i])
+                {
+                    stack.pop();
+                }
+              
+                res[i] = stack.isEmpty()?n:stack.peek();  // ye wala index chhote element ka hoga 
+                stack.push(i);   //push current element
+            }
+        }
+
+        return res;
+
+    }
+
+    private int[] getPrevSmallerElement(int []temp)
+    {
+        Stack<Integer> stack = new Stack<>();
+        int n = temp.length;
+        int res[] = new int[n];
+        
+        for(int i = 0;i<n;i++)
+        {
+            if(i== 0)
+            {
+                stack.push(0); 
+                res[i] = -1 ;
+                
+            }else
+            {
+                //jab takk left me bde element mil rhe hain unhe pop krte jaana h //
+                // hm indexes store kr rhe hain  to element b nikaal lenge indexes s
+
+                while(!stack.isEmpty() && temp[stack.peek()] >= temp[i])
+                {
+                    stack.pop();
+                }
+
+                 
+                res[i] = stack.isEmpty()?-1:stack.peek();  // ye wala index chhote element ka hoga 
+                stack.push(i);   //push current element
+            }
+        }
+
+        return res;
+
+    }
+}
