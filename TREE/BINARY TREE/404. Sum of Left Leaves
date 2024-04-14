@@ -1,0 +1,33 @@
+404. Sum of Left Leaves :: https://leetcode.com/problems/sum-of-left-leaves/description/
+
+*******************************************************************************************************************************************
+APPROACH : parent bhi bhejte rho jb b leaf aaye dkhlo ki left h ya right
+
+APPROACH 2 : ek variable bhejte rho recursion m jo btaega ki left h ya nai eg isLeft = true or false
+
+
+class Solution {
+    public int sumOfLeftLeaves(TreeNode root) {
+        
+        return help(root,null);
+    }
+
+    public int help(TreeNode curr , TreeNode parent)
+    {
+        if(curr == null)
+        return 0;
+
+        if(curr.left == null && curr.right == null )  // leaf node
+        {
+            if(parent != null && parent.left == curr)
+            {
+                return curr.val ;
+            }
+        }
+
+        int left = help(curr.left,curr);
+        int right = help(curr.right,curr);
+
+        return left + right ;
+    }
+}
