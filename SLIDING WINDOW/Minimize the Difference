@@ -1,0 +1,67 @@
+Minimize the Difference :: https://www.geeksforgeeks.org/problems/minimize-the-difference/1
+
+*******************************************************************************************************************************
+
+class Solution {
+    public static int minimizeDifference(int n, int k, int[] arr) {
+        
+    // hrek k-size window k liye baaki bche max and min find kro then ans m minimum update krte rho
+    
+    // finding every time minimum and maximum is hectic or unnecessary adding complexity
+    
+    // so we can store min and max for every indexes
+    
+    int mini[] = new int[n];
+    int maxi[] = new int[n];
+    
+    mini[n-1] = arr[n-1];
+    maxi[n-1] = arr[n-1];
+    
+    for(int i = n-2;i>= 0;i--)            // hrek index k liy mini and maxi aagya
+    {
+        mini[i] = Math.min(mini[i+1],arr[i]);
+        maxi[i] = Math.max(maxi[i+1],arr[i]);
+    }
+    
+    
+    int ans = Integer.MAX_VALUE ;
+    int minE = Integer.MAX_VALUE , maxE = Integer.MIN_VALUE ;
+    int i  = 0, j = k-1 ;
+    while(j<n)   // sliding window of size k
+    {
+        if(i != 0)    // mtlb left side me b min and maximum present ho skta hai 
+        {
+            minE = Math.min(minE , arr[i-1]);  // saath k saath minimum and maximum ko b maintain krk rkhe hue h
+            maxE = Math.max(maxE , arr[i-1]);
+            
+        }
+        
+        int temp1 = minE , temp2 = maxE;
+        
+        if(j != n-1)  // mtlb right me elements hain or waha s min max present ho skta h
+        {
+            temp1 = Math.min(temp1 , mini[j+1]);  // left side s minimum maximum upr store hota jaa rha h
+            temp2 = Math.max(temp2 , maxi[j+1]);  // right wala mini and maxi jo hmne 2 array m store kia tha 
+                                                  // waha s aa rha h 
+            
+        }
+        
+        // ab dono window s max min aagya hoga 
+        
+        //ab final max min nikaal lo
+        
+        int finalMin = Math.min(minE,temp1);   // ab bs total left mini and right minimum ka minium
+        int finalMax = Math.max(maxE,temp2);   // and left maxi and right maximum ka maximum
+        
+        ans = Math.min(ans , finalMax-finalMin);  // inka difference 
+        i++;
+        j++;              // window shift
+    }
+    
+    
+    
+    return ans;
+    
+    
+    } 
+}
