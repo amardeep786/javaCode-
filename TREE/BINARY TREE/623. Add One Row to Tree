@@ -1,0 +1,48 @@
+623. Add One Row to Tree : https://leetcode.com/problems/add-one-row-to-tree/description/
+
+***************************************************************************************************************************************8
+
+class Solution {
+    public TreeNode addOneRow(TreeNode root, int val, int depth) {
+
+        return help(root,val,depth , 1 ) ;  // 1 -> current depth , isLeft -> true / false  helps in adjusting pointer
+
+        
+    }
+    public TreeNode help(TreeNode node, int val, int depth , int curr )
+    {
+
+        if(node == null)
+        return null ;
+
+        if(depth == 1)
+        {
+            TreeNode root = new TreeNode(val);
+            root.left = node;
+            return root ;
+        }
+        if(curr+1 == depth)
+        {
+            TreeNode Left = node.left;
+            
+            TreeNode Right = node.right;
+            
+            node.left = new TreeNode(val,Left,null);
+            node.right = new TreeNode(val,null,Right);
+
+            // node.left.left = Left;        // this will also works
+            // node.right.right = Right ;
+
+            //node.left.left 
+
+
+            return node;
+        }
+
+        node.left =  help(node.left,val,depth , curr+1);
+        node.right = help(node.right,val,depth , curr+1);
+
+        return node ;
+
+    }
+}
