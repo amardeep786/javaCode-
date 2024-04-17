@@ -1,0 +1,189 @@
+1337. The K Weakest Rows in a Matrix  :: https://leetcode.com/problems/the-k-weakest-rows-in-a-matrix/description/
+
+****************************************************************************************************************************************
+
+class pair implements Comparator<pair>   // implement isliy ki sort kr ske 2 pair ko 
+{
+    int noOfOne;
+    int rowNumber;
+
+    pair()
+    {}
+
+    pair(int noOfOne , int rowNumber)
+    {
+        this.noOfOne = noOfOne ;
+        this.rowNumber = rowNumber ;
+    }
+
+    
+    public int compare(pair p1 , pair p2)
+    {
+        int compareOne = Integer.compare(p1.noOfOne,p2.noOfOne);
+
+        if(compareOne != 0) // mtlb 1's equal nai the to yehi return kro'
+        {
+            return compareOne;
+        }
+        else
+        {
+            return Integer.compare(p1.rowNumber,p2.rowNumber);
+        }
+    }
+
+
+}
+
+
+class Solution {
+    public int[] kWeakestRows(int[][] mat, int k) {
+        
+        //count number of 1 in each row and sort and return first k indexes
+
+        // for counting we can use binary search qki 1 k baad hi 0 hai to sorted hai
+
+        int rows = mat.length;
+        int cols = mat[0].length ;
+
+        pair[] arr = new pair[rows];
+
+        for(int i = 0;i<rows;i++)
+        {
+            int countOfOne = count(mat[i],cols);
+
+            
+
+            arr[i] = new pair(countOfOne,i);
+
+        }
+
+        Arrays.sort(arr,new pair());
+
+        int res[] = new int[k];
+        int j = 0 ;
+        for(int i = 0;i<k;i++)
+        {
+            res[j++] = arr[i].rowNumber ;
+        }
+
+        return res;
+    }
+
+    public int count(int []arr , int n)   // binary search
+    {
+        int i = 0,j = n-1 ;
+
+        int index = -1 ;
+        while(i<=j)
+        {
+            int mid = i + (j-i)/2 ;
+
+            if(arr[mid] == 1)
+            {
+                index = mid;
+                i = mid+1 ;
+            }
+            else
+            {
+                j = mid-1 ;
+            }
+        }
+        return index+1 ;  // last index + 1 hi number of ones honge
+    }
+}
+
+
+*********************************************************************************************************************************************
+
+APPROACH - 2 -> heap lelo k weakest bola h toh orr max heap lenge jb b heap ka size greater than k hua top ko pop krege to largest wala pop hoga
+                orr choote wale k heap m bche reh jaaege
+
+
+class pair implements Comparator<pair>   // implement isliy ki sort kr ske 2 pair ko 
+{
+    int noOfOne;
+    int rowNumber;
+
+    pair()
+    {}
+
+    pair(int noOfOne , int rowNumber)
+    {
+        this.noOfOne = noOfOne ;
+        this.rowNumber = rowNumber ;
+    }
+
+    
+    public int compare(pair p1 , pair p2)
+    {
+        int compareOne = Integer.compare(p2.noOfOne,p1.noOfOne);  // ye ab jo bda hai usey pehle rkhega ie descending order
+
+        if(compareOne != 0) // mtlb 1's equal nai the to yehi return kro'
+        {
+            return compareOne;
+        }
+        else
+        {
+            return Integer.compare(p2.rowNumber,p1.rowNumber);
+        }
+    }
+
+
+}
+
+class Solution {
+    public int[] kWeakestRows(int[][] mat, int k) {
+
+        PriorityQueue<pair> pq = new PriorityQueue<>(new pair());   // max heap
+
+        int rows = mat.length;
+        int cols = mat[0].length ;
+
+
+        for(int i = 0;i<rows;i++)
+        {
+            int countOfOne = count(mat[i],cols);
+            pq.offer(new pair(countOfOne , i));
+
+            if(pq.size() > k)
+            pq.poll();
+        }
+
+        int res[] = new int[k];
+        int j = k-1 ;
+        while(!pq.isEmpty())
+        {
+            res[j--] = pq.poll().rowNumber ;
+        }
+
+        return res;
+
+
+    }
+
+
+
+    public int count(int []arr , int n)   // binary search
+    {
+        int i = 0,j = n-1 ;
+
+        int index = -1 ;
+        while(i<=j)
+        {
+            int mid = i + (j-i)/2 ;
+
+            if(arr[mid] == 1)
+            {
+                index = mid;
+                i = mid+1 ;
+            }
+            else
+            {
+                j = mid-1 ;
+            }
+        }
+        return index+1 ;  // last index + 1 hi number of ones honge
+    }
+}
+
+
