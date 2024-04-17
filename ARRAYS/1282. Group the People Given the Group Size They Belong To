@@ -1,0 +1,36 @@
+1282. Group the People Given the Group Size They Belong To  :: https://leetcode.com/problems/group-the-people-given-the-group-size-they-belong-to/description/
+
+***************************************************************************************************************************************************************
+
+class Solution {
+    public List<List<Integer>> groupThePeople(int[] groupSizes) {
+        
+        int n = groupSizes.length;
+
+        List<List<Integer>> result = new ArrayList<>();
+
+        Map<Integer,ArrayList<Integer>> map = new HashMap<>();   // to store values and indexes
+
+        for(int i = 0;i<n;i++)
+        {          
+
+            if(map.get(groupSizes[i]) != null && map.get(groupSizes[i]).size() == groupSizes[i] ) // jb b kisi group ka size list k brabr hua 
+            {                                           // tbhi usey ans list m daal k usey map s htaaado qki aage same size k or b group 
+                result.add(map.get(groupSizes[i])) ;  // ho skte hain
+                map.remove(groupSizes[i]);
+            }
+            
+            if(!map.containsKey(groupSizes[i]))
+            {
+                map.put(groupSizes[i] , new ArrayList<>());
+            }
+            map.get(groupSizes[i]).add(i);
+
+            
+        }
+        
+        result.addAll(map.values());
+        return result ;
+
+    }
+}
