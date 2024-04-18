@@ -1,0 +1,129 @@
+4. Median of Two Sorted Arrays :: https://leetcode.com/problems/median-of-two-sorted-arrays/description/
+
+*********************************************************************************************************************************************
+
+// class Solution {
+//     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+
+//         //**********APPROACH 1 brute force  Tc O(n) and space O(m+n) *********************/
+
+//         int m = nums1.length;
+//         int n = nums2.length;
+
+//         int i = 0, j = 0,k=0;
+//         int temp[] = new int[m+n];
+
+//         while(i<m && j<n)
+//         {
+//             if(nums1[i] == nums2[j])
+//             {
+//                 temp[k++] = nums1[i++];
+//             }
+//             else if(nums1[i] < nums2[j])
+//             {
+//                 temp[k++] = nums1[i++];
+//             }else
+//             {
+//                 temp[k++] = nums2[j++];
+//             }
+
+//         }
+
+//         while(i<m)
+//         {
+//             temp[k++] = nums1[i++];
+//         }
+
+//         while(j<n)
+//         {
+//             temp[k++] = nums2[j++];
+//         }
+
+//         if((m+n)%2 == 1)
+//         return (temp[(m+n)/2])/1.0;
+//         else
+//         return (temp[temp.length/2]+temp[(temp.length/2)-1])/2.0;
+         
+//     }
+// }
+
+
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+
+        //**********APPROACH 2 better  Tc O(n) and space O(1) *********************/
+
+        //isme bss wo temp array ko htakr index store krlia knsa nikaalna h jb b pointer uss 
+        // index p phocha toh waha k element ko store kr lia
+
+        int m = nums1.length;
+        int n = nums2.length;
+
+        int i = 0, j = 0, k = 0 ;
+
+        int idx1= 0 , idx2 = 0;
+
+        
+        idx1 = (m+n)/2 -1 ;
+
+        idx2 = (m+n)/2 ;
+
+        int ele1 = Integer.MIN_VALUE , ele2 = Integer.MIN_VALUE ;
+
+        while(i<m && j<n)
+        {
+            if(nums1[i] <= nums2[j])
+            {
+                if(k==idx1)
+                ele1 = nums1[i++];          
+                else if(k==idx2)
+                ele2 = nums1[i++];
+                else 
+                i++;
+            }
+            else
+            {
+                if(k==idx1)
+                ele1 = nums2[j++];               
+                else if(k==idx2)
+                ele2 = nums2[j++];
+                else 
+                j++;
+            }
+            k++ ;
+            
+
+        }
+
+        while(i<m)
+        {
+           if(k==idx1)
+                ele1 = nums1[i++];          
+                else if(k==idx2)
+                ele2 = nums1[i++];
+                else 
+                i++;
+
+                k++ ;
+        }
+
+        while(j<n)
+        {
+            
+                if(k==idx1)
+                ele1 = nums2[j++];               
+                else if(k==idx2)
+                ele2 = nums2[j++];
+                else 
+                j++;
+
+                k++;
+        }
+
+        if((m+n)%2 == 1)
+        return ele2;
+        else
+        return (ele1+ele2)/2.0;
+
+    }
+}
