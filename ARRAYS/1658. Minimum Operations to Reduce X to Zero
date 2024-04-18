@@ -1,0 +1,61 @@
+1658. Minimum Operations to Reduce X to Zero ::https://leetcode.com/problems/minimum-operations-to-reduce-x-to-zero/description/
+
+**********************************************************************************************************************************************
+
+class Solution {
+    public int minOperations(int[] nums, int x) {
+        
+        //*********BRUTE FORCE********************************************************************/
+
+        // using recursion that is pick or not pick 1st or last
+
+        // gives TLE AND its memoization also gives TLE
+
+
+        //******OPTIMAL APPROACH************************************************************/
+
+        // (hme left or right me se minimum elements chahieye jiska sum X ho)  equiavalent to 
+        // (beech ka longest part jiska sum  -> sum - x ho)
+
+        // to hme largest sub array pta krna h jiska sum (totalsum-x) k brabr h or agr isli length L hai
+        // to total elements - L is ans
+
+        // approach for finding longest subarray who sums to totalsum-x
+        // use hashmap to store cumulative sum and index
+
+        Map<Integer,Integer>map = new HashMap<>();   // sum->index pair
+        map.put(0,-1);
+        int n = nums.length;
+
+        int cumSum = 0 ;
+
+        for(int i = 0;i<n;i++)
+        {
+            cumSum += nums[i];
+            map.put(cumSum , i);  // storing in map ki itna sum hmne iss index tkk dekh lia h
+        }
+
+        if(cumSum < x) return -1 ;  // agar total sum hi less than x hua to ans -1 hi hoga
+
+        int target = cumSum - x ;  // last me cumSum bhi totalsum k brabr hogya hoga
+
+        int lengthOfSubArray = Integer.MIN_VALUE ;
+        cumSum = 0 ;  // fr s ab cumulative sum nikaal k dekhte jaaege ki cumuSum - target present tha ki nai
+        for(int i = 0;i<n;i++)
+        {
+            cumSum += nums[i];
+            if(map.containsKey(cumSum - target))
+            {
+                // mtlb jaha cumSum-target pressent tha whaa s lekr yaha tkk ka sum target rha hoga
+                lengthOfSubArray = Math.max(lengthOfSubArray , i - map.get(cumSum - target));
+            }
+        }
+
+
+        // ab length of subarray m wo max length hogi jiska sum ( totalsum - x ) hhoga
+
+        return lengthOfSubArray==Integer.MIN_VALUE?-1:n- lengthOfSubArray ;  // to ye left + right wale minimum elements jinska sum x hoga
+
+
+    }
+}
