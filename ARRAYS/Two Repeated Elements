@@ -1,0 +1,65 @@
+Two Repeated Elements :: https://www.geeksforgeeks.org/problems/two-repeated-elements-1587115621/1
+
+************************************************************************************************************************************************
+
+// class Solution
+// {
+//     //Function to find two repeated elements.
+//     public int[] twoRepeated(int arr[], int n)
+//     {
+        
+//     //**********APPROACh 1 *********TC - O(N) ans SC ->O(n)*******************************************//
+        
+//         Set<Integer> set = new HashSet<>();
+        
+//         int [] res = new int[2];
+//         int index = 0;
+        
+//         for(int i = 0;i<n+2;i++)
+//         {
+//           if(set.contains(arr[i]))
+//           {
+//               res[index++] = arr[i];
+//           }
+//           else
+//           {
+//               set.add(arr[i]);
+//           }
+           
+           
+           
+//         }
+        
+//         return res;
+//     }
+    
+// }
+
+//**********APPROACh 2 *********TC - O(N) ans SC ->O(1)*******************************************//
+
+
+class Solution           // concept of neagating element
+{
+    //Function to find two repeated elements.
+    public int[] twoRepeated(int arr[], int n)
+    {
+        int [] res = new int[2];
+        int index = 0;
+        
+        for(int i = 0 ; i<n+2;i++ )
+        {
+            if(arr[Math.abs(arr[i])] < 0 ) // it means arr[i] is already visited before
+            {
+                res[index++] = Math.abs(arr[i]);
+            }
+            else
+            {
+                arr[Math.abs(arr[i])] = arr[Math.abs(arr[i])] * -1 ;
+            }
+        }
+        
+        return res;
+        
+    }
+    
+}
