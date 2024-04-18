@@ -1,0 +1,177 @@
+463. Island Perimeter  :: https://leetcode.com/problems/island-perimeter/description/
+
+******************************************************************************************************************************************
+
+// class Solution {
+//     int directions[][] = {{1,0},{-1,0},{0,1},{0,-1}};
+//     int perimeter = 0;
+//     public int islandPerimeter(int[][] grid) {
+        
+// //***************APPROACH -1 **********USING DFS**************************************//
+
+//     int rows = grid.length;
+//     int cols = grid[0].length;
+
+//     boolean flag = false ;
+
+//     for(int i = 0;i<rows;i++ )
+//     {
+//         for(int j = 0;j<cols;j++)
+//         {
+//             if(grid[i][j] == 1)
+//             {
+//                 //System.out.println("hello");
+//                  dfs(grid,i,j,rows,cols);
+//                  flag = true;
+//                  break;
+//             }
+//         }
+
+//         if(flag)
+//         break;
+//     }
+
+//     return perimeter;
+
+// }
+
+//     public void dfs(int[][] grid , int i,int j,int rows,int cols)
+//     {
+//         if(i<0 || i >= rows || j < 0 || j >= cols || grid[i][j] == 0)
+//         {
+//             perimeter++ ;
+//             return ;
+//         }
+
+//         //System.out.println("hello");
+
+//         if(grid[i][j] == -1)
+//         return;
+        
+//         grid[i][j] = -1 ;
+//         for(var dir : directions)
+//         {
+//             int newX = i + dir[0];
+//             int newY = j + dir[1];
+
+//             dfs(grid,newX,newY,rows,cols);
+
+//         }
+
+//     }
+// }
+
+
+//***************APPROACH -2 **********USING BFS**************************************//
+
+
+// class Solution {
+//     int directions[][] = {{1,0},{-1,0},{0,1},{0,-1}};
+//     int perimeter = 0;
+
+//     public int islandPerimeter(int[][] grid) {
+
+//     int rows = grid.length;
+//     int cols = grid[0].length;
+
+//     Queue<int[] > que = new LinkedList<>();
+
+//     boolean flag = false ;
+
+//         for(int i = 0;i<rows;i++ )
+//         {
+//             for(int j = 0;j<cols;j++)
+//             {
+//                 if(grid[i][j] == 1)
+//                 {
+//                     que.offer(new int[]{i,j});
+//                     flag = true;
+//                     break;
+//                 }
+
+//         }
+    
+//             if(flag)
+//             break;
+//         }
+
+//         while(!que.isEmpty())
+//         {
+//             int []temp = que.poll();
+//             int i = temp[0];
+//             int j = temp[1];
+
+
+//             for(var dir : directions)
+//             {
+//                 int newX = i+ dir[0];
+//                 int newY = j + dir[1];
+
+//                 if(newX <0 || newY <0 || newX>=rows || newY >= cols || grid[newX][newY] == 0)
+//                 { 
+//                     perimeter++;
+//                     continue;
+//                 }
+
+//                 if(grid[newX][newY] == -1)
+//                 continue;
+
+//                 grid[i][j] = -1 ;
+
+                
+//                 que.offer(new int[]{newX,newY});
+//                 grid[newX][newY] = -1 ;  //  agr ye pehle s hi h to dubara add naa ho kisi or rste s
+//             }
+//         }
+
+//         return perimeter;
+//     }
+// }
+
+
+//***************APPROACH -3 **********USING 2D traversal**************************************//
+class Solution {
+    
+
+    public int islandPerimeter(int[][] grid) {
+
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        int perimeter = 0;
+
+        for(int i = 0;i<rows;i++)
+        {
+            for(int j = 0;j<cols;j++)
+            {
+                if(grid[i][j] == 0)
+                continue;
+
+                //mtlb 1 hai tohh  4 direction m dekhl0
+                
+                if(j+1 >= cols || grid[i][j+1] == 0)
+                {
+                    perimeter++ ;
+                }
+
+                if(j-1 <0 || grid[i][j-1] == 0)  // out of bound ya paani ho tbb ans hoga
+                {
+                    perimeter++ ;
+                }
+
+                if(i+1 >= rows || grid[i+1][j] == 0)
+                {
+                    perimeter++ ;
+                }
+
+                if(i-1 < 0 || grid[i-1][j] == 0)
+                {
+                    perimeter++ ;
+                }
+
+            }
+        }
+
+        return perimeter ;
+    }
+}
