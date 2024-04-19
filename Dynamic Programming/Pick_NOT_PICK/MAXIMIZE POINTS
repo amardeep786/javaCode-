@@ -1,0 +1,31 @@
+MAXIMIZE POINTS :: https://practice.geeksforgeeks.org/contest/gfg-weekly-coding-contest-150/problems
+
+***********************************************************************************************************************************************
+
+class Solution {
+    public long maxPoints(int n, int[][] arr) {
+        
+        //pik not pik 
+        
+        long dp[] = new long[100001];
+        Arrays.fill(dp,-1L);
+        
+        return help(arr,n,0,dp);
+    }
+    
+    public long help(int[][] arr,int n,int index,long dp[])
+    {
+        if(index >= n)
+        return 0;
+        
+        if(dp[index] != -1L)
+        return dp[index];
+
+        
+        long pick = arr[index][0] + help(arr,n,index+arr[index][1] +1,dp);
+        
+        long notPick = help(arr,n,index +1,dp);
+        
+        return dp[index] = Math.max(pick,notPick);
+    }
+}
