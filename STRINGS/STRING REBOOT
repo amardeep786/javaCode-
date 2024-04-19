@@ -1,0 +1,23 @@
+STRING REBOOT  :: https://practice.geeksforgeeks.org/contest/gfg-weekly-coding-contest-150/problems
+
+***********************************************************************************************************************************************
+
+class Solution {
+    public static boolean AreEqual(String a, String b) {
+        
+        // bss hme y dekhna tha ki dono me substring honi chahiye "01" at same index
+        // hme pta hi h ki dono string 0 s shuru ho rhi h and 1 p khtam 
+        // to dono string k 0 s lekr "01" k 0 tkk equal krdenge orr baakio ko 1 aise dono string equal ho jaege
+        
+        int n = a.length();
+        
+        
+        for(int i = 0;i<n-1;i++)
+        {
+            if(((a.charAt(i)== b.charAt(i)) && (a.charAt(i)=='0')) && ((a.charAt(i+1)== b.charAt(i+1)) && (a.charAt(i+1)=='1')))
+            return true;
+        }
+        
+        return false ;
+    }
+}
