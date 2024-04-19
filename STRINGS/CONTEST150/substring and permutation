@@ -1,0 +1,65 @@
+substring and permutation :: https://practice.geeksforgeeks.org/contest/gfg-weekly-coding-contest-150/problems
+
+***********************************************************************************************************************************************
+
+class Solution {
+    public static ArrayList<Integer> substringsAndPermutations(int n, int m, String s,
+                                                               String[] arr) {
+        
+        ArrayList<Integer> res = new ArrayList<>();
+        
+        Map<Character,ArrayList<Integer>> map = new HashMap<>();
+        
+        for(int i = 0;i<n;i++)
+        {
+            if(!map.containsKey(s.charAt(i)))
+            {
+                map.put(s.charAt(i) , new ArrayList<>());
+            }
+            
+            map.get(s.charAt(i)).add(i);
+        }
+        
+        // yaha tkk hmne hrek character k liy usk indexes store kr liye hain
+        // ab bss array k hrek string ko pks k dekhna h ki knse character ka index sbse door hai 
+        // wahi index + 1 ans hoga
+        
+        for(var str : arr)
+        {
+            int maxIndex = -1 ;
+            // ek aur frequency store krni pdegi jo ki current array elemennt k characters ki
+            // frequency store krega
+            Map<Character,Integer> freq = new HashMap<>();
+            
+            for(int i = 0;i<str.length();i++)
+            {
+                freq.put(str.charAt(i), freq.getOrDefault(str.charAt(i),0)+1);
+            }
+            
+            // ab y dekhna hai ki current string k kisi element ki frequency agr map m pde char 
+            // ki freq s jaada h tb b -1 aaega
+            
+            boolean flag = false ;  // ho skta h aadhe number map m mile aadhe naa to aadhe k hissab s 
+                                    // ans update ho jaega but hme -1 chahiye iss case me
+            for(Map.Entry<Character,Integer> entry : freq.entrySet())
+            {
+                if(map.get(entry.getKey()) == null || entry.getValue() > map.get(entry.getKey()).size())
+                {
+                    flag = true;
+                    break;
+                }
+                else
+                {
+                    maxIndex = Math.max(maxIndex, map.get(entry.getKey()).get(entry.getValue()-1));
+                }
+            }
+            if(flag)   // mtlb hm kisi string  k liy break krk aaye h to ans -1 
+            res.add(-1);
+            else
+            res.add(maxIndex==-1? -1 : maxIndex+1); // qki hme last index nahi blki kitny dooor tkk gye hain wo btana h
+        }
+        return res;
+        
+    }
+            
+}
