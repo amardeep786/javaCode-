@@ -1,0 +1,49 @@
+1535. Find the Winner of an Array Game  :: https://leetcode.com/problems/find-the-winner-of-an-array-game/description/
+
+*********************************************************************************************************************************************
+
+class Solution {
+    public int getWinner(int[] arr, int k) {
+        
+        // agar kbhi bhi winner maximum element hua to to wahi ans hoga qki wo sbko hra dega and at some point wo 
+        // winning streak equal to k bhi krlega
+
+        // agar k>= arr.length hua tbb bbhi winner maximum element hoga kiuki k>n hai mtlb kisi element ko
+        // jitne elements h ussey jada bar jeetna hai pr wo max s haarega ki hrek element orr maximum element hi h jo sbse
+        // jeet skta hai
+
+        // and hme haarne wale ko peeche shift krne ki jrurt nai h qki fr hrek element left shift hoga to complexity bdhegi
+        // to isk liy current winner ko hi store kr lenge or current element ko winner s compare krte rhege
+
+        int winner = arr[0];
+        int streak = 0 ;
+
+        int n = arr.length;
+
+        
+
+        int maxE = Integer.MIN_VALUE ;
+        for(var e : arr)
+        {
+            maxE = Math.max(maxE,e);
+        }
+        if(k>=n) return maxE;
+
+        for(int i = 1;i<n;i++)
+        {
+            if(arr[i] > winner)
+            {
+                winner = arr[i];
+                streak = 1 ;
+            }else
+            {
+                streak++ ;
+            }
+
+            if(winner == maxE || streak == k)   // agr streak k hui ya winner kbhi b maximum element hua  to return
+            return winner;
+        }
+
+        return -1 ;
+    }
+}
