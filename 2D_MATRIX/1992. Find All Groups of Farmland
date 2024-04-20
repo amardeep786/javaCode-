@@ -1,0 +1,133 @@
+1992. Find All Groups of Farmland  :: https://leetcode.com/problems/find-all-groups-of-farmland/description/
+
+************************************************************************************************************************************************
+
+APPROACH - 1 USING DFS
+/*
+class Solution {
+    int directions[][] = {{0,1},{0,-1},{1,0},{-1,0}};
+    public int[][] findFarmland(int[][] land) {
+        
+        int rows = land.length;
+        int cols = land[0].length;
+
+        List<int[]> list = new ArrayList<>();
+
+        for(int i = 0;i<rows;i++)
+        {
+            
+            for(int j = 0;j<cols;j++)
+            {
+                
+
+                int r1 = i;
+                int c1 = j;
+                
+            if(land[i][j] == 1)
+               {
+                    int []arr = new int[2];
+                    arr = dfs(land,i,j,-1,-1,rows,cols); // will return array of 2 containing end coordinates
+                    list.add(new int[]{r1,c1,arr[0],arr[1]});
+                }
+             }
+             
+        }
+
+        int [][] res = new int[list.size()][];
+
+        for(int i = 0;i<list.size();i++)
+        res[i] = list.get(i);
+
+        return res;
+    }
+
+    public int[] dfs(int[][] land , int i,int j , int r2, int c2 ,int rows,int cols)
+    {
+        int []end = new int[2];
+
+        land[i][j] = 0 ; // visited current land
+
+        end[0] = Math.max(i,r2);   // qki bottom corner ki khas bat y hai ki wo maximum hoga
+        end[1] = Math.max(j,c2);
+
+        for(var dir : directions)
+        {
+            int newX = i + dir[0];
+            int newY = j + dir[1];
+
+            if(newX >= 0 && newX<rows && newY >= 0 && newY < cols && land[newX][newY]==1)
+            {
+                int[]newEnd =  dfs(land,newX,newY,end[0],end[1],rows,cols);  // future  s max end le aagea 
+
+                end[0] = Math.max(end[0],newEnd[0]);   // ab futre and current s maximum dekhlo
+                end[1] = Math.max(end[1],newEnd[1]);
+            } 
+        }
+
+        return end;
+    }
+}
+
+*/
+
+****************************************************************************************************************************************
+
+// ***************APPROACH 3  SIMPLE TRAVERSAL***********************************************************************8
+
+class Solution {
+    
+    public int[][] findFarmland(int[][] land) {
+
+        int rows = land.length;
+        int cols = land[0].length;
+
+        List<int[]> list = new ArrayList<>();
+
+        for(int i = 0;i<rows;i++)
+        {           
+            for(int j = 0;j<cols;j++)
+            {
+                if(land[i][j] == 0)
+                continue;
+
+                // mtlb 1 mila to yaha s right tkk dekhte jaao kaha tkk 1 hai
+
+                int col1 = j;
+
+                while(col1 < cols && land[i][col1] == 1 )
+                {
+                    col1++ ;  //ye usi row k last 1 tkk chla jaega
+                }
+
+                int row1 = i;  // current row s
+
+                while(row1 < rows && land[row1][j] == 1 )  // neeche 1 jbtk h
+                {
+                    row1++ ;  //ye usi row k last 1 tkk chla jaega
+                }
+
+                col1 = col1 == 0? col1 : col1-1;
+                row1 = row1 == 0? row1 : row1-1;
+
+                list.add(new int[]{i,j,row1,col1});
+
+                // orr jo visited hain unhe 0 to bna hi do
+
+                for(int k = i ; k<= row1;k++)
+                {
+                    for(int m = j;m<= col1;m++)
+                    {
+                        land[k][m] = 0;
+                    }
+                }
+            }
+
+        }
+
+        int [][] res = new int[list.size()][];
+        for(int i = 0;i<list.size();i++)
+        res[i] = list.get(i);
+
+        return res;
+    }
+}
