@@ -1,0 +1,170 @@
+100276. Find Edges in Shortest Paths  :: https://leetcode.com/contest/weekly-contest-394/problems/find-edges-in-shortest-paths/
+
+*************************************************************************************************************************************************
+
+class Solution {
+    public boolean[] findAnswer(int n, int[][] edges) {
+        
+        /*
+        
+        Approach -> 1. pehle to source s destination tkk dijkstra lga karr shortest path ki value nikaal lo 
+        
+        ab ye shortest path multiple ways s achieve ho skta hai
+        to hm hrek edge ko uthaege (say u v w) to source se u tkk ka distance hmne nikaal rkha hoga
+        agr hme v tkk se destination ka bhi shortest distance pta ho toh mtlb  hme src-> u and u ->v ka toh w hai hi and v se destination ka 
+        pta ho tohh hme in teeno value ko jod  k dekh skte hain ki ye minnimum dist jo src-> destination hai ki nai agr hai to ye edge hmne           lia hoga
+        
+        // destination s v ka distance chahiye to ek dijkstra v se bhi maarna pdega
+        
+        //corner case  ->  ho skta hi ki edge [u v w] me src v se shortest path s connected ho or u destination se to hme src to v and dest             to u b check krna hoga
+        
+        
+        
+        
+        */
+        
+        int distSrc[] = new int[n];  // source s distance fill kreege
+        int distDes[] = new int[n];  // dest s distance fill kreege
+        
+        Arrays.fill(distSrc,Integer.MAX_VALUE);
+        Arrays.fill(distDes,Integer.MAX_VALUE);
+        
+        // graph bnaate h pehle
+        
+        Map<Integer,ArrayList<int[]>> graph = new HashMap<>();
+        
+        for(var edge : edges)
+        {
+            if(!graph.containsKey(edge[0]))
+            {
+                graph.put(edge[0],new ArrayList<>());
+            }
+            
+            graph.get(edge[0]).add(new int[]{edge[1],edge[2]});
+            
+            
+            if(!graph.containsKey(edge[1]))
+            {
+                graph.put(edge[1],new ArrayList<>());
+            }
+            
+            graph.get(edge[1]).add(new int[]{edge[0],edge[2]});
+        }
+        
+        //****************************************
+        
+        /*  printing map values 
+        
+        for (Map.Entry<Integer, ArrayList<int[]>> entry : graph.entrySet()) {
+            Integer key = entry.getKey();
+            ArrayList<int[]> value = entry.getValue();
+            System.out.println("Key: " + key);
+            System.out.println("Values:");
+            for (int[] array : value) {
+                for (int i : array) {
+                    System.out.print(i + " ");
+                }
+                System.out.println();
+            }
+            System.out.println();
+        }
+        
+        */
+        
+        
+        //*********************************************
+        
+        // graph ready hai 
+        // dijkstra ko bulao on src and dest
+        dijkstra(0,graph,distSrc , n);
+        
+        dijkstra(n-1,graph,distDes,n);
+        
+        // for(var p : distSrc)
+        // {
+        //     System.out.print(p +" ");
+        // }
+        // System.out.println();
+        // for(var p : distDes)
+        // {
+        //     System.out.print(p +" ");
+        // }
+        
+        long shortestDist = distSrc[n-1] ;
+        
+        //System.out.println(shortestDist);
+        // ab Src and dest s shortest ans aagya h toh bss ans dekhlo
+       
+        boolean result[] = new boolean[edges.length];
+        Arrays.fill(result,false);
+        int index = 0;
+        
+        for(var edge : edges)
+        {
+            int u = edge[0];
+            int v = edge[1];
+            int w = edge[2];
+            
+            
+            int flag = 1 ;
+            
+            
+            if((distSrc[u] + (long)w + distDes[v]) == shortestDist)  // agar src se u and dest se v + w equal hai to ans true 
+            {
+                flag = 0;
+                result[index++] = true ;
+            } 
+            else if((distSrc[v] + (long)w + distDes[u]) == shortestDist)   // agar src se v and dest se u + w equal hai to ans true 
+            {
+                flag = 0;
+                result[index++] = true ;
+            }
+            
+            if(flag == 1)   // mtlb dono nahi chle mtlb edge nahi hai part to iss index [ false krk aage bdho]
+                result[index++] = false ;   // agar aisee hi chhor dia to next value true yaha p aaskty h qki index++ kr rhe h 
+            
+            
+        }
+         return result ;
+        
+        
+        
+    }
+    
+        public void dijkstra(int src , Map<Integer,ArrayList<int[]>> graph ,int arr[], int n )   // function bna lete hain dijkstra ka 
+        {
+            
+            PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)-> a[1]-b[1]);  // sort based on cost
+            
+            pq.offer(new int[]{src,0});  // cost with itself 0
+            arr[src] = 0 ;
+            
+            while(!pq.isEmpty())
+            {
+                int temp[] = pq.poll();
+                int currNode = temp[0];
+                int currCost = temp[1];
+
+                
+                
+                if(graph.containsKey(currNode))
+                {
+                    for(var neigh : graph.get(currNode))
+                    {
+                        int nextNeigh = neigh[0];
+                        int nextCost = neigh[1];
+                        
+                        if(currCost + nextCost < arr[nextNeigh])
+                        {
+                            arr[nextNeigh] =currCost + nextCost ;
+                            pq.offer(new int[]{nextNeigh , arr[nextNeigh]});
+                        }
+                    }
+                }
+                
+                
+            }
+            
+            
+        }
+}
