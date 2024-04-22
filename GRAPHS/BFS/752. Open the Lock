@@ -1,0 +1,65 @@
+752. Open the Lock :: https://leetcode.com/problems/open-the-lock/description/
+
+**************************************************************************************************************************************************
+
+class Solution {
+    public int openLock(String[] deadends, String target) {
+
+     Queue<String> que = new LinkedList<>();
+     Set<String> visited = new HashSet<>();
+
+            if(Arrays.asList(deadends).contains("0000"))
+            {               
+                return -1;
+            }
+
+     que.offer("0000");
+     visited.add("0000");
+
+     int count = 0 ;
+
+     while(!que.isEmpty())
+     {
+        int n = que.size();
+        while(n-- != 0)
+        {
+            StringBuilder temp = new StringBuilder(que.poll());
+
+            if(temp.toString().equals(target))
+            return count ;
+
+            // mtlb hrek position p 0-9 insert krk check krna h
+
+            for(int i = 0;i<temp.length();i++)
+            {
+                char ch = temp.charAt(i);
+                char decChar = ch=='0'?'9': (char)(ch-1) ;
+                char incChar = ch=='9'?'0': (char)(ch+1) ;
+
+                temp.setCharAt(i,decChar);
+                if(!visited.contains(temp.toString()) && !Arrays.asList(deadends).contains(temp.toString()))
+                {
+                    visited.add(temp.toString());
+                    que.offer(temp.toString()) ;
+                }
+                
+                temp.setCharAt(i,incChar);
+                if(!visited.contains(temp.toString()) && !Arrays.asList(deadends).contains(temp.toString()))
+                {
+                    visited.add(temp.toString());
+                    que.offer(temp.toString()) ;
+                }
+
+                
+                temp.setCharAt(i,ch);  // purane character ko fr se add krdo taaki nect wale ko prev same dikhe
+            }
+
+        }
+
+        count++ ;
+     }
+
+     return -1 ;
+
+    }
+}
