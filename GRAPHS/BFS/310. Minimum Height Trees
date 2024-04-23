@@ -1,0 +1,81 @@
+310. Minimum Height Trees  :: https://leetcode.com/problems/minimum-height-trees/description/
+
+**********************************************************************************************************************************************
+
+class Solution {
+    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        
+        // APPROACH -> leaf node to kbhi minimum height m help nai krega qki usse distance jaada hi aaega
+        // hme central node chahiye jaha s sbki doori kam s kam ho
+
+        // to hum sbhi leaf ko que m daal kar waha s central node ki trf jaa skte hain
+         // qki leaf node s kahi orr ja nai paega wapis centre ki trf jaa skte hain
+
+         // to edges s graph bna lete hain 
+         // orr sbhi leaf ko dhundne k liy indegree ka vector bna lete hain wki leaf ki indegree 1 hogi
+
+         if(n==1) 
+         {
+            List<Integer> list = new ArrayList<>();
+            list.add(0);
+            return list;
+         } 
+
+         Map<Integer, List<Integer>> map = new HashMap<>();
+         int indegree[] = new int[n];
+
+         for(var edge : edges)
+         {
+            int u = edge[0];
+            int v = edge[1];
+
+            map.computeIfAbsent(u,k->new ArrayList<>()).add(v);
+            map.computeIfAbsent(v,k->new ArrayList<>()).add(u);
+
+            indegree[u]++;
+            indegree[v]++ ;
+         }
+
+         // graph redy hai to leaf ko que m daalo
+         Queue<Integer> que = new LinkedList<>();
+         for(int i = 0;i<n;i++)
+         {
+            if(indegree[i]==1)
+            {
+                que.offer(i);
+            }
+         }
+
+         //*****atmost 2 nodes ho skte hain central ya 1 qki or kahi s height mini nai aaega try on simple path of length even and odd */
+
+         // jbtk graph m 2 nodes s jaada node hain tbtk centre ki trf aate jaao
+         while(n>2)
+         {
+            int size = que.size();
+            n-=size;
+            while(size-- != 0)
+            {
+                int temp = que.poll();
+                // iske jitne b neighburs ka indgree 1 hai use daalo ki agle leaf wohi hinge or leaf minimum height m contri nai krega
+
+                if(map.containsKey(temp))
+                for(var i : map.get(temp))
+                {
+                    indegree[i]-- ; // sbhi neightbour ki degree ghate di
+                    if(indegree[i] == 1)  // ab jiski bhi 1 hai
+                    {
+                        que.offer(i);
+                    }
+                }
+            }
+         }
+         // yaha tkk aagye mtlb queue m 2 ya 1 elelemt hoga to wahi central bcha hoga
+         List<Integer> result = new ArrayList<>();
+         while(!que.isEmpty())
+         {
+            result.add(que.poll());
+         }
+
+         return result;
+    }
+}
