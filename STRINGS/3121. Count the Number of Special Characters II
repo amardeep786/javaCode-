@@ -1,0 +1,43 @@
+3121. Count the Number of Special Characters II :: https://leetcode.com/problems/count-the-number-of-special-characters-ii/description/
+
+**************************************************************************************************************************************************
+
+class Solution {
+    public int numberOfSpecialChars(String word) {
+        
+
+        // hme bss last occurence of lowercase ko first occurence of upper case s krna h 
+
+        int lower[] = new int[26] ; 
+        int upper[] = new int[26];
+        Arrays.fill(upper,-1);
+        Arrays.fill(lower,-1);   // sbko -1 s fill krdia 
+
+        int count = 0 ;
+
+        for(int i  = 0;i<word.length();i++)
+        {
+            char ch = word.charAt(i);
+
+            if(Character.isLowerCase(ch))  // mtlb ek lower case dekh chuke hain
+               {
+
+                    lower[ch-'a'] = i ;  // hrek baari hrek character k last index rewrite hota jaega            
+
+               }
+            else if(upper[ch-'A'] == -1)  // qki upper ka hme first occurence hi dekhna hai to agr koi -1 huaa tbhi uska first occurence hoga
+                {
+                    upper[ch-'A']=i ;  // dusri baar same upper case aaya to ye update nai hoga
+                }
+        }
+
+        for(int i = 0;i<=25;i++)
+        {
+            if(lower[i]!= -1 && upper[i]!= -1 && upper[i]>lower[i])  // agar lower & upper dono present hain and upper ka index bda h lower k se to count bdhega
+            count++ ;
+        }
+        return count;
+        
+    
+    }
+}
