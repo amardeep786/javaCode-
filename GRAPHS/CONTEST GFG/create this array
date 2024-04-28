@@ -1,0 +1,74 @@
+create this array :: https://practice.geeksforgeeks.org/contest/gfg-weekly-coding-contest-152/problems
+
+************************************************************************************************************************************************
+
+/*
+approach :- topological order maintain krega ki a-b me a pehle then b orr topological order m 
+neighbour nikaal k ans ko 1 se bdhaate jaao
+*/
+class Solution{
+    public int[] createArray(int M, int N, int Requirements[][]){
+        
+        // ek directed graph bna lo 
+        int n = N ;
+        Map<Integer,List<Integer>> map = new HashMap<>();
+        
+        for(var edge : Requirements)
+        {
+            int u = edge[0];
+            int v = edge[1];
+            
+            map.computeIfAbsent(u,k->new ArrayList<>()).add(v);
+        }
+        
+        boolean visited[] = new boolean[n];
+        Stack<Integer> stack = new Stack<>();
+        
+        for(int i = 0;i<n;i++)
+        {
+            if(!visited[i])
+            dfs(i,map,visited,stack);
+        }
+        
+        // yaha tkkk stack m topological order aagya 
+        // ab bss topological order m travel krke neighbours ko 1 jada value dete jaao
+        
+        int ans[] = new int[n];
+        Arrays.fill(ans,1);
+        
+        while(!stack.isEmpty())
+        {
+            int num = stack.pop();
+            if(map.containsKey(num))
+            {
+                for(var neighbour : map.get(num))
+                {
+                    if(ans[neighbour]<= ans[num])
+                    {
+                        ans[neighbour] = 1 + ans[num];
+                    }
+                }
+            }
+        }
+        
+        return ans;
+    }
+    
+    public void dfs(int i , Map<Integer,List<Integer>> map,boolean visited[],Stack<Integer> stack)
+    {
+        visited[i] = true;
+        
+        if(map.containsKey(i))
+        {
+            for(var x : map.get(i))
+            {
+                if(!visited[x])
+                {
+                    dfs(x,map,visited,stack);
+                }
+            }
+        }
+        
+        stack.push(i);
+    }
+}
