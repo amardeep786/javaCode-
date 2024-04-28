@@ -1,0 +1,76 @@
+3131. Find the Integer Added to Array I :: https://leetcode.com/problems/find-the-integer-added-to-array-i/description/
+
+*********************************************************************************************************************************************
+
+
+// class Solution {
+//     public int addedInteger(int[] nums1, int[] nums2) {
+        
+//         int n = nums1.length;
+        
+//         int diff[] = new int[n];
+//         for(int i = 0;i<n;i++)         //possible difference
+//         {
+//             diff[i] = nums2[i]-nums1[0];
+//         }
+        
+//         for (int i = 0;i<n;i++)
+//         {
+            
+//             add(nums1,diff[i]);
+            
+//             if(isEqual(nums1,nums2))
+//                 return diff[i];
+            
+//             remove(nums1,diff[i]);
+//         }
+        
+//         return -1;
+//      }
+//     public boolean isEqual(int []nums1,int nums2[])
+//     {
+//         Map<Integer,Integer> freq1 = new TreeMap<>();
+//         Map<Integer,Integer> freq2 = new TreeMap<>();
+        
+//         for(int i = 0;i<nums1.length;i++)
+//         {
+//             freq1.put(nums1[i] , freq1.getOrDefault(nums1[i],0)+1);
+//         }
+        
+//         for(int i = 0;i<nums2.length;i++)
+//         {
+//             freq2.put(nums2[i] , freq2.getOrDefault(nums2[i],0)+1);
+//         }
+        
+//         return freq1.equals(freq2);
+//     }
+    
+//     public void add(int[] nums1,int diff)
+//     {
+//         for(int i = 0;i<nums1.length;i++)
+//         {
+//             nums1[i]+=diff ;
+//         }
+//     }
+    
+//     public void remove(int[] nums1,int diff)
+//     {
+//         for(int i = 0;i<nums1.length;i++)
+//         {
+//             nums1[i]-=diff ;
+//         }
+//     }
+// }
+
+// ******************METHOD 2********************************************************************************************************8
+
+// dono ko sort krdege to after adding x to nums1 order is same 
+class Solution {
+    public int addedInteger(int[] nums1, int[] nums2) {
+
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+
+        return nums2[0]-nums1[0];
+    }
+}
