@@ -1,0 +1,60 @@
+3132. Find the Integer Added to Array II  :: https://leetcode.com/problems/find-the-integer-added-to-array-ii/description/
+
+*************************************************************************************************************************************************
+
+class Solution {
+    public int minimumAddedInteger(int[] nums1, int[] nums2) {
+        
+        //approach
+
+        /*
+
+            hum hrek possible combination lekr index ka usko htaegege or fir 1st part wala logic
+
+        */
+
+        int n  = nums2.length;
+        int ans = Integer.MAX_VALUE;
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);    // taaki aage jo updaedarray bnega after deletion of 2 element will be sorted
+
+        for(int i = 0;i<nums1.length;i++)  // all possible index ko htaege
+        {
+            for(int j = i+1;j<nums1.length;j++)
+            {
+                ArrayList<Integer> updatedArray = new ArrayList<>();
+
+                for(int k = 0;k<nums1.length;k++)
+                {
+                    if(k==i || k==j)
+                    {
+                        continue;
+                    }
+                    updatedArray.add( nums1[k]);  // ye 2 element ko htakar nya aray bna
+
+                }
+
+                int flag = 1;  // all diff is same
+                int diff = nums2[0]-updatedArray.get(0);
+
+                for(int idx = 1;idx<updatedArray.size();idx++)
+                {
+                    if((nums2[idx]-updatedArray.get(idx)) != diff)   // checking ki hrek element wise diff same hai
+                    {
+                        flag = 0;
+                        break ;
+                    }
+                }
+
+                if(flag==1)  // all diff is same
+                {
+                    ans = Math.min(ans,diff);
+                }
+            }
+        }
+
+        return ans;
+        
+    }
+}
+ 
