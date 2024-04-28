@@ -1,0 +1,166 @@
+834. Sum of Distances in Tree  ::  https://leetcode.com/problems/sum-of-distances-in-tree/description/
+
+********************************************O(N^2)*****************************************************************************************************
+
+/* class Solution {
+    public int[] sumOfDistancesInTree(int n, int[][] edges) {
+        
+    
+
+    BRUTE FORCE : -
+    apply bfs or dfs from all nodes and calculate distances
+    */
+
+    // edges s graph bnao
+
+
+/*   //             BRUTE FORCE                  
+
+    Map<Integer,List<Integer>> map = new HashMap<>();
+
+    for(var edge:edges)
+    {
+        int u = edge[0];
+        int v = edge[1];
+
+        map.computeIfAbsent(u,k->new ArrayList<Integer>()).add(v);
+        map.computeIfAbsent(v,k->new ArrayList<Integer>()).add(u);
+
+    }
+
+        boolean visited[] = new boolean[n];
+        int res[] = new int[n];
+        for(int i = 0;i<n;i++)
+        {
+            res[i] = dfs(i,map,0,visited);  // 0 is for current distance
+        }
+    return res;
+}
+
+    public int dfs(int i , Map<Integer,List<Integer>> map , int count ,boolean visited[])
+    {
+        visited[i] = true;
+        int childCount = 0 ;
+        if(map.containsKey(i))
+        {
+            for(var nei : map.get(i))
+            {
+                if(!visited[nei])
+                {
+                    childCount += dfs(nei,map,count+1,visited);
+                }
+            }
+        }
+        visited[i] = false ;
+        return count+childCount;
+
+
+    */
+    
+
+    //***************************************************APPROACH 2**********OPTIMAL**O(n)*************************************************************************** */
+    /*
+    hum given node s dfs lga kar uska ans calculate kr lenge 
+    ab child jidhar hai wo or uske subtree me height 1 s kamm hogi qki ab child as a parent kaam krega to pehle parent ka ans tha 
+    usme ab #nodes in child subtree ko ghtaado  
+
+    baaki bche hue nodes ki height m 1 se increment hoga qki ab ye child s parent and parent s wo sb edges to unki disatnces bdhi 
+
+    to ans = ans of given node - no of nodes in child subtree including child(x) + (n-x)
+
+    bs isi logic ko ab umplement krna h
+    */
+
+    class Solution {
+
+        int root_result = 0;
+        ArrayList<Integer> count;
+
+
+    public int[] sumOfDistancesInTree(int n, int[][] edges) {
+
+        // pehle to hme root ka ans store krlena h taaki isi m + ya - krke hum baaki k answers ko calulate krege 
+        // count of child b store krna h sbhi ka to wo bhi saath k saath hi store krte and root ka result b chahiye toh inko global bna lia taaki update krte rhe saath k saath hi
+
+        count = new ArrayList<>(n);   // initialize krdo 0 se count array ko
+
+        for(int i = 0;i<n;i++)
+        {
+            count.add(0);
+        }
+
+        Map<Integer,List<Integer>> map = new HashMap<>();
+
+        for(var edge:edges)
+        {
+            int u = edge[0];
+            int v = edge[1];
+
+            map.computeIfAbsent(u,k->new ArrayList<Integer>()).add(v);
+            map.computeIfAbsent(v,k->new ArrayList<Integer>()).add(u);
+
+        }
+
+        dfsRoot(map,0,-1,0);  // 0 is current node , -1 is taaki hum apne parent k paas fir naa chle jaayen and 0 ki current level jo ki +1 hota jaega count nikalne k laam aayeaga
+
+        // yaha takkk hmare paas root ka result and sbhi nodes k child ka count aagya h
+
+
+        // for(var c : count)
+        // System.out.print(c+" ");
+        // System.out.println();
+
+        // to bss ek or dfs lgaane pdega jisse hum apna result array fill krte jaaege with help of root 
+
+        int[] result = new int[n];
+        result[0] = root_result ;   // shuru m root node ka result rkh dia
+
+        dfs(map,0,-1,result,n);   // 0 current node and prev = -1
+        
+        return result ;
+
+    }
+
+    public void dfs(Map<Integer,List<Integer>> map,int parent,int prev_node,int[] result,int n)
+    {
+        // sbhi child k paas jaao
+        if(map.containsKey(parent))
+        {   
+            for(var child : map.get(parent))
+            {
+                if(child == prev_node)
+                continue;
+
+                result[child] = result[parent] - count.get(child) + (n - count.get(child)) ;
+
+                dfs(map,child,parent,result,n);  // populate further results
+            }
+        }
+    }
+
+    public int dfsRoot(Map<Integer,List<Integer>> map , int curr_node , int prev_node , int depth)
+    {
+
+        int totalNode = 1 ;  // current wale ko toh count krna hi h
+
+        root_result += depth ;  // hm kisi level p aaye mtb ye node root se depth level p hai to root ka ans bhi update hota jaega 
+
+        // ab iske child k paaas bhi jaao or dekhlo kitne nodes hain
+
+        if(map.containsKey(curr_node))
+        {
+            for(var child : map.get(curr_node))
+            {
+                if(child == prev_node)  // mtlb parent k paas hi jaa rhe h to kuj nai krna h continue krdo
+                continue;
+
+                // agr aisa nai h toh totalNode ko update krna hoga
+                totalNode += dfsRoot(map,child,curr_node,depth+1);    // child current node bna or current wala prev bna gya
+            }
+        }
+
+        count.set(curr_node,totalNode);   // curr_node k children ka count including itself store krdia
+
+        return totalNode ;
+    }
+}
