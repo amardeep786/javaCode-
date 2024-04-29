@@ -1,0 +1,21 @@
+2997. Minimum Number of Operations to Make Array XOR Equal to K  :: https://leetcode.com/problems/minimum-number-of-operations-to-make-array-xor-equal-to-k/description/
+
+*************************************************************************************************************************************************************************
+
+class Solution {
+    public int minOperations(int[] nums, int k) {
+        
+        // sbhi number ka xor krdo 
+        // fr uska xor K k saath kreege to konsi knsi position m difference hoga wo aajega
+        // fr bss wo posiiton coiunt krlo utne hi position operation krna hoga that is kisi bhi bit ko 1 bnado
+        int totalXor = 0;
+        for(int ele : nums)
+        {
+            totalXor^= ele;
+        }
+
+        int diff = totalXor^k;
+
+        return Integer.bitCount(diff);
+    }
+}
