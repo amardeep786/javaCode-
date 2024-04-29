@@ -1,0 +1,65 @@
+3133. Minimum Array End  :: https://leetcode.com/problems/minimum-array-end/description/
+**************************************************************************************************************************************************
+
+class Solution {
+    public long minEnd(int n, int x) {
+
+        // to hme wo last number nikalna h jo sbse minimum ho  +  kisi number s waha tkk ka AND bhi x ho
+
+        // to hme sbhi number ka AND x chahiye to c me jaha jaha p 1 hga inn sbhi numbers me bhi waha waha 1 hona chahiye tbhi to final
+        // sbka AND Krege to ans x aaega
+
+        // to pehla number hmmaara x hi hoga wki jaha p x me set bit hai waha p hmaare aray k number bhi set hone chahiye
+        // since hme sbse chhota nu,ber pehle chahiy tb ussey bda and usey bda to set bit k allawa baaki places me 0 bhrdo
+        // to pehla number khud x hi hoga        
+
+
+        /*
+            ans 6 chahiye to  11_ ab 3rd place p kya daalna h obviously ans 0 chahiye to pehla no 6 hi le lenhe 
+
+            taaki 110 ab aage k number me 11_ ab blank m kuj b ho AND to zero hi hoga to bss jitne numvr h uss hissab s 0 ,1 ,2 fill krdo 
+
+        */
+        int xBit[] = new int[64] ; // to store binary bits of x  qki long m ans pucha h
+        int nBit[] = new int[64] ;  // to store n binary
+
+        n-- ;  // qki pehla number to x hi hai too jaha jaha x set h waha waha hmaare number b set honge 
+                // baaki khaali jgeh bchegi jaha unset bit hai to waha pehle all 0 ie 0 fr 1 and fr 2 and so on to last me n-1 bhrege isliy n--
+                // kia taaki iska bnary b aajega
+
+        // fr iske ek ek bit ko utha k hmaare array k number k khaali jgeh p  p bit by bit fillkreege
+
+        for(int i = 0;i<32;i++)
+        {
+            xBit[i] = (x>>i)&1 ;
+            nBit[i] = (n>>i)&1 ;   // dono ka binary store krlia (n-1) ka bh qki last number n-1 hogai
+        }
+
+        // place this nBits on xbit ki 0th location
+
+
+        int i = 0, j = 0 ;  // i point to x and j point to n
+
+        while(i<64)
+        {
+            if(xBit[i] == 1)
+            {
+                i++ ;
+                continue;
+            }
+
+            xBit[i++] = nBit[j++] ;   // x me jaha 0 mila waha nth bit dala
+        }
+
+        // ab xbit me jo value hai usey long m convert krk ans dedo
+
+        long ans = 0 ;
+
+        for(int k = 0;k<64;k++)
+        {
+            ans += xBit[k]*(1L << k);
+        }
+
+        return ans;
+    }
+}
