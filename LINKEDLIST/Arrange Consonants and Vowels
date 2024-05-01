@@ -1,0 +1,46 @@
+Arrange Consonants and Vowels :: https://www.geeksforgeeks.org/problems/arrange-consonants-and-vowels/1
+
+**************************************************************************************************************************************************
+
+class Solution {
+    
+    public Node arrangeCV(Node head){
+        
+        Node vowel = new Node('a');
+        Node consonant = new Node('b');
+        
+        Node headVowel = vowel;
+        Node headConsonant = consonant ;
+        
+        
+        while(head != null)
+        {
+            if(isVowel(head.data))
+            {
+                
+                vowel.next = head;
+                vowel = vowel.next;
+                
+                
+            }else
+            {
+                consonant.next = head;
+                consonant = consonant.next ;
+                
+            }
+            
+            head = head.next;
+        }
+        
+        consonant.next = null;
+        vowel.next = headConsonant.next;
+        
+        
+        return headVowel.next;
+    }
+    
+    public boolean isVowel(char ch)
+    {
+        return ch=='a'||ch=='e'||ch=='i'||ch=='o'||ch=='u' ;
+    }
+}
