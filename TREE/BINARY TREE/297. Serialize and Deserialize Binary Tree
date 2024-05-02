@@ -1,0 +1,108 @@
+297. Serialize and Deserialize Binary Tree  :: https://leetcode.com/problems/serialize-and-deserialize-binary-tree/description/
+
+************************************************************************************************************************************************
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+
+        StringBuilder sb = new StringBuilder();
+        help(root,sb);
+
+        return sb.toString();
+    }
+
+    public void help(TreeNode root , StringBuilder sb)
+    {
+        if(root == null)
+        {
+            sb.append("null,");   // defines null
+            return ;
+        }
+
+        sb.append(String.valueOf(root.val+","));   // separtes 12 with 1,2 so that data is identified properly
+
+        help(root.left,sb);
+        help(root.right,sb);
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        
+        //StringBuilder sb = new StringBuilder(data);
+        ArrayList<String> list = new ArrayList<>(Arrays.asList(data.split(",")));
+
+        return help2(list);        
+    }
+
+    public TreeNode help2(List<String> list)   // instead of list we can use queue for efficient pop 
+    {       
+        String temp = list.get(0);
+        list.remove(0);
+
+
+        if(temp.equals("null"))
+        return null ;
+
+        TreeNode root = new TreeNode(Integer.parseInt(temp));
+        root.left = help2(list);
+        root.right = help2(list);
+
+        return root;
+    }
+}
+
+//**********USING QUEUE***************************************************************************************************************************************** */
+
+// public class Codec {
+
+//     // Encodes a tree to a single string.
+//     public String serialize(TreeNode root) {
+//         StringBuilder sb = new StringBuilder();
+//         serializeHelper(root, sb);
+//         return sb.toString();
+//     }
+
+//     private void serializeHelper(TreeNode root, StringBuilder sb) {
+//         if (root == null) {
+//             sb.append("null").append(",");
+//             return;
+//         }
+//         sb.append(root.val).append(",");
+//         serializeHelper(root.left, sb);
+//         serializeHelper(root.right, sb);
+//     }
+
+//     // Decodes your encoded data to tree.
+//     public TreeNode deserialize(String data) {
+//         Queue<String> nodes = new LinkedList<>(Arrays.asList(data.split(",")));
+//         return deserializeHelper(nodes);
+//     }
+
+//     private TreeNode deserializeHelper(Queue<String> nodes) {
+//         String val = nodes.poll();
+//         if (val.equals("null")) {
+//             return null;
+//         }
+//         TreeNode root = new TreeNode(Integer.parseInt(val));
+//         root.left = deserializeHelper(nodes);
+//         root.right = deserializeHelper(nodes);
+//         return root;
+//     }
+// }
+
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser = new Codec();
+// Codec deser = new Codec();
+// TreeNode ans = deser.deserialize(ser.serialize(root));
