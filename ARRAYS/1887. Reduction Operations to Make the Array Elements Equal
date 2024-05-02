@@ -1,0 +1,25 @@
+1887. Reduction Operations to Make the Array Elements Equal :: class Solution {
+    public int reductionOperations(int[] nums) {
+        
+        // we need to find everytime largest and second largest so sort them 
+
+        Arrays.sort(nums);
+        int n = nums.length;
+        int operations = 0;
+
+        for(int i = n-1;i>0;i--)
+        {
+            //considering i index element is largest
+            if( nums[i]==nums[i-1])   // agar second largest  bhi largest k equal hai toh hme orr peechhe jana h
+            {
+                continue;
+            }
+
+            operations = operations + n-i ;   // baad wale sare elements ko bhi to reduce krege
+                   
+        }
+
+        return operations;
+
+    }
+}
