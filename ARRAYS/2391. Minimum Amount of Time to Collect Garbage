@@ -1,0 +1,86 @@
+2391. Minimum Amount of Time to Collect Garbage  :: https://leetcode.com/problems/minimum-amount-of-time-to-collect-garbage/
+
+***********************************************************************************************************************************************
+
+class Solution {
+    public int garbageCollection(String[] garbage, int[] travel) {
+        
+        /*****10^5 * 10 = 10^6**********means we need O(n) solution******* */
+
+        /*
+            jitne garbage hain utna time to lgega hi 
+            ek baar me ek hi truck work kr rha hai toh individually dekh lenge kitna time le rhe each truck and add them
+
+            to hum jb dekh rhe honge ki total kitna garbage hai isi smy pointer rkh lenge M,P,G ka jo y bta rha hoga ki max kitne ghr tkk koi truch jaega 
+            then trvaerl m ja kart time add krdenge
+
+            to hum travel array ka prefix sum bhi nikal lenge jo ki hme btaega ki kis ghr tkk jaane m kitna total time lgega
+
+
+            */
+
+            int n  = garbage.length;
+
+            int lastM = -1,lastP=-1,lastG = -1;
+
+            int totalTime = 0;
+
+            for(int i = 0;i<n;i++)
+            {
+                String temp = garbage[i];
+
+                int len = temp.length();
+                totalTime += len ;
+
+                for(int j = 0;j<len;j++)
+                {
+                    if(temp.charAt(j)=='M')
+                    {
+                        lastM = i ;
+                        continue;
+                    }
+
+                    if(temp.charAt(j)=='P')
+                    {
+                        lastP = i ;
+                        continue;
+                    }
+
+                    if(temp.charAt(j)=='G')
+                    {
+                        lastG = i ;
+                        continue;
+                    }
+                }
+
+            }
+
+             // yaha tkk hmare paas total garbage ka time bhi add hogya hoga and metal , plastic , glass last knse ghr me hai wo bhi aagya hoga
+
+            // ab bss jo jis ghr tkk jaega waha tk ka sum from travel
+
+            // travel array ka bbhi prefix sum nikal lo 
+
+            for(int i = 1;i<travel.length;i++)
+            {
+                travel[i] = travel[i-1]+travel[i];
+            }
+
+                if(lastM > 0)   // tbhi to atleast 1 ghr bhi travel krna pdega
+                {
+                    totalTime += travel[lastM-1];
+                }
+
+                if(lastP > 0)
+                {
+                    totalTime += travel[lastP-1];
+                }
+
+                if(lastG > 0)
+                {
+                    totalTime += travel[lastG-1];
+                }
+
+                return totalTime ;
+    }
+}
