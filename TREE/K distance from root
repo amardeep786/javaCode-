@@ -1,0 +1,48 @@
+K distance from root :: https://www.geeksforgeeks.org/problems/k-distance-from-root/1
+
+**********************************************************************************************************************************************
+
+class Tree
+{
+    
+     ArrayList<Integer> Kdistance(Node root, int k)
+     {
+         ArrayList<Integer> list = new ArrayList<>();
+         int i = 0 ;
+         
+         Queue<Node> que = new LinkedList<>();
+         que.offer(root);
+         
+         while(!que.isEmpty())
+         {
+             int n = que.size();
+             while(n-- != 0)
+             {
+               
+                if(i==k)      // jb bhi height k hui uss smy que m jo bhi hai sbko list m daaldo
+                {
+                    for(var t : que)
+                    {
+                        list.add(t.data);
+                    }
+                    break;
+                }
+                Node temp = que.poll();
+                
+                if(temp.left != null)
+                que.offer(temp.left);
+                
+                if(temp.right != null)
+                que.offer(temp.right);
+                
+                
+             }
+             
+             i++ ;
+             
+             
+         }
+         
+         return list;
+     }
+}
