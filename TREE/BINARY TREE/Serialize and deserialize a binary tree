@@ -1,0 +1,49 @@
+Serialize and deserialize a binary tree  :: https://www.geeksforgeeks.org/problems/serialize-and-deserialize-a-binary-tree/1
+
+************************************************************************************************************************************************
+
+class Tree {
+    // Function to serialize a tree and return a list containing nodes of tree.
+    public ArrayList<Integer> serialize(Node root) {
+        ArrayList<Integer> list = new ArrayList<>();
+        help(list,root);
+        return list;
+        
+    }
+    public void help(ArrayList<Integer> list , Node root)
+    {
+        if(root == null)
+        {
+            list.add(-1);
+            return ;
+        }
+        
+        list.add(root.data);
+        help(list,root.left);
+        help(list,root.right);
+    }
+
+    // Function to deserialize a list and construct the tree.
+    public Node deSerialize(ArrayList<Integer> A) {
+        
+        Collections.reverse(A);
+        
+        return help2(A);
+    }
+    
+    public Node help2( ArrayList<Integer> A)
+    {
+        
+        int ele = A.remove(A.size()-1);
+        
+        if(ele == -1)
+        return null;
+        
+        Node root = new Node(ele);
+        
+        root.left = help2(A);
+        root.right = help2(A);
+        
+        return root;
+    }
+};
