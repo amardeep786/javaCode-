@@ -1,0 +1,65 @@
+1551. Minimum Operations to Make Array Equal  :: https://leetcode.com/problems/minimum-operations-to-make-array-equal/description/
+
+****************************************************************************************************************************************************
+
+/*
+
+class Solution {
+    public int minOperations(int n) {
+        
+//******************O(N)*********************************************************************************************************************/
+/*
+        // try to get all element close to mid or average or median
+        int middleElement = 0;
+        if(n%2 != 0)
+        {
+             middleElement =  2 *(n/2)+1 ;  // formula is given
+        }else
+        {
+            middleElement = 2*(n/2)+1 ;  //pehla middle
+
+            middleElement += 2* ((n-1)/2)+1;  // add kia dusra middle 
+
+            middleElement =  middleElement/2 ;  // divide by 2 krk averege nikala
+        }
+
+        
+
+        //sirf aadhe element p operation krna h baaki ka aadha to khud hojaega
+        int ans = 0;
+        for(int i = 0;i<n/2;i++)
+        {
+            ans += middleElement - (2*i+1) ;  // bss hrek aadhe element ko avg tkk jaane ka difference
+        }
+
+        return ans;
+
+    }
+}
+
+*/
+
+
+//******************O(1)*********************************************************************************************************************//
+
+
+class Solution {
+    public int minOperations(int n) {
+
+        // agar n odd hai to ek middle element hoga 
+        // to hme aadhe elements ko wo avg element bnana hoga 
+        // to AP series bnegi difference(operations ) ki ie 2 , 4 , 6 and so on to sum = n * (n+1) ; since hme aadhe hi elements tkk jaana hai
+        // toh  n = mid rkhdo upr wale formule me
+        int mid = n/2 ;
+        if(n%2 != 0)
+        {
+            return mid*(mid+1);
+        }
+
+        // n odd hua toh operations ki AP series bnegi 1,3,5... qki do middle element honge or unka bhi avaerge krege to middle aaagea 
+
+        // to inka sum krna hai till half part tkk which is n^n to bss n me mid daal denge to middle element tkk 1,3, 5 tk ki ap ka sum aajaega
+
+        return mid*mid ;
+    }
+}
