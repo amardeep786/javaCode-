@@ -1,0 +1,122 @@
+1424. Diagonal Traverse II  :: https://leetcode.com/problems/diagonal-traverse-ii/description/
+
+*************************************************************************************************************************************************
+
+/*
+class Solution {
+    public int[] findDiagonalOrder(List<List<Integer>> nums) {
+        
+        // same diagonal walo ka row+col constant hai
+        Map<Integer,List<Integer>> map = new HashMap<>();
+        int n = nums.size();
+        
+        
+        /*
+        for(int row = 0;row < n;row++)
+        {
+            int m = nums.get(row).size();
+            {
+
+                for(int col = 0;col < m;col++)
+                {
+                    // aise kr skte hain lekin hme map ki values ko reverse krk daalna pdega DO DRY RUN 
+                    // qki hme neeche s upr chahiye ye upr s neeche ki trf dega so we start from last row
+                }
+            }
+        }
+
+        */
+    /*
+
+        for(int row = n-1;row >= 0;row--)
+        {
+            int m = nums.get(row).size();
+            
+            for(int col = 0;col<m;col++)
+            {
+                if(!map.containsKey(row+col))
+                {
+                    map.put(row+col , new ArrayList<>());
+                }
+                map.get(row+col).add(nums.get(row).get(col));
+            }
+
+        }
+
+        // map m diagonals store hogye honge correct order me
+        // ab bs print kraado
+        List<Integer> result = new ArrayList<>();
+        for(int i = 0 ; i<map.size();i++)
+        {
+            result.addAll(map.get(i));
+        }
+
+        int res[] = new int[result.size()];
+        int idx = 0;
+        for(var i : result)
+        {
+            res[idx++] = i ;
+        }
+
+        return res;
+}
+}
+
+*/
+
+/********************METHOD 2 USING BFS*********************************************************************************************/
+
+class Solution {
+    public int[] findDiagonalOrder(List<List<Integer>> nums) {
+
+        /*
+            (0,0) se BFS maardo orr pehle neeche wali row and then ek side wala col push kroo ir after 0,0 we have 1,0 and 0,1 in queue
+
+            lekin 1,0 ek baari 1,1 bhi que me daalega and jb (0,1) pop hoga to wo bhi (1,1) daalne ka try krega to isey avoid krna h
+
+            to hm dekh paa rhe hain ki only column 0 wale hi neeche + right wala element daal paa rhe hain baaki k sirf right wala daalege
+
+            qki neeeche wala already dla hoga
+        */
+
+        int rows = nums.size();
+
+        Queue<int[]> que = new LinkedList<>();
+        que.offer(new int[]{0,0});
+
+        List<Integer> list = new ArrayList<>();
+        while(!que.isEmpty())
+        {
+            
+
+            int temp[] = que.poll();
+            int row = temp[0];
+            int col = temp[1];
+
+            int cols = nums.get(row).size();
+
+            list.add(nums.get(row).get(col));
+
+            if(col == 0 && row+1 < rows)    // jb col 0 hai wahi neeche wala element daalege
+            {
+                que.offer(new int[]{row+1,col});
+            }
+
+            if(col+1 < cols)   // orr right wala to sbhi dalege
+            {
+                que.offer(new int[]{row,col+1});
+            }
+        }
+
+        int res[] = new int[list.size()];
+        int idx = 0;
+        for(var i : list)
+        {
+            res[idx++] = i ;
+        }
+
+        return res;
+
+
+    }
+}
