@@ -1,0 +1,115 @@
+1630. Arithmetic Subarrays :: https://leetcode.com/problems/arithmetic-subarrays/description/
+
+**********************************************************************************************************************************************
+
+// **************************************METHOD 1 USING SORTING***********************************************************************/
+
+/*
+class Solution {
+    public List<Boolean> checkArithmeticSubarrays(int[] nums, int[] l, int[] r) {
+        List<Boolean> list = new ArrayList<>();
+
+        int n = l.length;
+        for(int i = 0;i<n;i++)
+        {
+            int idx1 = l[i];
+            int idx2 = r[i];
+            List<Integer> temp = new ArrayList<>();
+            for(int j = idx1;j<=idx2;j++)
+            {
+                temp.add(nums[j]);
+            }
+            Collections.sort(temp);
+
+            int diff = temp.get(1)-temp.get(0);
+            boolean flag = false;
+            for(int j = 1;j<temp.size()-1;j++)
+            {
+                if(temp.get(j+1)-temp.get(j) != diff)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+
+            if(flag == true)
+            {
+                list.add(false);
+            }
+            else
+              list.add(true);
+        }
+
+        return list;
+
+    }
+}
+
+*/
+
+// **************************************METHOD 2 WITHOUT SORTING***********************************************************************/
+
+class Solution {
+    public List<Boolean> checkArithmeticSubarrays(int[] nums, int[] l, int[] r) {
+        List<Boolean> list = new ArrayList<>();
+
+        int n = l.length;
+        for(int i = 0;i<n;i++)
+        {
+            int idx1 = l[i];
+            int idx2 = r[i];
+            List<Integer> temp = new ArrayList<>();
+            for(int j = idx1;j<=idx2;j++)
+            {
+                temp.add(nums[j]);
+            }
+             
+            // here we will not sort instead find common difference using this an = a + (n-1)d where a is minimum element and an is maximum
+
+            int len = temp.size();
+
+            int maxE = Integer.MIN_VALUE;
+            int minE = Integer.MAX_VALUE;
+
+            Set<Integer> set = new HashSet<>();
+            for(var ele : temp)
+            {
+                maxE = Math.max(maxE,ele);
+                minE = Math.min(minE,ele);
+                set.add(ele);
+            }
+
+
+            if((maxE-minE)%(len-1)!= 0)
+            {
+                list.add(false);
+                continue;
+            }
+            int commonDiff = (maxE-minE)/(len-1);
+
+            
+            boolean flag = false;
+            int curr = minE ;
+            while(curr < maxE)   // jbtk current eleement max s chhota h 
+            {
+                if(!set.contains(curr))
+                {
+                    flag = true;
+                    break;
+                }
+                 curr += commonDiff ;
+            }
+
+            if(flag == true)
+            {
+                list.add(false);
+            }
+            else
+              list.add(true);
+        }
+
+        return list;
+
+    }
+}
+
