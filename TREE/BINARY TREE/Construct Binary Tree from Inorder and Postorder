@@ -1,0 +1,66 @@
+Construct Binary Tree from Inorder and Postorder :: https://www.geeksforgeeks.org/problems/tree-from-postorder-and-inorder/1
+
+****************************************************************************************************************************************************
+
+class GfG
+{
+    //Function to return a tree created from postorder and inoreder traversals.
+    Node buildTree(int in[], int post[], int n) {
+       
+       int inStart = 0;   // to keep track ki inorder k left me kya kya h
+       int inEnd = n-1 ;
+        
+       int postStart = 0;  // postorder k wo array jo left or right m hai
+       int postEnd = n-1 ;
+       
+       return solve(in,post,inStart,inEnd,postStart,postEnd);
+    }
+    
+    public Node solve(int[]in,int[]post,int inStart,int inEnd,int postStart,int postEnd)
+    {
+        if(inStart>inEnd)
+        {
+            return null;
+        }
+        
+        Node root = new Node(post[postEnd]);  // last wala root hai
+        
+        int i = inStart;
+        
+        for(;i<=inEnd;i++)
+        {
+            if(in[i]==post[postEnd])
+            {
+                break;
+            }
+        }
+        
+        // i wo index hai inorder m jaha p root mila 
+        
+        int leftSize = i - inStart  ;
+        int rightSize = inEnd - i ;
+        
+        // for left tree 
+        int newInstart = inStart;
+        int newInEnd = i - 1;
+        
+        int newPostStart = postStart;
+        int newPostEnd = postStart + leftSize - 1 ;
+        
+        root.left = solve(in,post,newInstart,newInEnd,newPostStart,newPostEnd);
+        
+        // for right tree 
+        
+        newInstart = i+1;
+        newInEnd = inEnd ;
+        
+        newPostStart = postEnd - rightSize;
+        newPostEnd = postEnd-1;
+        
+        root.right = solve(in,post,newInstart,newInEnd,newPostStart,newPostEnd);
+        
+        return root;
+    }
+}
+
+ 
