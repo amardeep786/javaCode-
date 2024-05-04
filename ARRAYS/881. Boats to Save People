@@ -1,0 +1,33 @@
+881. Boats to Save People  :: https://leetcode.com/problems/boats-to-save-people/description/
+
+******************************************************************************************************************************************************************************************
+
+//*********************OPTIMIZED************************************************************* */
+class Solution {
+    public int numRescueBoats(int[] people, int limit) {
+
+        // hum sbse jada weight wale ko bhege or y b dekh lenge ki usk saath sbse chhota wala ja skta hai ki nai 
+        // agr jaa skta h to bhej denge wrna nai
+
+        int boats = 0;
+        Arrays.sort(people);
+        int n = people.length;
+        int i = 0, j = n-1;
+
+        while(i<=j)
+        {
+            if(people[i]+people[j]<=limit)   // heaviest and lightest jaa skte h to dono ko bhej dia 
+            {
+                boats++;
+                i++;
+                j--;
+            }else     // wrna heaviest ko bhejdo 
+            {
+                j--;
+                boats++ ;
+            }
+        }
+
+        return boats;
+    }
+}
