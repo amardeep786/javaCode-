@@ -1,0 +1,22 @@
+237. Delete Node in a Linked List  :: https://leetcode.com/problems/delete-node-in-a-linked-list/description/
+
+*************************************************************************************************************************************************
+
+class Solution {
+    public void deleteNode(ListNode node) {
+        
+        // aage wali values ko ek ek shift krdia peeechhe ki trf
+        
+           ListNode prev = null;
+
+            while(node.next != null)
+            {
+                node.val = node.next.val;
+                prev = node;
+                node = node.next;
+            }
+
+            prev.next = null;
+            return;    
+    }
+}
