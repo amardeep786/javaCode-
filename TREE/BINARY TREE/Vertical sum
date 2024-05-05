@@ -1,0 +1,90 @@
+Vertical sum  :: https://www.geeksforgeeks.org/problems/vertical-sum/1
+
+*************************************************************************************************************************************************
+
+/*
+approach : hrek node ko line number denge root ko line 0 , aur jo b left hoga usey 1 kam line number or jo right m 
+hoga usey ek jaada 
+
+map m line number k corresponding sum store kraate jaaege 
+
+baad m is map ki values ko list m daal denge
+
+time : O(nlogn) qki treemap m hr baar log n time  to for n nodes nlog(n)
+space : O(n)
+
+*/
+
+// class Solution{
+//     Map<Integer,Integer>map = new TreeMap<>();
+//     public ArrayList <Integer> verticalSum(Node root) {
+        
+//         help(root,0); 
+//         ArrayList <Integer> result = new ArrayList<>(map.values());
+        
+//         return result;
+        
+//     }
+    
+//     public void help(Node root , int line)
+//     {
+//         if(root == null)
+//         return ;
+        
+//         if(!map.containsKey(line))
+//         {
+//             map.put(line,root.data);
+//         }else
+//         {
+//             map.put(line , map.get(line)+root.data);
+//         }
+        
+//         help(root.left , line-1);
+//         help(root.right,line+1);
+//     }
+// }
+
+//*isme nlogn lg rha because of treeMap to hum simple map lekr  and while traversing ye store kralege ki 
+// minimum  line number knsi hai or maximum knsi hai orr fr loop lgakar minimum to maximum value fetch krke
+// list m daalte rhege
+
+
+
+/*********************O(N)*************************************************************************/
+class Solution{
+    Map<Integer,Integer>map = new HashMap<>();
+    int min = Integer.MAX_VALUE , max = Integer.MIN_VALUE ;
+    public ArrayList <Integer> verticalSum(Node root) {
+        
+        help(root,0); 
+        ArrayList <Integer> result = new ArrayList<>();
+        
+        for(int i = min;i<=max;i++)
+        {
+            result.add(map.get(i));
+        }
+        
+        return result;
+        
+    }
+    
+    public void help(Node root , int line)
+    {
+        if(root == null)
+        return ;
+        
+        min = Math.min(min,line);
+        max = Math.max(max,line);
+        
+        if(!map.containsKey(line))
+        {
+            map.put(line,root.data);
+        }else
+        {
+            map.put(line , map.get(line)+root.data);
+        }
+        
+        help(root.left , line-1);
+        help(root.right,line+1);
+    }
+}
