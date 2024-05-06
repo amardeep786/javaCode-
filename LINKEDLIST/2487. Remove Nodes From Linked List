@@ -1,0 +1,158 @@
+2487. Remove Nodes From Linked List :: https://leetcode.com/problems/remove-nodes-from-linked-list/description/
+
+****************************************************************************************************************************************************
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+
+
+
+// class Solution {
+//     public ListNode removeNodes(ListNode head) {
+        
+//         // agar hum left s check krege to hrek element k liy check krna pdega  O(n^2)
+
+//         // to hum right to left traverse krege linked list me orr maximum ka count maintain krke rkhege
+
+//         // now in linkedlist 3 ways to traverse right to left
+
+//         /*
+//             1.using stack 2.using recursion 3. reverse linkedlist 
+//         */
+
+//         /***** ********************METHOD 1************STACK **TC-> O(N)*& SC-> O(N)************************************************************************/
+
+//         /*
+
+//         Stack<Integer> stack = new Stack<>();
+//         while(head != null)
+//         {
+//             stack.push(head.val);
+//             head = head.next;
+//         }
+
+        
+//         ListNode result = new ListNode();
+//         ListNode result1 =  result;
+
+//         int lastNode = stack.pop() ;
+//         ListNode temp = new ListNode(lastNode);
+//         int max = lastNode;
+
+//         while(!stack.isEmpty())
+//         {
+//             int element = stack.pop() ;
+//             if(element>=max)
+//             {
+//                 max = element ;
+
+//                 ListNode create = new ListNode(element);
+//                 create.next = temp ;
+//                 temp = create;              
+                
+//             }
+//         }
+
+//         return temp;
+
+
+//         */
+
+
+
+//     }
+// }
+
+
+/************************* METHOD 2 *********** recursion ******TC->O(N)**SC->O(1)***************usi list ko modify kia*****************************************************/
+
+
+// class Solution {
+//     public ListNode removeNodes(ListNode head) {
+
+//         if(head == null)
+//         return null;
+
+//         ListNode nextNode = removeNodes(head.next);  // assume ki aage ka answer lekr aagya ab bss hme currnode orr aage ki liast ka jo ans hai
+
+//         if(nextNode!= null && head.val < nextNode.val)  // agar nyi list ka head ka value current s bda h tohh nyi list ka head hi anser hoga
+//         {
+//             return nextNode;
+//         }
+
+//         head.next = nextNode ;   // nahi to head k next me nextNode daal do or head return krdo
+//         return head;
+
+//     }
+// }
+
+/************************* METHOD 3 *********** REVERSE LINKEDLIST ******TC->O(N)**SC->O(1)***************usi list ko modify kia*****************************************************/
+class Solution {
+    public ListNode removeNodes(ListNode head) {
+
+        ListNode rHead = reverse(head);
+
+        if(rHead.next == null)
+        return rHead;
+
+        ListNode prev = rHead;
+        ListNode curr = rHead.next;
+        // ListNode Next = rHead.next;
+
+        int max = prev.val ;
+
+        while(curr != null)  
+        {
+            max = Math.max(curr.val,max);
+            if(curr.val < max)
+            {
+                prev.next = curr.next;
+                
+                curr = curr.next;
+            }else
+            {
+                
+                prev = curr;
+                curr = curr.next;
+            }
+        }
+
+        return reverse(rHead);
+
+
+    }
+    public ListNode reverse(ListNode head)    // for reversing list
+    {
+        if(head == null)
+        return head;
+
+        if(head.next == null)
+        return head;
+
+        ListNode prev = null;
+        ListNode curr = head;
+        ListNode Next = head.next;
+
+        while(curr != null)
+        {
+            curr.next = prev ;
+            prev = curr;
+            curr = Next;
+
+            if(Next != null)
+            {
+                Next = Next.next;
+            }
+        }
+        return prev;
+
+    }
+}
