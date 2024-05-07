@@ -1,0 +1,88 @@
+Reverse Level Order Traversal :: https://www.geeksforgeeks.org/problems/reverse-level-order-traversal/1
+*************************************************************************************************************************************************
+
+class Tree
+{
+    public ArrayList<Integer> reverseLevelOrder(Node node) 
+    {
+        ArrayList<Integer> res = new ArrayList<>();
+        
+        Queue<Node>que = new LinkedList<>();   // que me level order daal karr reverse krdo
+        que.offer(node);
+        
+        while(!que.isEmpty())
+        {
+            Node temp = que.poll();
+            res.add(temp.data);
+            
+            if(temp.right != null)  // pehle right qki baad m reverse  hoga to ans sahi ho jaega khud hi
+            que.offer(temp.right);
+            
+            if(temp.left != null)
+            que.offer(temp.left);
+            
+            
+        }
+        Collections.reverse(res);
+        return res;
+    }
+    
+    
+}   
+
+
+// Method 2 -> store level and its value in map then add in list wisely
+// Method 3  -> find height of tree and using recursion  travsere again to tree from bottom of tree and if node is at that level add inti 
+// list 
+
+class Tree
+{
+    ArrayList<Integer> al = new ArrayList<>();
+    public ArrayList<Integer> reverseLevelOrder(Node node) 
+    {
+        int h = height(node);
+        int i;
+        for (i = h; i >= 1; i--)
+        //THE ONLY LINE DIFFERENT FROM NORMAL LEVEL ORDER
+        {
+            addGivenLevel(node, i);
+        }
+        return al;
+    }
+  
+    /* Print nodes at a given level */
+    void addGivenLevel(Node node, int level)
+    {
+        if (node == null)
+            return;
+        if (level == 1)
+            al.add(node.data);
+        else if (level > 1)
+        {
+            addGivenLevel(node.left, level - 1);
+            addGivenLevel(node.right, level - 1);
+        }
+    }
+  
+    /* Compute the "height" of a tree -- the number of
+     nodes along the longest path from the root node
+     down to the farthest leaf node.*/
+    int height(Node node)
+    {
+        if (node == null)
+            return 0;
+        else
+        {
+            /* compute the height of each subtree */
+            int lheight = height(node.left);
+            int rheight = height(node.right);
+  
+            /* use the larger one */
+            if (lheight > rheight)
+                return (lheight + 1);
+            else
+                return (rheight + 1);
+        }
+    }
+}      
+
