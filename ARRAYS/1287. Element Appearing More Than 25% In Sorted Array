@@ -1,0 +1,187 @@
+1287. Element Appearing More Than 25% In Sorted Array :: https://leetcode.com/problems/element-appearing-more-than-25-in-sorted-array/
+
+*****************************************************************************************************************************************************
+
+// class Solution {
+//     public int findSpecialInteger(int[] arr) {
+        
+//         // approach 1 ->count frequency and check whether it is greater than n/4 or not
+
+//         int n = arr.length;
+
+//         Map<Integer,Integer>map = new HashMap<>();
+//         for(int i = 0;i<n;i++)
+//         {
+//             map.put(arr[i],map.getOrDefault(arr[i],0)+1);
+//         }
+
+//         for(Map.Entry<Integer,Integer> entry : map.entrySet())
+//         {
+//             if(entry.getValue() > n/4)
+//             {
+//                 return entry.getKey();
+//             }
+//         }
+
+//         return -1 ;
+
+//     }
+// }
+
+/**********************************************************************************************************************************************************************
+//  // approach 2 - > 
+//  // since array sorted hai toh say n/4 ki value 2 hai to agr koi element i index p hai to same element i+ 2 p bhi present hona chahiye tb wo greater hoga
+
+//  class Solution {
+//     public int findSpecialInteger(int[] arr) {
+        
+//         int n = arr.length;
+//         int freq = n/4 ;
+
+//         for(int i = 0;i<n-freq;i++ )
+//         {
+//             if(arr[i] == arr[i+freq])
+//             return arr[i] ;
+//         }
+
+//         return -1 ;
+
+//     }
+// }
+
+/**********************************************************************************************************************************************************************
+ // approach 3 - > 
+ // since array sorted hai toh say n/4 ki value 2 hai to agr koi element i index p hai to same element ka right index bhi nikaal lo binary search se 
+ // tb dekhlo n/4 s jada element h ya kamm or agr nai h toh index ko lastIndex+1 p set krdo
+
+
+ // but it is n times binary search so n *logn
+
+//  class Solution {
+//     public int findSpecialInteger(int[] arr) {
+        
+//         int n = arr.length;
+//         int freq = n/4 ;
+
+//         for(int i = 0;i<n;i++ )
+//         {
+//             int rightIndex = binSearch(arr,arr[i] , i);
+
+//             if(rightIndex - i + 1 > freq)
+//             return arr[i];
+//         }
+
+//         return -1 ;
+
+//     }
+
+//     public int binSearch(int[]arr, int element ,int left)
+//     {
+//         int right = arr.length -1;
+//         int ans = -1 ;
+        
+//         while(left<= right)
+//         {
+//             int mid = (left + right )/2 ;
+
+//             if(arr[mid] == element)
+//             {
+//                 ans = mid ;
+//                 left = mid+1 ;
+//             }else if(arr[mid] > element)
+//             {
+//                 right = mid -1 ;
+//             }else
+//             {
+//                 left = mid + 1 ;
+//             }
+//         }
+
+//         return ans ;
+         
+//     }
+// }
+
+/********************************************************************************************************************************************************************** */
+ // approach 4- >  on observing candidate hmaare 3 hi values ho skte hain  n/4th element , n/2th element ,  3 *(n/4)th element
+ // sirf inhi 3no ka left and right index nikaal k check krlo 
+
+
+ class Solution {
+    public int findSpecialInteger(int[] arr) {
+        
+        int candidate[] = new int[3];
+        int n = arr.length;
+
+        candidate[0] = arr[n/4];
+        candidate[1] = arr[n/2];
+        candidate[2] = arr[3*n/4];
+
+        for(var cand : candidate)
+        {
+            int left = findLeftIndex(arr,0,n-1,cand);
+            int right = findRightIndex(arr,0,n-1,cand);
+
+            if(right -left + 1 > (n/4))   // agr 25% s jaada hai tohh
+            {
+                return cand ;
+            }
+        }
+
+        return -1 ;
+
+    }
+
+    public int findRightIndex(int[]arr, int left,int right ,int element )
+    {
+       
+        int ans = -1 ;
+        
+        while(left<= right)
+        {
+            int mid = (left + right )/2 ;
+
+            if(arr[mid] == element)
+            {
+                ans = mid ;   //store current 
+                left = mid+1 ;  // and go right 
+            }else if(arr[mid] > element)
+            {
+                right = mid -1 ;
+            }else
+            {
+                left = mid + 1 ;
+            }
+        }
+
+        return ans ;
+         
+    }
+
+
+public int findLeftIndex(int[]arr, int left,int right ,int element )
+    {
+       
+        int ans = -1 ;
+        
+        while(left<= right)
+        {
+            int mid = (left + right )/2 ;
+
+            if(arr[mid] == element)
+            {
+                ans = mid ;
+                right = mid - 1 ;  // go left
+            }else if(arr[mid] > element)
+            {
+                right = mid -1 ;
+            }else
+            {
+                left = mid + 1 ;
+            }
+        }
+
+        return ans ;
+         
+    }
+}
