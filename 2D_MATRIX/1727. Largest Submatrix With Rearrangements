@@ -1,0 +1,123 @@
+1727. Largest Submatrix With Rearrangements :: https://leetcode.com/problems/largest-submatrix-with-rearrangements/
+
+***************************************************************************************************************************************************
+
+// class Solution {
+//     public int largestSubmatrix(int[][] matrix) {
+        
+//         /*
+//             Appraoch 1 : - 
+
+//             hme kisi bhi cell k paas hain to uski height chahiye to hum hrek roww ko cumulative add krte jaaege to height aajaegi kisi bhi row ki
+//             ie kitne 1 hai waha or ussey upar
+
+//             then uss row ko descending order m sort krege qki hme  height jada wale ek saath rhege to base bhi bda bnega
+
+//             saath m area update krte jaaege
+
+//         */
+
+
+//         // tc - O(rows * nlogn)  n-> cols
+//         // sc - O(m*n)
+
+//         int rows = matrix.length ;
+//         int cols = matrix[0].length;
+//         int area = Integer.MIN_VALUE ;
+        
+//         for(int i = 0;i<rows;i++)
+//         {
+//             for(int j = 0;j<cols;j++)
+//             {
+//                 if(matrix[i][j] == 1 && i > 0)
+//                 {
+//                     matrix[i][j] +=matrix[i-1][j];    // cumulative sum
+//                 }
+//             }
+
+//             Integer temp[] = new Integer[cols];
+
+//             for(int k = 0;k<cols;k++)    // new array 
+//             {
+//                 temp[k] = matrix[i][k];
+//             }
+//             Arrays.sort(temp,Collections.reverseOrder());   // sort in descending order qki maximum heights wale saath m reh  kar lambi base bnaege
+
+//             for(int j = 0;j<cols;j++)       // base hme index+1 se mil jaega or height to element khud bta rha h
+//             {
+//                 int base = j+1;
+//                 int height = temp[j] ;
+
+//                 area = Math.max(area , base*height);
+//             }
+//         }
+
+//         return area;
+//     }
+// }
+
+
+/*APPROACH 2 WITHOUT SORTING   *******************O(m*n)***********************************************************/
+class Solution {
+    public int largestSubmatrix(int[][] matrix) {
+
+        /*
+            Appraoch 2 : - 
+
+            hme kisi bhi cell k paas hain to uski height chahiye to hum hrek roww ko cumulative add krte jaaege to height aajaegi kisi bhi row ki
+            ie kitne 1 hai waha or ussey upar
+
+           hm pichle row ka value + col store krte hue chlege ki kaha p hme height mili to ussi height ko pehle rkhege
+            saath m area update krte jaaege
+
+        */
+
+        int rows = matrix.length ;
+        int cols = matrix[0].length;
+        int area = 0;
+
+        ArrayList<int[]> prevHeights = new ArrayList<>();    // storing {height , column no}
+
+        for(int i = 0;i<rows;i++)
+        {
+
+            ArrayList<int[]> heights = new ArrayList<>();  // pehle isme wo heights aaegi jisk pichhle rows m 1 tha then wo jaha abhi 1 hai pr pehle 1 nai tha
+            boolean seen[] = new boolean[cols];   // jisko hm pehle process kreege to usey baad m na krna pde
+
+            // pehle hum prevHeight m dekhege ki kaha kaha height mila tha
+            for(var height : prevHeights)
+            {
+                int hei = height[0];
+                int col = height[1];
+
+                if(matrix[i][col] == 1)     // agr pichle col m 1 tha or usi col me 1 cuurrent m bhi hai tohh height add hogi
+                {
+                    heights.add(new int[]{hei+1,col});
+                    seen[col] = true;
+                }
+            }
+
+            for(int j = 0;j<cols;j++)   // now go at every  element in that col and update height
+            {
+                if(!seen[j] && matrix[i][j] == 1)
+                {
+                    heights.add(new int[]{1,j});   // jaha bhi baaki 1 hai unki heights ko daal do 
+                }
+            }
+
+            // ab saari non heights aagyi hain heights me to dekhlo knsi maximum area wli h
+
+            for(int t = 0;t < heights.size();t++)
+            {
+                int base = t+1 ;
+                int height = heights.get(t)[0];
+
+                area = Math.max(area,base*height);
+            }
+
+            prevHeights = heights;
+        }
+
+        return area ;
+    }
+}
