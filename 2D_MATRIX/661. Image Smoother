@@ -1,0 +1,49 @@
+661. Image Smoother :: https://leetcode.com/problems/image-smoother/
+
+*********************************************************************************************************************************************
+
+class Solution {
+
+    int directions[][] = {    // all nine directions
+
+        {-1,-1},{-1,0},{-1,1},
+        {0,-1},{0,0},{0,1},
+        {1,-1},{1,0},{1,1}
+
+    };
+
+
+
+    public int[][] imageSmoother(int[][] img) {
+        
+        int rows = img.length;
+        int cols = img[0].length;
+
+        int[][]res = new int[rows][cols];
+
+        for(int i = 0;i<rows;i++)
+        {
+            for(int j = 0;j<cols;j++)
+            {
+                int sum = 0;
+                int count_neighbour = 0;
+                for(var dir : directions)
+                {
+                    int i_new = i + dir[0];
+                    int j_new = j + dir[1];
+
+                    if(i_new >= 0 && i_new < rows && j_new >=0 && j_new < cols)
+                    {
+                        sum += img[i_new][j_new];   // hrek neihbours ka sum
+                        count_neighbour++ ;         // neighbours ka count rkhne k liy qki corner p 8 neighbours nai h
+                    }
+                }
+
+                res[i][j] = sum/count_neighbour ;
+            }
+        }
+
+        return res;
+
+    }
+}
