@@ -1,0 +1,89 @@
+786. K-th Smallest Prime Fraction :: https://leetcode.com/problems/k-th-smallest-prime-fraction/description/
+
+*************************************************************************************************************************************************************************************************
+
+// class Solution {
+//     public int[] kthSmallestPrimeFraction(int[] arr, int k) {
+        
+// // time complexity -> n^2 * nlogn   coz for i,j pair we are putting into tree
+//         int n  = arr.length;
+//         double frac = Double.MAX_VALUE ;
+//         Map<Double,int[]> map = new TreeMap<>();
+//         for(int i = 0;i<n;i++)
+//         {
+//             for(int j = i+1 ; j<n;j++)
+//             {
+                
+//                 map.put(((double)arr[i]/arr[j]),new int[]{arr[i],arr[j]});    
+//             }
+//         }
+//         int j = 0;
+//         for(Map.Entry<Double,int[]> entry : map.entrySet())
+//         {
+//             j++ ;
+//             if(j==k)
+//             {
+//                 return entry.getValue();
+//             }
+            
+//         }
+
+//         return new int[]{1/1};
+
+//     }
+// }
+
+class pair implements Comparable<pair>
+{
+    double x;
+    int y;
+    int z ;
+
+    pair(double x, int y, int z )
+    {
+        this.x = x ;
+        this.y = y;
+        this.z = z;
+
+    }
+
+    public int compareTo(pair other)
+    {
+        return Double.compare(this.x , other.x);
+    }
+}
+
+class Solution {
+    public int[] kthSmallestPrimeFraction(int[] arr, int k) {
+        
+        // time complexity -> nlogn + klogn   using min-Heap
+        PriorityQueue<pair> pq = new  PriorityQueue<>() ;   // min heap based on first value
+
+        int n  = arr.length;
+        for(int i = 0;i<n;i++)
+        {
+            pq.offer(new pair((double )arr[i]/arr[n-1],i,n-1));
+        }
+        
+        int j = 1;
+        while(j< k)
+        {
+            pair temp = pq.poll();
+
+           int index1 = temp.y;
+           int index2 = temp.z - 1 ;
+           pq.offer(new pair((double )arr[index1]/arr[index2],index1,index2)) ;
+
+
+            j++;
+        }
+
+        // ab ye baahr tb aaega tb j == k hogya mtlb top p kth smallest h
+        pair temp = pq.poll();
+        int m = temp.y;
+        int p = temp.z;
+
+        return new int[]{arr[m],arr[p]};
+
+    }
+}
