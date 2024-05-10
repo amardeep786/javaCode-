@@ -1,0 +1,55 @@
+2482. Difference Between Ones and Zeros in Row and Column :: https://leetcode.com/problems/difference-between-ones-and-zeros-in-row-and-column/
+
+***************************************************************************************************************************************************
+
+class Solution {
+    public int[][] onesMinusZeros(int[][] grid) {
+        
+        /*
+            BRUTE FORCE : diff[i][j] k liy grid k ith row and jth col ko traverse krna h to find 1s and 0s
+            so complexity : m*n * (m+n) ie mn for every diff[i][j] and m+n for traversing every time 
+        */
+
+        /*
+            Approach 2 : we can store ki hrek row and col me kitne 1 hain  to dimensions pta hi hai tohh we can calculate number of zeroes 
+                        O(m*n)
+        */
+
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        int oneRows[] = new int[rows];
+        int oneCols[] = new int[cols];
+
+
+        for(int i = 0;i<rows;i++)
+        {
+            for(int j = 0;j<cols;j++)
+            {
+                if(grid[i][j] == 1)
+                {
+                    oneRows[i]++ ;
+                    oneCols[j]++ ;
+                }
+            }
+        }
+
+
+        // now we have 2 array which store ki kitne 1 hain hrek row me and kitne col hain hrek col me 
+
+        int diff[][] = new int[rows][cols];
+
+        for(int i = 0;i<rows;i++)
+        {
+            for(int j = 0;j<cols;j++)
+            {
+                int zeroRows = rows - oneRows[i];  // total - ones give zeroes in that row
+                int zeroCols = cols - oneCols[j];
+
+                diff[i][j] = oneRows[i]+oneCols[j] - zeroRows - zeroCols ;
+            }
+        }
+
+        return diff;
+    }
+}
