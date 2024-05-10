@@ -1,0 +1,41 @@
+40. Combination Sum II   :: https://leetcode.com/problems/combination-sum-ii/
+****************************************************************************************************************************************************
+
+class Solution {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(candidates);
+        help(candidates,target,res,new ArrayList<>(),0,0);  // current sum and target are initially 0
+
+        return res;
+}
+    
+
+    public void help(int[] candidates, int target,List<List<Integer>> res,List<Integer> temp,int currSum,int index)
+    {
+        if(currSum == target)
+        {
+            res.add(new ArrayList<>(temp));
+            return ;
+        }
+
+        if(index == candidates.length || currSum > target)
+        return;
+        
+        for(int i = index ;i<candidates.length;i++)
+        {
+            if(i > index && candidates[i] == candidates[i-1])  // same elements ko dubara nai lena h wrna 
+                continue;
+
+            if(candidates[i] > target)
+                break;
+
+            temp.add(candidates[i]);    // temp me add kia 
+            currSum+=candidates[i];     // current sum m bhi add kia 
+            help(candidates,target,res,temp,currSum,i+1); // call kia pick krke
+            temp.remove(temp.size()-1);   // remove kia 
+            currSum -=candidates[i];      // current sum s bhi remoe kia 
+        }
+    }
+
+}
