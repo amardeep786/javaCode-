@@ -1,0 +1,29 @@
+2610. Convert an Array Into a 2D Array With Conditions  :: https://leetcode.com/problems/convert-an-array-into-a-2d-array-with-conditions/
+
+****************************************************************************************************************************************************
+
+class Solution {
+    public List<List<Integer>> findMatrix(int[] nums) {
+        
+        int[]  frequency = new int[nums.length+1];   // values hmesa length s km hogi to ye krdia
+        
+        ArrayList<List<Integer>> result = new ArrayList<>();
+
+        for(int value : nums)
+        {
+            int freq = frequency[value];
+
+            if(freq == result.size())   // maximum rows utni hongi jitny max frequency hogi kisi element ki qki same row me 
+            {                           // duplicate elements nai honge 
+                result.add(new ArrayList<>());  // jb b kisi ki freq result k size k brabr hui tbhi nyi row add krdo
+            }
+
+            result.get(freq).add(value);    // corrresponding freq me value add krdo 
+            frequency[value]++ ;           // frequency of value bhi bdhaado ab
+        }
+
+        return result;
+    }
+
+    
+}
