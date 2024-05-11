@@ -1,0 +1,37 @@
+Anti Diagonal Traversal of Matrix  :: https://www.geeksforgeeks.org/problems/print-diagonally1623/1
+
+***********************************************************************************************************************************************
+
+class Solution
+{
+    public int[] antiDiagonalPattern(int[][] matrix)
+    {
+        // approach ki diagonals ka row + col constant hai
+        
+        int n = matrix.length ;
+        int m = matrix[0].length ;
+        Map<Integer,List<Integer>> map = new TreeMap<>();
+        for(int i = 0;i<n;i++)
+        {
+            for(int j = 0;j<m;j++)
+            {
+                if(!map.containsKey(i+j))
+                map.put(i+j , new ArrayList<>());
+                
+                map.get(i+j).add(matrix[i][j]);
+            }
+        }
+        
+        int [] res = new int[n*m] ;
+        int idx = 0 ;
+        for(Map.Entry<Integer,List<Integer>> entry : map.entrySet())
+        {
+            List<Integer> temp = entry.getValue();
+            for(int i = 0;i<temp.size();i++)
+            {
+                res[idx++] = temp.get(i);
+            }
+        }
+        return res;
+    }
+}
