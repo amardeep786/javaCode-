@@ -1,0 +1,72 @@
+Minimum steps to destination  :: https://www.geeksforgeeks.org/problems/minimum-number-of-steps-to-reach-a-given-number5234/1
+
+*****************************************************************************************************************************************************************************************************
+
+// class Solution {
+//     static int minSteps(int d) {
+        
+//         // can be done using recursion
+//         // go on right and left both sides whichever will give least is our answer .
+        
+        
+//         return help(0,0,d) ;  // 0-> initially we r at 0 , 0-> we have taken 0 steps till now , d -> destination
+
+//     }
+    
+//     static public int help(int source , int steps , int dest)
+//     {
+//         if(Math.abs(source) > dest)
+//         {
+//             return Integer.MAX_VALUE ;    // qki he minimum chahiye
+//         }
+        
+//         if(source == dest)
+//         return steps ;
+        
+//         int right = help(source+steps+1 , steps+1 , dest);
+//         int left =  help(source-steps-1 , steps+1 , dest);
+        
+//         return Math.min(right,left);
+//     }
+    
+    
+/*************************************************************************************************/
+
+/*
+     // 1+2+3.. krte rho jbtk sum < target hai and jb bhi sum >= target hua   to 
+      sum - target dekhlo ya to wo even hoga ya odd
+      
+      agar sum - target = even hua  mtlb hum beech k kisi bhi steps ko left and then right lekr jaaege 
+      
+      to wo even number compensate krdenge to steps hmaare utne hi rhege jitne the bss kisi ko reverse direction me 
+      bhej kr answer aa jaega
+      
+      lekin difference agr odd hua to hum ek step or add krege sum me taaki difference even bna paaye
+      agr abhi bhi nai difference even aaya to sum me n+1 orr add krege tb to pkka even aajaega qki total 
+      even bchega 
+      
+      to ans steps+1,steps+2 hoga jb bhi difference even aajaega
+*/
+    class Solution {
+    static int minSteps(int d) {
+        
+        return reachTarget(d);
+    }
+    
+    
+    static int reachTarget(int target)
+    {
+        // Handling negatives by symmetry
+        target = Math.abs(target);
+         
+        // Keep moving while sum is smaller
+        // or difference is odd.
+        int sum = 0, step = 0;
+         
+        while (sum < target || (sum - target) % 2!= 0) {   // pehle to jbtk sum hi chhota hai tbtk to add krete jaao
+            step++;                                      // jb bda hua sum target se tb dekhlo kb even aa rha h 
+            sum += step;
+        }
+        return step;
+    }
+}
