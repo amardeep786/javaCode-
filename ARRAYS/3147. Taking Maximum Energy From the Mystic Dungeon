@@ -1,0 +1,64 @@
+3147. Taking Maximum Energy From the Mystic Dungeon  :: https://leetcode.com/problems/taking-maximum-energy-from-the-mystic-dungeon/
+
+*************************************************************************************************************************************************
+
+// class Solution {
+//     int ans = Integer.MIN_VALUE ;
+//     public int maximumEnergy(int[] energy, int k) {
+        
+//         int n = energy.length;
+        
+//         for(int i = 0;i<n;i++)         // O(n)
+//         {
+//             int pickedIndex = i ;
+//             int sum = 0;
+//             while(pickedIndex  < n)   // O(n/k)
+//             {
+//                 sum += energy[pickedIndex] ;
+//                 pickedIndex +=k;
+//             }
+            
+//             ans = Math.max(ans,sum);           // so total tc O(n^2/k)
+        
+//         }
+//         return ans;
+//     }
+
+// }
+
+
+//***************IMPROVISED VERSION*************************************************************************************************************************** */
+
+/*
+    instead of chossing every possible index  we know our last value end at last k elements  -> O(k)
+
+    so for every lasat k indexes we will traverse till start so O(n/k)
+
+    so total complexity is O(k * n/k) = O(n)
+*/
+
+class Solution {
+    
+    public int maximumEnergy(int[] energy, int k) {
+        int ans = Integer.MIN_VALUE ;
+        int n = energy.length;
+        
+        for(int i = n-1;i>= n-k;--i)         // O(k)
+        {
+            int pickedIndex = i ;
+            int sum = 0;
+            while(pickedIndex  >=0)   // O(n/k)
+            {
+                sum += energy[pickedIndex] ;
+                pickedIndex -=k;
+
+                ans = Math.max(ans,sum); //  current sequence me jo sbse bda h wahi ans ho skta h isliy hrek max ko lenge 
+            }
+            
+          // so total tc O(k * n/k) = O(n)
+        
+        }
+        return ans;
+    }
+
+}
