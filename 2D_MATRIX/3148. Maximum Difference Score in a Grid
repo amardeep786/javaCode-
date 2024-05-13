@@ -1,0 +1,70 @@
+3148. Maximum Difference Score in a Grid  :: https://leetcode.com/problems/maximum-difference-score-in-a-grid/description/
+
+**************************************************************************************************************************************************
+
+class Solution {
+    public int maxScore(List<List<Integer>> grid) {
+        
+        
+        // maanlo hum kisi x,y coordinate p hain to hme ussey upr ya left me minimum value chahiye 
+
+        // suppose hum x,y -> x1,y1 -> x2,y2 p gye 
+        
+        // score =  val(x1,y1) - val(x,y) + val(x2,y2) - val(x1,y1)  =  val(x2,y2) - val (x,y)
+
+        // mtlb ki paath s koi frk nai pdega end me answer wahi hoga finally tum kis cell p ho or initially knse cell p ho
+
+        // to maximize score  = final val - initiall value  -> to maximize initial score should be as least as possible
+
+        // to hme hrek cell p jakr ussey upr and left ka mini nikalee to it will be O(n*m) * O(n*m)
+
+        // so we will pre Compute min value at each cell to avoid this and our complexity will be O(n*m) which will be acceptable
+
+
+        int rows = grid.size();
+        int cols = grid.get(0).size();
+        
+
+        int [][] prefixMin = new int[rows][cols];
+        prefixMin[0][0] = grid.get(0).get(0);
+
+        for(int i = 1;i<rows;i++)
+        {
+            prefixMin[i][0] = Math.min( grid.get(i).get(0) , prefixMin[i-1][0]);
+        }
+
+        for(int i = 1;i<cols;i++)
+        {
+            prefixMin[0][i] = Math.min( grid.get(0).get(i) , prefixMin[0][i-1]);
+        }
+
+        for(int i = 1;i<rows;i++)
+        {
+            for(int j = 1;j<cols;j++)
+            {
+
+                prefixMin[i][j] = Math.min(prefixMin[i-1][j] ,Math.min( prefixMin[i][j-1] , grid.get(i).get(j)));
+            }
+        }
+
+
+    // ******** yaha tkk hmara 2D prefix min value for each cell aagya hoga**************************************//
+
+    // ab bss hrek cell k liy uske upr wale cell or right ka minimum hme prefix MIN se milega
+    int ans = Integer.MIN_VALUE ;
+    for(int i = rows - 1; i>= 0;i--)
+    {
+        for(int j = cols-1 ;j>=0;j--)
+        {
+            int mini = Integer.MAX_VALUE ;
+
+            if(i-1 >= 0) mini = Math.min(mini , prefixMin[i-1][j]);   // minimum from upper
+            if(j-1 >= 0) mini = Math.min(mini,prefixMin[i][j-1]);       // minimum from right
+  
+            ans = Math.max(ans , grid.get(i).get(j) - mini);   // considering grid[i][j] as final to mini ghtaao taaki maxim ans aaye
+        }
+    }
+
+        return ans;
+    }
+}
