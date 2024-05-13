@@ -1,0 +1,112 @@
+861. Score After Flipping Matrix  :: https://leetcode.com/problems/score-after-flipping-matrix/description/
+
+***************************************************************************************************************************************************
+
+// class Solution {
+//     public int matrixScore(int[][] grid) {
+        
+
+//         // sbse pehle hum hrek row ka pehla value 1 bnana chahege qki wo MSB hoga to value jaada hogi
+
+//         int rows = grid.length;
+//         int cols = grid[0].length;
+
+//         for(int i = 0;i<rows;i++)
+//         {
+//             if(grid[i][0] == 0)  // agr pehli value 0 hai toh
+//             {
+//                 for(int j = 0;j<cols;j++)  // usss row ko toggle krdo
+//                 {
+//                     grid[i][j] = 1 - grid[i][j];
+//                 }
+//             }
+//         }
+
+//         // ab wo columns dekhlo jaha p 0's > 1's hain to uss columne ko flip krk hme better ans milega
+//         for(int j = 0;j<cols;j++)
+//         {
+//             int count = 0;   // used to store count of ones
+//             for(int i = 0;i<rows;i++)
+//             {
+//                 if(grid[i][j] == 1)
+//                 count++ ;
+//             }
+
+//             int no_Zeroes = rows - count ;
+
+//             if(no_Zeroes > count)
+//             {
+//                 // flip that column
+//               for(int i = 0;i<rows;i++)
+//                 {
+//                     grid[i][j] = 1 - grid[i][j];
+//                 }
+                
+//             }
+//         }
+
+//         // ab sb sahi values store hogi honge to bss ans nikalna h
+
+//         int result = 0 ;
+
+//         for(int i = 0;i<rows;i++)
+//         {
+//             int temp[] = grid[i];
+
+//             for(int j = 0;j<cols;j++)
+//             {
+//                 if(grid[i][j] == 1)
+//                 {
+//                     result += Math.pow(2,cols-1-j);
+//                 }
+//             }
+//         }
+
+//         return result;
+//     }
+// }
+
+//*****************APPROACH 2 WITHOUT MODIFYING ARRAY******************************************************************************************/
+
+class Solution {
+    public int matrixScore(int[][] grid) {
+
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        int score  = 0;
+
+        // hme sbhi rows ka pehle value to 1 bnana hi tha to assume ki bna lia h to answer ab tk
+
+        score = rows * (int)(Math.pow(2,cols-1));
+
+        // ab hme hrek col m zeroes and 1 ka count dekhna h to agr input ki MSB 0 hai mtlb hmne flip kia hoga row ko to hme 
+        // uss row k 0 ko 1 assume krna h else 0 hi
+
+        for(int j = 1;j<cols;j++)
+        {
+            int countOfSameBits = 0 ;  // agr msb k saath same hua to 1 respresent krega and it is used to store 1's eg MSB = 0  and usi col m 0 hai
+                                        // meeans wo 0 nai h hmne flip krk 1 bnaya hoga and MSB = 1 and col = 1 tb to wo 1 hi h
+            for(int i = 0;i<rows;i++)
+            {
+                if(grid[i][j] == grid[i][0])
+                countOfSameBits++ ;
+            }
+        
+        
+            int countZeroes = rows - countOfSameBits ;
+
+            if(countZeroes > countOfSameBits)
+            {
+                // we need flipping as all zeroes becomes 1 so we add this to our ans
+                score += countZeroes * (int)Math.pow(2,cols-1-j);
+            }else
+            {
+                score += countOfSameBits * (int)Math.pow(2,cols-1-j);
+            }
+        }
+        return score;
+    }
+
+    
+}
