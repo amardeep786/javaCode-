@@ -1,0 +1,86 @@
+Number of Good Components  :: https://www.geeksforgeeks.org/problems/number-of-good-components--170647/1
+
+****************************************************************************************************************************************************
+
+class Solution {
+    public static int findNumberOfGoodComponent(int e, int v, int[][] edges) {
+        
+        Map<Integer,List<Integer>> map = new HashMap<>();
+        int ans = 0;
+        for (var temp : edges) {
+            
+            if(!map.containsKey(temp[0]))
+            map.put(temp[0],new ArrayList<>());
+            
+            if(!map.containsKey(temp[1]))
+            map.put(temp[1],new ArrayList<>());
+            
+            map.get(temp[0]).add(temp[1]);
+            map.get(temp[1]).add(temp[0]);
+        }
+        
+        boolean visited[] = new boolean[v+1];
+        
+        // // jo single node hain wo fully connected hain
+        
+        // for(int i = 1;i<=v;i++)
+        // {
+        //     if(!map.containsKey(i))
+        //     ans++ ;
+        // }
+        
+        // // jo 2 nodes aapas m connected hain wo b fully connected hain 
+        // int count = 0 ; // for counting ki kitne nodes hain jo aapas m hi connected hain
+        
+        // for(Map.Entry<Integer,List<Integer>> entry : map.entrySet())
+        // {
+        //     List<Integer> temp = entry.getValue();
+        //     if(temp.size() == 1 && (map.get(temp.get(0)).size()==1))
+        //     {
+        //         count++ ;
+        //     }
+        // }
+        // //System.out.println("count "+ count);
+        // ans += (count/2) ;  // coz undirected hain to a->b and b->a store hoga to count m 2 baar aaya hoga
+        
+        
+        // jo bhi fully connected hoga uske edges = n*(n-1)/2 honge so do that
+        
+        for(int i = 1;i<=v;i++)
+        {
+            if(!visited[i])
+            {
+                int vertices[] = {0};
+                int edge[] = {0};
+                checkCycle(map,i , visited,vertices,edge) ;
+                
+                edge[0]/=2 ;  // qki hrek edge ko 2 baar count kia 
+                
+                if(edge[0] == (vertices[0] * (vertices[0]-1)/2))
+                ans++ ;
+            }
+        }
+        
+        return ans;
+    }
+    
+    public static void checkCycle(Map<Integer,List<Integer>> map , int i,boolean visited[],int vertices[],int edge[])
+    {
+        visited[i] = true;
+        
+        vertices[0]++ ;  // vertices 1 aaya 
+        edge[0] += map.get(i) == null? 0:map.get(i).size();
+        
+        if(map.containsKey(i))
+        {
+            for(var neigh : map.get(i))
+            {
+                if(!visited[neigh])
+                {
+                    checkCycle(map,neigh,visited,vertices,edge);
+
+                }
+            }
+        }
+    }
+}
