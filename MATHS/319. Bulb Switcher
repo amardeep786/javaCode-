@@ -1,0 +1,49 @@
+319. Bulb Switcher  :: https://leetcode.com/problems/bulb-switcher/
+
+**********************************************************************************************************************************************************************************************
+
+
+class Solution {
+    public int bulbSwitch(int n) {
+        
+
+        /*
+            initially off the sbb ans suppose n = 12
+
+            (1,12)  ---  (12,1)
+            (2,6)   ---  (6,2)
+            (3,4)   ===  (4,3)
+
+            means jb round 1 wala ON krega bulb ko orr round 12 wala off krdega 
+            similarly round 2 me toggle hue to round 6 me reverse toggle hoga 
+            || ly round 3 and round 4 cancel their effect and bulb remain off
+
+            say n = 9
+
+            (1,9) --- (9,1)   --> cancel effect and bult will off
+                 
+                 (3,3)   --> it will on 
+
+        
+            so only those bulb will remain on which are perfect squares
+
+        */
+
+        //****METHOD 1 USING BRUTE FORCE*********************************/
+
+        // int count = 0;
+        // for(int i = 1;i<=n;i++)
+        // {
+        //     for(int j = 1;j<=i;j++)    // counting perfect squares between 1 to n  -> giving tle coz O(n^2)
+        //     if(j*j == i)
+        //     count++ ;
+        // }
+
+        // return count;
+
+
+        //***METHOD 2 uSing function****************************** */
+
+        return (int)Math.sqrt(n);
+    }
+}
