@@ -1,0 +1,128 @@
+837. New 21 Game  :: https://leetcode.com/problems/new-21-game/description/
+
+***********************************************************************************************************************************************************************************
+
+
+// class Solution {
+//     public double new21Game(int n, int k, int maxPts) {
+        
+
+//         /*
+//             hme prob chahiye n ya usse kam ki score ki 
+
+//             eg say k = 17 and n = 21 and maxPoint = 10 then we want probability of p(21) + p(20)+ __----- +p(17)
+
+//             why 17 tkk hi qki ussey kam score tkk hua to wo to khelta hi rhega and rukega hi nai ans prob tb nikalege jb wo rukgega
+
+//             now lets calculate any one probability say p(21) = ?
+
+//             p(21) = possible hai ki uska score 16 tha or usne baad me 5 pick kia to total 21 so isis tra s saare nikaale and
+//                     last  me ho skta hai uske paas 11 ho or usne card 10 pick kia ho ie card 10 s jaada wo pick nai kr skta 
+
+//             so 
+
+//             p(21) = p(16) * p(5) + p(15)*p(6) + --------- + p(11)*p(10[maxpoint])
+
+//             in general p(t) = p(k-1)*p(n - (k-1)) + p(k-2)*p(n-(k-2)) + -------- + p(n-maxpoint)*p(maxPoint);
+
+//             given = p(picked no) = 1 / maxpoint ie equally likely
+
+//             APPROACH : 
+
+//             to hum 1 se n tkk ki saari probability nikal lenge and hme chahiye kya  n se kam and k se equal or jaada wrna game nai rukega
+//             to hum saari prob ko store kra k and baaad me k s lekr n tkk ki prob jod denge
+
+//         */
+
+//         double probabilityArray[] = new double[n+1];
+//         probabilityArray[0] = 1 ;  // qki wo start s 0 s tha to prob(score = 0) = 1 
+
+//         double probOfOne = 1.0 / maxPts ;
+
+
+//         for(int i = 1;i<=n;i++)   // in sbki prob nikalni h
+//         {
+//             for(int card = 1 ;card <= maxPts ;card++)   // ye wale card pick kr skte hain 
+//             {
+//                 // ek important check daalna jruri hai
+//                 if(i-card >=0 && i-card < k)    // why 2nd condition qki i-card >= k  hua to hum orr card select hi nai kr paege to probOfOne ka use nai krege
+//                 probabilityArray[i] +=  (probOfOne * probabilityArray[i-card]);  // ek card pick kia uski prob * ab us card ki val ghta do to jo bcha probability                                                                               
+//             }
+//         }
+
+//         // till here hmaaare paas sbhi ki prob aagyi hogi
+
+//         // ab bss k or ussey jada wali prob ko add krna h
+
+//         // for(var t : probabilityArray)
+//         // {
+//         //     System.out.print(t+" ");
+//         // }
+//         double result = 0 ;
+
+//         for(int i = k ;i<=n;i++)
+//         {
+//             result += probabilityArray[i] ;
+//         }
+
+
+//         return result ;
+
+//     }
+// }
+
+/*********giving TLE coz we have done multiple calculation again and again ********OPTIMIZED********************************************************
+
+
+for above example :
+
+p(16) = p(15)* prob of 1 crd + ------------- + p(6) * p(10)  max 10 le skte hain tohh
+
+p(17) = p(16) * p(1) + ------------ + p(7)*p(10)  to isme 6 wala nai h bss orr p(16 )wala add hogya
+is needed for p(17)
+
+to hum hrek next k liy prev wale ko sum me jodege and last wale ko ghtaege
+ */
+
+
+
+class Solution {
+    public double new21Game(int n, int k, int maxPts) {
+
+        double probabilityArray[] = new double[n+1];
+        probabilityArray[0] = 1 ;  // qki wo start s 0 s tha to prob(score = 0) = 1 
+        double probabilitySum = (k==0) ? 0 : 1 ;
+        double probOfOne = 1.0 / maxPts ;
+
+
+        for(int i = 1;i<=n;i++)   // in sbki prob nikalni h
+        {
+            probabilityArray[i]  = probabilitySum * probOfOne ;  // ye hr baar pick krne ki prob s multiply krega
+           
+           if(i < k)    // coz i > k hua to hm next card nai utha paege to prob last uthane s hi shuru hogi
+           {
+            probabilitySum += probabilityArray[i] ;     // current probability ko jod do
+           }
+
+           if(i-maxPts >= 0 && i-maxPts < k)
+           probabilitySum -= probabilityArray[i-maxPts] ;    // last wale value ko hta do
+
+       
+        }
+
+        // till here hmaaare paas sbhi ki prob aagyi hogi
+
+        // ab bss k or ussey jada wali prob ko add krna h
+
+        double result = 0 ;
+
+        for(int i = k ;i<=n;i++)
+        {
+            result += probabilityArray[i] ;
+        }
+
+
+        return result ;
+
+    }
+}
