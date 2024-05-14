@@ -1,0 +1,63 @@
+Path With Minimum Effort :: https://www.geeksforgeeks.org/problems/path-with-minimum-effort/1
+
+*****************************************************************************************************************************************************
+
+class Solution {
+    int[][] direction = {{0,1},{1,0},{0,-1},{-1,0}};
+    int MinimumEffort(int m,int n,int heights[][]) {
+
+        int shortestDist[][] = new int[m][n];
+
+        for(int row[]:shortestDist)   //initial krdo infinite se
+        {
+            Arrays.fill(row,Integer.MAX_VALUE);
+        }
+
+        shortestDist[0][0] = 0 ;
+
+        //priority queue me triplets daal rha pehli value cost bta rhi baaki value coordinates
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)-> Integer.compare(a[0],b[0]));
+
+        pq.offer(new int[]{0,0,0});
+       
+        while(!pq.isEmpty())
+        {
+            int diff = pq.peek()[0];
+            int x = pq.peek()[1];
+            int y = pq.poll()[2];
+
+            
+            if(x == m-1 && y == n-1)
+            return diff;
+    
+
+            for(var dir :direction)
+            {
+                int newX = x + dir[0];
+                int newY = y + dir[1];
+
+                if(isSafe(newX,newY,m,n))
+                {
+
+                    int absDiff = Math.abs(heights[newX][newY]-heights[x][y]);
+                    int maxDiff = Math.max(diff,absDiff);
+                    if( shortestDist[newX][newY] > maxDiff)
+                    {shortestDist[newX][newY] = maxDiff;
+                    pq.offer(new int[]{maxDiff,newX,newY});}
+                  
+                }
+            }
+        }
+
+       return shortestDist[m-1][n-1];
+}
+
+    public boolean isSafe(int x,int y, int m,int n)
+    {
+        if(x>= 0 && x <m && y>=0 && y< n)
+        return true;
+
+        return false;
+    }
+}
