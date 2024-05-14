@@ -1,0 +1,55 @@
+1219. Path with Maximum Gold :: https://leetcode.com/problems/path-with-maximum-gold/
+
+***************************************************************************************************************************************************
+
+class Solution {
+    int [][]directions = {{0,-1},{0,1},{-1,0},{1,0}};
+    public int getMaximumGold(int[][] grid) {
+        
+        int m = grid.length;
+        int n = grid[0].length;
+        int maxGold = 0 ;
+        for(int i = 0;i<m;i++)
+        {
+            for(int j = 0;j<n;j++)            // O(m*n)
+            {
+                if(grid[i][j] != 0)     //gold is present
+                {
+                    int ans = dfs(grid,m,n,i,j);   
+
+                    maxGold = Math.max(maxGold,ans);                    
+                }
+            }
+        }
+
+        return maxGold;
+    }
+
+    public int dfs(int[][] grid,int m,int n,int i,int j)  // 4 possiblitites where gold is present so 4 ^ (where gold is present)
+    {
+        if(i>=m || i<0 || j>=n || j<0 || grid[i][j] == 0)
+        return 0;
+
+        int currGold = grid[i][j];
+
+        grid[i][j] = 0 ; // mark visited
+        int futureGold = 0;
+
+        for(var dir : directions)
+        {
+            int new_i = i + dir[0];
+            int new_j = j + dir[1];
+
+             futureGold = Math.max(futureGold , dfs(grid,m,n,new_i,new_j) );
+           
+        }
+
+        grid[i][j] = currGold ;    // unvisited
+
+        return currGold + futureGold ;   // return krdo
+
+    }
+
+
+
+}
