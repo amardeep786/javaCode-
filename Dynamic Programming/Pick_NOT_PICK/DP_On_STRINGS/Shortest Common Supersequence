@@ -216,3 +216,14 @@ class Solution
     }
 }
 
+
+//**METHOD 4 is  ki hum agar longest common subsequence nikal lenge to **************************************************/
+// say X ki length n1 thi and Y ki n2 
+/*
+    LCS maanlo t aaya to ans m t to hoga hi 
+    baaki ab pehli string me kitna or bcha jo likhne hai is n1-t
+    and string 2 me kitna bcha jo or likhna h ir n2-t 
+    
+    so total ans = t + (n1-t)+(n2-t) ;
+*/
+
