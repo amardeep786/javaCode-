@@ -1,0 +1,189 @@
+Account Merge  ::   https://www.geeksforgeeks.org/problems/account-merge/1
+721. Accounts Merge :: https://leetcode.com/problems/accounts-merge/description/                   
+
+**************************************************************************************************************************************************
+
+class Solution {
+  static List<List<String>> accountsMerge(List<List<String>> accounts) {
+      
+      int n  = accounts.size() ;
+      
+      DisjointSet ds = new DisjointSet(n);
+      
+      // logic hai ki hrek email ko traverse krte jaana h orr jb bhi map m koi mail pehle s dikhega 
+      // to un dono ko merge krte rho
+      
+      Map<String,Integer> map = new HashMap<>();  // to map email to index i -> i se hum name pta lga sket hain
+      
+      for(int i = 0;i<n;i++)   // sbhi person k paas jaao
+      {
+          for(int j = 1; j< accounts.get(i).size();j++)  // 0th ko chhor k baaki mails k paas jao
+          {
+              String mail = accounts.get(i).get(j) ;
+              
+              if(map.containsKey(mail) == false)
+              {
+                  map.put(mail,i);   // agr mail nai tha to mail ko daal dia
+              }
+              else
+              {
+                  //agar koi mail pehle hi present hai to ussey indexes ko merge krna pdega ir same person
+                  ds.unionBySize(map.get(mail) , i);
+              }
+              
+          }
+          
+      }
+      
+      //.....now hmare pas mails to aagye or wo kis index ko belong kr rhe hain wo b
+      
+      // suppose kuj mail common mila tha to hmne union of(3,0) kia tha to parent of 3 ab 0 hogya
+      
+      // lekin map m abhi bhi 0 hi likha h qki hmne changes nai kiye koi map me 
+      
+      // to hum ek arraylist of strings ka Array bna lete hain 
+      
+      /*
+        
+        say amar@gmail  --> 0 index  k person ka hai 
+        
+        amar11@gmail bhi usi ka hai to hm array k 0th index p {amar@gmail } and usi index p
+        
+        amar11@gmail add krege to  hmara ek array hoga jiska individual element arraylist of string hoga 
+        
+        means hmaare mails abb merge hote jaa rhe h
+      
+      */
+      
+      
+      ArrayList<String> arr[] = new ArrayList[n] ;   // array bnaya
+      
+      // ab individual ko bhi initialisze krdo
+      
+      for(int i = 0;i<n;i++)
+      {
+          arr[i] = new ArrayList<String>();
+      }
+      
+      // ab map me traverse krke hrek string k saath m jo index h uska parent nikalege kuki wohi main 
+      //parent hoga ot uss index m string ko add krte jaege
+      
+      for(Map.Entry<String,Integer> entry : map.entrySet())
+      {
+          String mail = entry.getKey();
+          
+          int actualParent = ds.findParent(entry.getValue());
+          
+          arr[actualParent].add(mail);
+      }
+      
+      // hmare paas array aagya hai or wo mails us array k indexes k element hai
+      
+      // ab result m store krate jaao
+    
+      List<List<String>> result = new ArrayList<>();
+      
+      for(int i = 0;i<n;i++)
+      {
+          
+          // agar array ka kisi element ka size 0 s mtlb usme kuj nai to bs return hona h
+          
+          if(arr[i].size() == 0) continue ;
+          
+          List<String> temp = new ArrayList<>();
+          
+          temp.add(accounts.get(i).get(0));   // ans ka pehla value naame to aagya 
+          
+          // pehle hme name chahiye to account k index ka 0th element naam hi hai 
+          Collections.sort(arr[i]);
+          
+          for(var t : arr[i])
+          {
+              temp.add(t) ;        // baaki strings sorted list me add ho rhi h
+          }
+          result.add(temp);
+      }
+      
+      return result ;
+  }
+}
+     
+     
+class DisjointSet
+{
+    List<Integer> rank = new ArrayList<>();
+    List<Integer> parent = new ArrayList<>();
+    List<Integer> size = new ArrayList<>();
+    
+    public DisjointSet(int n )   // jese hi n aaega ye 3no list ko initialise krege sbse pehle
+    {
+        for(int i = 0;i<=n ;i++)
+        {
+            parent.add(i) ;   // initially everyone is parent of itselt
+            rank.add(0);      // initially rank 0 hai sbhi ka
+            size.add(1) ;     // initially all size - 1
+        }
+    }
+    
+    public int findParent(int x)
+    {
+        if(parent.get(x) == x)
+        return parent.get(x);
+        
+        // if not to pehle uske parent ka parent pta kro then isme update kro
+        
+        int parentOfx = findParent(parent.get(x));
+        parent.set(x,parentOfx);
+        
+        return parent.get(x);
+    }
+    
+    
+    public void unionByRank(int x , int y)
+    {
+        int par_x = findParent(x);
+        int par_y = findParent(y);
+        
+        if(par_x == par_y) return ;         // if parent of both is same then do nothing
+        
+        if(rank.get(par_x) < rank.get(par_y))  // if y k parent ki rank jada h 
+        {
+            parent.set(par_x , par_y) ;   // small rank wle ko bde ka child bna dia
+        }
+        else if(rank.get(par_x) > rank.get(par_y))  // if y k parent ki rank kamm h 
+        {
+            parent.set(par_y , par_x) ;   // small rank wle ko bde ka child bna dia
+        }
+        else
+        {
+            // dono ki rank same hai toh kisi ko bhi kisi ka parent bna k parent ka rank bdhado
+            
+            parent.set(par_y , par_x) ; 
+            int currRank = rank.get(par_x);
+            rank.set(par_x , currRank+1) ;  // x me child add hua to x ki rank bdh gyi
+        }
+    }
+    
+    
+    public void unionBySize(int x , int y)
+    {
+        int par_x = findParent(x);
+        int par_y = findParent(y);
+        
+        if(par_x == par_y) return ;         // if parent of both is same then do nothing
+        
+        if(size.get(par_x) < size.get(par_y))  // if y k parent ki size jada h 
+        {
+            parent.set(par_x , par_y) ;   // small size wle ko bde size ka child bna dia
+            
+            size.set(par_y , size.get(par_y) + size.get(par_x));
+        }
+        else 
+        {
+            parent.set(par_y , par_x) ;   // small size wle ko bde ka child bna dia
+            size.set(par_x , size.get(par_y) + size.get(par_x));
+        }
+        
+    }
+    
+}
