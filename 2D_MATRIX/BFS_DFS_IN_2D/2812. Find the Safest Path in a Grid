@@ -1,0 +1,158 @@
+2812. Find the Safest Path in a Grid  :: https://leetcode.com/problems/find-the-safest-path-in-a-grid/
+
+*************************************************************************************************************************************************
+
+
+
+class Solution {
+
+    int [][] direction = {{0,1},{0,-1},{1,0},{-1,0}} ;
+
+    public int maximumSafenessFactor(List<List<Integer>> grid) {
+        
+        /*
+            hme maximum safeness chahiye factor
+
+            mtlb hme thief se door s door hokr path chahiy to safeness bdhega
+
+            to 1) hum sbhi cell ki safeness value calculate krege 
+
+            i) agr hrek cell s BFS maare and jb b chor mile to tuk jaee to complexity (m*n)*BFS
+
+            SO isliy hum n thieves s simultaneously BFS maargege and baaki cell ka safeness score update krte rhege
+
+            2)  and jabb  sbhi cell ka score aagya to  score can be 1,2,3--- so on
+
+            to hum binary search lga kar dekhte rhege ki knsa score possible hai knsa nai  say we want to check for x = 3
+
+            to hme ek path chahiye jaha p safeness >= 3 hoga tbhi to uss path ka safeness score 3 hoga
+
+
+            COMPLEXITY - O(n*n*logn)
+
+        */
+        int n = grid.size();
+        int [][] distanceFromThief = new int[n][n] ;
+        Queue<int[]> que = new LinkedList<>();  // for aclculating score of every other cell
+        boolean [][] visited = new boolean[n][n] ;
+
+        
+
+        for(int i = 0 ;i<n;i++)
+        {
+            for(int j = 0;j<n;j++)
+            {
+                if(grid.get(i).get(j) == 1)
+                {
+                    que.offer(new int[]{i,j}) ;
+                    visited[i][j] = true ;
+                }
+            }
+        }
+
+        // wo saare coordinates jaha thief hain wo aagye honge que me  ab simultaneously hi bfs maarna h sbhi thieves se
+        int level = 0 ;   // ye manahatten hi btaega alg s calculate krne ki jrurt nai h
+        while(!que.isEmpty())
+        {
+            int size = que.size();
+            while(size-- > 0)
+            {
+                int []temp = que.poll();
+                int x = temp[0];
+                int y = temp[1] ;
+
+                distanceFromThief[x][y] = level ;
+
+                for(var dir : direction)
+                {
+                    int x_new = x + dir[0];
+                    int y_new = y + dir[1];
+
+                    if(x_new < 0 || x_new >= n || y_new < 0 || y_new >= n || visited[x_new][y_new])
+                    {
+                        continue;
+                    }
+
+                    que.offer(new int[]{x_new,y_new});
+                    visited[x_new][y_new] = true ;
+                }
+            }
+            level++ ;  // next level ka manhateen bhi 1 s hi bdhega
+        }
+
+        // hmara distance from thief to every cell update hogya h ie safefness of each cell
+
+        //step2 ->  ab ye dekhna h ki kya 1 safeness score hai agr hai to kya 2 safeness score possible hai and so on
+
+        // to iske liy hum binary search lga denge 
+
+        int low = 0 , high = 400 ;  // 400 is given constraint of higher rows
+
+        int result = 0;
+
+        while(low <= high)                    // binsearch on scores
+        {
+            int mid = low + (high-low)/2 ;
+
+            if(checkMidPossible(distanceFromThief,mid,n))
+            {
+                result = mid ;
+                low = mid+1;
+            }else
+            {
+                high = mid-1 ;
+            }
+        }
+
+        return result ;
+
+}
+
+
+
+public boolean checkMidPossible(int [][] distanceFromThief,int mid,int n)
+    {
+        // hme path dekhna hai ki koi path safeness factor mid ka exist krta hai ki nai 
+        // in that path every cell has score >= mid
+
+        Queue<int[]> que = new LinkedList<>();
+        boolean[][] visited = new boolean[n][n];
+
+        que.offer(new int[]{0,0}) ;   // initially 0,0 p hain
+        visited[0][0] = true ;
+
+        if(distanceFromThief[0][0] < mid)
+        return false;
+
+        while(!que.isEmpty())
+        {
+            int temp[] = que.poll();
+            int x = temp[0];
+            int y = temp[1];
+
+            if(x == n-1 && y == n-1)
+            {
+                return true;
+            }
+
+            for(var dir : direction)
+                {
+                    int x_new = x + dir[0];
+                    int y_new = y + dir[1];
+
+                    if(x_new < 0 || x_new >= n || y_new < 0 || y_new >= n || visited[x_new][y_new])
+                    {
+                        continue;
+                    }
+
+                    if(distanceFromThief[x_new][y_new] < mid)
+                    continue;
+
+                    que.offer(new int[]{x_new,y_new});
+                    visited[x_new][y_new] = true ;
+                }
+        }
+
+        return false;
+    }
+}
