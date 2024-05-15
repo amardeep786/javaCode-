@@ -1,0 +1,218 @@
+Shortest Common Supersequence :: https://www.geeksforgeeks.org/problems/shortest-common-supersequence0322/1
+
+******************************************************************************************************************************************************
+
+// /*********Brute force ie take all combination *************** gives TLE ******************************/
+
+// class Solution
+// {
+//     //Function to find length of shortest common supersequence of two strings.
+//     public static int shortestCommonSupersequence(String X,String Y,int m,int n)
+//     {
+//         /*
+        
+//         hum chahege ki jo common hain dono me usey ek hi baaar likhe baaki agr uncoomon hai to 
+//         ek baar ek ko le and dusri baar dusre ko le
+        
+//         like LCS -> longest common subsequence
+        
+//         */
+        
+//         return solve(X,Y,0,0,m,n);
+//     }
+    
+//     static public int solve(String X,String Y,int index1 , int index2,int m,int n)
+//     {
+        
+//         // base case if we reach at end in any string
+        
+//         if(index1 >= m)
+//         {
+//             return Y.substring(index2).length() ;   // agr X khtm hua to bche hue Y k characters hi append krna hoga 
+//         }                       // longest commom me yaha 0 return krte the qki ab kuj commom nai aata dono me
+            
+//         if(index2 >=  n)
+//         {
+//             return X.substring(index1).length() ;   // agr Y khtm hua to bche hue Y k characters hi append krna hoga 
+//         }
+        
+        
+//         if(X.charAt(index1) == Y.charAt(index2))
+//         {
+//             return 1 + solve(X,Y,index1+1,index2+1,m,n);
+//         }
+//         else
+//         {
+//             return 1+ Math.min(solve(X,Y,index1+1,index2,m,n),solve(X,Y,index1,index2+1,m,n)) ;
+//         }
+        
+//     }
+// }
+
+
+
+/*********MEMOIZATION *************** ******************************/
+
+// class Solution
+// {
+//     //Function to find length of shortest common supersequence of two strings.
+//     public static int shortestCommonSupersequence(String X,String Y,int m,int n)
+//     {
+//         /*
+        
+//         hum chahege ki jo common hain dono me usey ek hi baaar likhe baaki agr uncoomon hai to 
+//         ek baar ek ko le and dusri baar dusre ko le
+        
+//         like LCS -> longest common subsequence
+        
+//         */
+//         int dp[][] = new int[m][n] ;
+//         for(var t : dp)
+//         {
+//             Arrays.fill(t,-1);
+//         }
+        
+//         return solve(X,Y,0,0,m,n,dp);
+//     }
+    
+//     static public int solve(String X,String Y,int index1 , int index2,int m,int n,int dp[][])
+//     {
+        
+//         // base case if we reach at end in any string
+        
+//         if(index1 >= m)
+//         {
+//             return Y.substring(index2).length() ;   // agr X khtm hua to bche hue Y k characters hi append krna hoga 
+//         }                       // longest commom me yaha 0 return krte the qki ab kuj commom nai aata dono me
+            
+//         if(index2 >=  n)
+//         {
+//             return X.substring(index1).length() ;   // agr Y khtm hua to bche hue Y k characters hi append krna hoga 
+//         }
+        
+//         if(dp[index1][index2] != -1)
+//         return dp[index1][index2] ;
+        
+        
+//         if(X.charAt(index1) == Y.charAt(index2))
+//         {
+//             return dp[index1][index2]  = 1 + solve(X,Y,index1+1,index2+1,m,n,dp);
+//         }
+//         else
+//         {                                   // pick i th and left jth                   pick jth and left ith
+//             return dp[index1][index2]  = 1+ Math.min(solve(X,Y,index1+1,index2,m,n,dp),solve(X,Y,index1,index2+1,m,n,dp)) ;
+//         }
+        
+//     }
+// }
+
+
+
+
+
+// /*********MEMOIZATION ***but last se solve krege ********helpful for bottom up**** ******************************/
+
+// class Solution
+// {
+//     //Function to find length of shortest common supersequence of two strings.
+//     public static int shortestCommonSupersequence(String X,String Y,int m,int n)
+//     {
+//         /*
+        
+//         hum chahege ki jo common hain dono me usey ek hi baaar likhe baaki agr uncoomon hai to 
+//         ek baar ek ko le and dusri baar dusre ko le
+        
+//         like LCS -> longest common subsequence
+        
+//         */
+//         int dp[][] = new int[m][n] ;
+//         for(var t : dp)
+//         {
+//             Arrays.fill(t,-1);
+//         }
+        
+//         return solve(X,Y,m,n,dp);
+//     }
+    
+//     static public int solve(String X,String Y,int m , int n,int dp[][])
+//     {
+        
+//         // base case if we reach at end in any string
+        
+//         // if(index1 >= m)
+//         // {
+//         //     return Y.substring(index2).length() ;   // agr X khtm hua to bche hue Y k characters hi append krna hoga 
+//         // }                       // longest commom me yaha 0 return krte the qki ab kuj commom nai aata dono me
+            
+//         // if(index2 >=  n)
+//         // {
+//         //     return X.substring(index1).length() ;   // agr Y khtm hua to bche hue Y k characters hi append krna hoga 
+//         // }
+        
+        
+        
+//         // is base case ko aise b likh skte hain
+        
+//         if(m==0 || n == 0)
+//         return m+n ;     // kisi ki b length 0 hui to dusre ki length return 
+        
+        
+//         if(dp[m-1][n-1] != -1)
+//         return dp[m-1][n-1] ;
+        
+        
+//         if(X.charAt(m-1) == Y.charAt(n-1))
+//         {
+//             return dp[m-1][n-1]  = 1 + solve(X,Y,m-1,n-1,dp);
+//         }
+//         else
+//         {                                   // pick ith and left jth , pick jth and left ith
+//             return dp[m-1][n-1]  = 1 + Math.min(solve(X,Y,m-1,n,dp),solve(X,Y,m,n-1,dp)) ;
+//         }
+        
+//     }
+// }
+
+
+/******BOTTOM UP ***********************************************************************************/
+
+class Solution
+{
+    public static int shortestCommonSupersequence(String X,String Y,int m,int n)
+    {
+        int dp[][] = new int[m+1][n+1];  // dp[i][j] -> shortest common superseq. when X length = i and Y.length = j
+        
+        // for(int i = 0;i<n;i++)
+        // {
+        //     dp[0][i] = i ;   // agar X ki length 0 hai to uss row me Y ki jo bhi length  h wahi fill krdo
+        // }
+        
+        // for(int i = 0;i<m;i++)
+        // {
+        //     dp[i][0] = i ;   // agar Y ki length 0 hai to uss 0th column me X ki jo bhi length  h wahi fill krdo
+        // }
+        
+        
+        //above comment wala wrong hai qki hm bottom s fill krna chah rhe h
+        
+        for(int i = 0;i<m+1;i++)
+        {
+            for(int j = 0;j<n+1;j++)
+            {
+                if(i==0 || j==0)
+                dp[i][j] = i+j ;   // same from rec+memo
+                else if(X.charAt(i-1) == Y.charAt(j-1))
+                {
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                }else
+                {
+                    dp[i][j] = 1 + Math.min(dp[i-1][j] , dp[i][j-1]);
+                }
+                
+            }
+        }
+        
+        return dp[m][n] ;  //short comm superseq when X.length is m and Y length = n
+    }
+}
+
