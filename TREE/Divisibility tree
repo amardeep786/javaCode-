@@ -1,0 +1,51 @@
+Divisibility tree  :: https://www.geeksforgeeks.org/problems/divisibility-tree1902/1
+
+****************************************************************************************************************************************************
+
+class Solution {
+    int ans = 0;
+    public int minimumEdgeRemove(int n, int[][] edges) {
+        
+        ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
+        
+        for(int i = 0;i<=n;i++)
+        {
+            graph.add(new ArrayList<>());   // initialized
+        }
+        
+        for(var edge : edges)           //undirected graph
+        {
+            graph.get(edge[0]).add(edge[1]);
+            graph.get(edge[1]).add(edge[0]);
+        }
+        boolean visited[] = new boolean[n+1];
+        dfs(1,graph,visited);
+        return ans;
+    }
+    
+    public int dfs(int v , ArrayList<ArrayList<Integer>> graph,boolean visited[])
+    {
+        visited[v] = true ;
+        
+        int count = 0 ;  // abhi v k subtree me koi nai h
+        
+        int countOfSubTreeChild = 0 ;  // iske subtree m bhi 0 hai
+        
+        for(int neighbour : graph.get(v))
+        {
+            if(!visited[neighbour])
+            { 
+                countOfSubTreeChild = dfs(neighbour,graph,visited);
+                
+                if(countOfSubTreeChild %2 == 0)   // ek trf ka pehle hi dekh lete hain 
+                {
+                    ans++ ;   // nodes in subtree afr even hai to current edge hmare ans m aajaega
+                }
+                count += countOfSubTreeChild ;   // current k itne nodes in subtree 
+           }
+           
+        }
+        
+        return 1+count ;  // ye apne aap ko add krk upr bhej dega
+    }
+}
