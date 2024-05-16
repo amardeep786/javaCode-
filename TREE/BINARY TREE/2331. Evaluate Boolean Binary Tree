@@ -1,0 +1,23 @@
+2331. Evaluate Boolean Binary Tree :: https://leetcode.com/problems/evaluate-boolean-binary-tree/description/
+
+**************************************************************************************************************************************************
+
+class Solution {
+    public boolean evaluateTree(TreeNode root) {
+        
+        if(root.left == null && root.right == null)
+        {
+            return root.val == 0 ? false:true ;
+        }
+
+        // pehle left and then right and then root p dekho kya hai ie postOrder traversal
+
+        // abhi hum internal node p hain tohh
+
+        boolean left = evaluateTree(root.left);
+        boolean right = evaluateTree(root.right);
+
+       return root.val == 2 ? left||right : left && right ;
+
+    }
+}
