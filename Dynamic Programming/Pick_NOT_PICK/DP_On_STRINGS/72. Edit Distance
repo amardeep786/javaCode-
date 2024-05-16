@@ -1,0 +1,185 @@
+72. Edit Distance :: https://leetcode.com/problems/edit-distance/description/
+                  :: https://www.geeksforgeeks.org/problems/edit-distance3702/1
+
+******************************************************************************************************************************************************
+
+
+// class Solution {
+//     public int minDistance(String word1, String word2) {
+        
+//         int n = word1.length();
+//         int m = word2.length();
+
+//         return help(word1,word2,0,0,n,m);
+
+//     }
+
+//     public int help(String word1, String word2,int index1,int index2,int n,int m)
+//     {
+//         if(index2 == m)
+//         {
+//             return n-index1;   // delete remaining characters to n-index1 chacrters so that much operation
+//         }
+
+//         if(index1 == n)
+//         {
+//             return m-index2;   // insert remaining characters to form remaining charcter present in word2
+//         }
+
+//         if(word1.charAt(index1) == word2.charAt(index2))   // agr char matach then 0 operation and move ahead
+//         {
+//             return help(word1,word2,index1+1,index2+1,n,m);
+//         }
+
+//         // if not match
+
+//         int insert = 1 + help(word1,word2,index1,index2+1,n,m);  // insert kia to word ka pointer to wahi rhega and since word2 assume match so it will mov forward
+//         int replace = 1 + help(word1,word2,index1+1,index2+1,n,m);  // replace hi krdia to dono hi aage bdhege
+//         int delete = 1 + help(word1,word2,index1+1,index2,n,m);  // delete ki amtlb word1 ka pointer aage bdhega and word2 ka wahi rhega
+
+//         return Math.min(insert,Math.min(replace,delete));
+//     }
+// }
+
+/************ MEMOIZATION ************************************************************************************************************************/
+
+
+// class Solution {
+//     public int minDistance(String word1, String word2) {
+        
+//         int n = word1.length();
+//         int m = word2.length();
+
+//         int dp[][] = new int[n][m];
+//         for(var arr : dp)
+//         {
+//             Arrays.fill(arr,-1);
+//         }
+
+//         return help(word1,word2,0,0,n,m,dp);
+
+//     }
+
+//     public int help(String word1, String word2,int index1,int index2,int n,int m,int dp[][])
+//     {
+//         if(index2 == m)
+//         {
+//             return n-index1;   // delete remaining characters to n-index1 chacrters so that much operation
+//         }
+
+//         if(index1 == n)
+//         {
+//             return m-index2;   // insert remaining characters to form remaining charcter present in word2
+//         }
+
+//         if(dp[index1][index2] != -1)
+//         return dp[index1][index2];
+
+//         if(word1.charAt(index1) == word2.charAt(index2))   // agr char matach then 0 operation and move ahead
+//         {
+//             return dp[index1][index2] = help(word1,word2,index1+1,index2+1,n,m,dp);
+//         }
+
+//         // if not match
+
+//         int insert = 1 + help(word1,word2,index1,index2+1,n,m,dp);  // insert kia to word ka pointer to wahi rhega and since word2 assume match so it will mov forward
+//         int replace = 1 + help(word1,word2,index1+1,index2+1,n,m,dp);  // replace hi krdia to dono hi aage bdhege
+//         int delete = 1 + help(word1,word2,index1+1,index2,n,m,dp);  // delete ki amtlb word1 ka pointer aage bdhega and word2 ka wahi rhega
+
+//         return dp[index1][index2] = Math.min(insert,Math.min(replace,delete));
+//     }
+// }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+///////////               memoization but from right of string to left coz it helps in writiing bottom up 
+
+
+/*
+
+
+class Solution {
+    public int minDistance(String word1, String word2) {
+        
+        int n = word1.length();
+        int m = word2.length();
+
+        int dp[][] = new int[n][m];
+        for(var arr : dp)
+        {
+            Arrays.fill(arr,-1);
+        }
+
+        return help(word1,word2,n,m,dp);
+
+    }
+
+    public int help(String word1, String word2,int n,int m,int dp[][])
+    {
+        if(n==0 || m==0)
+        {
+            return  m+n  ; // koi b length 0 hua toh mtlb dusre ka jitna bcha h wo add krdo
+        }
+
+
+        if(dp[n-1][m-1] != -1)
+        return dp[n-1][m-1] ;
+
+        if(word1.charAt(n-1) == word2.charAt(m-1))   // agr char matach then 0 operation and move ahead
+        {
+            return dp[n-1][m-1]  = help(word1,word2,n-1,m-1,dp);
+        }
+
+        // if not match
+
+        int insert = 1 + help(word1,word2,n,m-1,dp);  // insert kia to word ka pointer to wahi rhega and since word2 assume match so it will mov forward
+        int replace = 1 + help(word1,word2,n-1,m-1,dp);  // replace hi krdia to dono hi aage bdhege
+        int delete = 1 + help(word1,word2,n-1,m,dp);  // delete ki amtlb word1 ka pointer aage bdhega and word2 ka wahi rhega
+
+        return dp[n-1][m-1] = Math.min(insert,Math.min(replace,delete));
+    }
+}
+
+
+
+*/
+
+/**********NOW BOTTOM UP CAN BE WRITTEN USING ABOVE CODE EASILY*********************************************************************** */
+
+
+class Solution {
+    public int minDistance(String word1, String word2) {
+        
+        int n = word1.length();
+        int m = word2.length();
+
+        int dp[][] = new int[n+1][m+1];
+
+        //dp[i][j]  -> minimum operation needed for string 1 till length i and string2 till length j
+
+        for(int i = 0;i < n+1 ;i++)    // remember : i nad j are length and so i-1 and j-1 represent indexes
+        {
+            for(int j = 0;j<m+1;j++)
+            {
+                if(i==0 || j==0)
+                {
+                    dp[i][j] = i+j ;  // mtlb koi b 0 hua to baaki bche dusre string k characters
+                }
+                else if(word1.charAt(i-1) == word2.charAt(j-1))
+                {
+                    dp[i][j] = dp[i-1][j-1] ;  // agar match hua to pichli no of operation the wahi ab bhi hoga
+                }else
+                {
+                    dp[i][j] = 1+Math.min(dp[i][j-1] , Math.min(dp[i-1][j-1] , dp[i-1][j])) ;
+                }
+            }
+        }
+
+        return dp[n][m] ; // coz we want operation till length n and m
+
+    }
+
+
+}
+
