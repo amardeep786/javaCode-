@@ -1,0 +1,79 @@
+1239. Maximum Length of a Concatenated String with Unique Characters :: https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/
+
+*************************************************************************************************************************************************************************
+
+class Solution {
+    public int maxLength(List<String> arr) {
+        
+        int n = arr.size();
+
+
+        // if(arr.size() == 1)      -------> wrong coz uss 1 string m duplicate hua to answer 0 hona chahiye bt y length dega
+        // return arr.get(0).length();
+
+    /*
+        logic : hrek string ko include ya exclude krk dekho and chec kkrt rho koi duplicate aara to usey exclude hi krdo 
+    */
+
+
+    String temp = "";
+    int i = 0;
+
+    Map<String,Integer> map = new HashMap<>();  // helps in memoization ie kisi string ka best length pele hi calculate h to wahi ans lelo
+      
+
+       
+    return solve( i,arr,temp,n,map);
+
+    }
+
+    public int solve(int i,List<String> arr,String temp,int n,Map<String,Integer> map)
+    {
+        if(i>=n)        // agr hmne saare array ko process krlia to uss wqt tk jo bhi max length h temp ki wahi return kro
+        return temp.length();
+
+        if(map.containsKey(temp))  // memoized part ki agr koi string ka calculation pehle hi h to map s max value aa ajegi
+        return map.get(temp);
+
+        int include = 0 , exclude = 0;
+
+        if(hasDuplicate(arr.get(i),temp))  // we will check ki arr k index wali string ko temp m add krne se duplication aaegi ki nai 
+        {
+            exclude = solve(i+1,arr,temp,n,map);  // aaegi to to mtlb uss string ko exclude krdo and aage wale index p call kro
+        }
+        else            // agar nai aaty hai tohh 
+        {
+            exclude = solve(i+1,arr,temp,n,map);           // usey exclude krk ans le aao 
+            include = solve(i+1,arr,temp+arr.get(i),n,map);     // usey include krk anser le aao 
+        }
+
+        int result = Math.max(exclude,include);   // jo bhi max ans de rha hai usey map me store krdo  ki uss string k corresponding y length aayi max
+        map.put(temp,result);
+
+        return result ;
+    }
+
+    public boolean hasDuplicate(String s1,String s2)
+    {
+        int freq[] = new int[26];
+
+        for(char ch : s1.toCharArray())    // hrek charcter ko daalo and dekh lo kahi bhi freq 1 s jada hui mtlb dupli hai
+        {
+            if(freq[ch-'a']>0)
+            return true;
+
+            freq[ch-'a']++ ;
+        }
+
+        for(char ch : s2.toCharArray())     // dusre string ko bhi usi freq m daalo taaki pta lgega ki dupli hai ya nai 
+        {
+           if(freq[ch-'a']>0)
+           {
+               return true;
+           }
+        }
+
+    return false;
+    }
+
+}
