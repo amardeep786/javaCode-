@@ -1,0 +1,124 @@
+1335. Minimum Difficulty of a Job Schedule :: https://leetcode.com/problems/minimum-difficulty-of-a-job-schedule/description/
+
+**************************************************************************************************************************************************
+
+
+// -----------------------BRUTE FORCE ------------------------------------------------------------------------------------------//
+
+
+/*
+
+class Solution {
+    
+    public int minDifficulty(int[] jobDifficulty, int d) {
+        int n = jobDifficulty.length ;
+
+        if(d>n) return -1 ;
+
+        return help(jobDifficulty,d,0,n);
+    }
+
+    public int help(int[] jobDifficulty, int d,int idx , int n )
+    {
+        if(d == 1) // agar ek din bcha hai toh saare kam usi din krne hain and max is the difficulty of that day
+        {
+            int diff = Integer.MIN_VALUE;
+            for(int i = idx;i<n;i++)
+            {
+                diff = Math.max(diff,jobDifficulty[i]);
+            }
+
+            return diff ;
+        }
+
+        /*
+        agr day 1 s jaada hai tohh hrek din ek ek possiblinlity
+
+        take idx = { idx } wala job in first day
+        take index = { idx , idx+1} wala job in first day mtlb 2 kaam ek din me
+        take index = { idx , idx+1 , idx+2 } wala job in first day mtlb 3 kaam ek din me
+        .
+        ..
+        .... and so on 
+
+        or in sb ka jo minimum aaega wahi ans hoga
+
+        */
+
+/*
+        int finalResult = Integer.MAX_VALUE ;
+        int maxDifficultyOfDay = Integer.MIN_VALUE ;
+        for(int i = idx;i<= n-d;i++)  // n-d s jada hua to hmaare paas days bch jaege or kaam pehle khtn hoskta h
+        {
+            maxDifficultyOfDay = Math.max(maxDifficultyOfDay,jobDifficulty[i]);
+            int result = maxDifficultyOfDay + help(jobDifficulty,d-1,i+1,n) ; // days 1 s ght gya and index ek aage chla gya
+
+            finalResult = Math.min(finalResult,result) ;
+        }
+        return finalResult ;
+    }
+}
+
+*/
+
+
+// -----------------------  MEMOIZATION  ------------------------------------------------------------------------------------------//
+
+
+
+class Solution {
+    
+    public int minDifficulty(int[] jobDifficulty, int d) {
+        int n = jobDifficulty.length ;
+
+        if(d>n) return -1 ;
+        int dp[][] = new int[d+1][n];
+
+        for(var t : dp)
+        Arrays.fill(t,-1);
+
+
+        return help(jobDifficulty,d,0,n,dp);
+    }
+
+    public int help(int[] jobDifficulty, int d,int idx , int n ,int dp[][])
+    {
+        if(d == 1) // agar ek din bcha hai toh saare kam usi din krne hain and max is the difficulty of that day
+        {
+            int diff = Integer.MIN_VALUE;
+            for(int i = idx;i<n;i++)
+            {
+                diff = Math.max(diff,jobDifficulty[i]);
+            }
+
+            return diff ;
+        }
+
+        if(dp[d][idx] != -1)
+        return dp[d][idx] ;
+
+        /*
+        agr day 1 s jaada hai tohh hrek din ek ek possiblinlity
+
+        take idx = { idx } wala job in first day
+        take index = { idx , idx+1} wala job in first day mtlb 2 kaam ek din me
+        take index = { idx , idx+1 , idx+2 } wala job in first day mtlb 3 kaam ek din me
+        .
+        ..
+        .... and so on 
+
+        or in sb ka jo minimum aaega wahi ans hoga
+
+        */
+        int finalResult = Integer.MAX_VALUE ;
+        int maxDifficultyOfDay = Integer.MIN_VALUE ;
+        for(int i = idx;i<= n-d;i++)  // n-d s jada hua to hmaare paas days bch jaege or kaam pehle khtn hoskta h
+        {
+            maxDifficultyOfDay = Math.max(maxDifficultyOfDay,jobDifficulty[i]);
+            int result = maxDifficultyOfDay + help(jobDifficulty,d-1,i+1,n,dp) ; // days 1 s ght gya and index ek aage chla gya
+
+            finalResult = Math.min(finalResult,result) ;
+        }
+        return dp[d][idx] = finalResult ;
+    }
+}
