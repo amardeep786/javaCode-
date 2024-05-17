@@ -1,0 +1,24 @@
+236. Lowest Common Ancestor of a Binary Tree :: https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/description/
+
+*****************************************************************************************************************************************************
+
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+
+        if(root == null)
+        return null;
+
+
+        if(root == p || root == q)   // root hi p ya q hai tohh to wahi LCA h
+        return root;
+
+        TreeNode leftL =  lowestCommonAncestor(root.left,p,q);      // root k left s ans aaya 
+        TreeNode rightL =  lowestCommonAncestor(root.right,p,q);    // root k right s ans aaya 
+
+        if(leftL!=null && rightL!= null)        // ab agr dono not null hai mtlb p,q root k left and right m the to mtlb root ho LCA hai 
+        return root;
+
+        return leftL==null?rightL:leftL;    // pr koi bhi ek null aaya to mtlb not null wala ans h qki dono node hi ek trf hai 
+        
+    }
+}
