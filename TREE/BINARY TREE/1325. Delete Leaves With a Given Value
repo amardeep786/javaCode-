@@ -1,0 +1,31 @@
+1325. Delete Leaves With a Given Value :: https://leetcode.com/problems/delete-leaves-with-a-given-value/description/
+
+*************************************************************************************************************************************************
+
+
+class Solution {
+    public TreeNode removeLeafNodes(TreeNode root, int target) {
+        
+        if(root == null) return null;
+
+        // left s ans lekr aao orr root k left  m daaldo
+
+        root.left = removeLeafNodes(root.left,target);
+
+        root.right = removeLeafNodes(root.right,target);// right s ans lekr aao orr root k right  m daaldo
+
+        // ab left and right s ans aagay h toh bss ye dekhlo ki khud kahi leaf to nai bn gya with value target
+
+        if(root.left == null && root.right == null)
+        {
+            if(root.val == target)   // agr val target k brabr iski b hogyi to return null
+            {
+                
+                return null;
+            }
+        }
+
+        return root;
+
+    }
+}
