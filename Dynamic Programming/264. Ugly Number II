@@ -1,0 +1,56 @@
+264. Ugly Number II :: https://leetcode.com/problems/ugly-number-ii/
+
+***********************************************************************************************************************************************
+
+
+class Solution {
+    public int nthUglyNumber(int n) {
+
+        // kis bhi ugly no ko 2,3,ya 5 se multiply kru to wo bhi ugly number hoga 
+        // pehla ugly number 1 hai to hum iski ko multiply krk aage bdhte jaaege
+
+        // -------------------  BRUTE FORCE ------------------------------------------------------------------------------//
+
+        // 1 se lekr loop m aage bdhte jaao tbtk count of ugly == n na hojae tc-> n * logn
+
+
+        // -------------------  OPTIMAL------------------------------------------------------------------------------//
+
+        int[] list = new int[n+1];
+        list[0] = 0;  // 0 pe aise hi 0 rkha dia
+        list[1] = 1;  // 1 mtlb pehla ugly number
+
+        int i2  = 1 ; // initially sbhi 1 koi point kr rhe hain
+        int i3  = 1 ;
+        int i5  = 1 ;
+
+        for(int i = 2;i<=n ;i++)
+        {
+            int i2Ugly = list[i2]*2;
+            int i3Ugly = list[i3]*3;
+            int i5Ugly = list[i5]*5;
+
+            int minimumUgly = Math.min(i2Ugly,Math.min(i3Ugly,i5Ugly));
+
+            list[i] = minimumUgly;  // jo teeno m s minimum hoga wahi to agla ugly number hoga
+
+            // jo bhi minimum diya uske pointer bdhaado 
+            if(minimumUgly == i2Ugly)
+            {
+                i2++ ;
+            }
+            if(minimumUgly == i3Ugly)   // say i3 ki wgeh s ugly number aaya to ab i3 next index ko point krega ie jaha pe agla ugly numbe store kia tha 
+            {
+                i3++ ;                     //to usme bhi ab 2,3,5 s multiply  krk dekhege
+            }
+            if(minimumUgly == i5Ugly)
+            {
+                i5++ ;
+            }
+        }
+
+
+        return list[n];
+        
+    }
+}
