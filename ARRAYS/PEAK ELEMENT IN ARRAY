@@ -1,0 +1,64 @@
+PEAK ELEMENT IN ARRAY :: https://www.geeksforgeeks.org/problems/find-the-highest-number2259/1
+
+************************************************************************************************************************************************
+
+class Solution {
+    public int findPeakElement(List<Integer> list) {
+        
+        int n = list.size() ;
+        int ans = -1 ;
+        int left = 0 , right = n-1;
+        
+        while(left <= right)
+        {
+            int mid = left + (right-left)/2 ;
+            if(mid == 0) // for mid = 0 alg s handle krlia 
+            {
+                ans = list.get(mid);
+                left=mid+1;
+            }else if( list.get(mid) > list.get(mid-1) )
+            {
+                ans = list.get(mid);
+                left = mid+1 ;
+            }else
+            {
+                right = mid-1 ;
+            }
+        }
+        
+        return ans ;
+        
+        
+    }
+}
+
+// --------------------------- APPROACH 2 compare with right element --------------------------------- //
+
+class Solution {
+    public int findPeakElement(List<Integer> a) {
+        int l = 0;
+        int r = a.size() - 1;
+
+        // Binary search to find the peak element.
+        while (l < r) {
+            // Calculating the mid index.
+            int mid = (l + r) / 2;
+
+            // Checking if the element at mid is greater than the element on its right.
+            // If yes, then the peak should be on the left side of the array.
+            if (a.get(mid) > a.get(mid + 1)) {
+                r = mid;
+            }
+            // If not, then the peak should be on the right side of the array.
+            else {
+                l = mid + 1;
+            }
+        }
+
+        // Returning the peak element.
+        return a.get(l);
+    }
+}
+
+
+
