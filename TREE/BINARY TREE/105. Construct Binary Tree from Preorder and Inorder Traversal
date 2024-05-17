@@ -1,0 +1,77 @@
+105. Construct Binary Tree from Preorder and Inorder Traversal :: https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/
+
+*************************************************************************************************************************************************************************
+
+
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+
+        if(preorder.length == 0) return null;
+
+        int r = preorder[0];   // taking 0th value of preOrder as root
+        int index= 0;
+
+        for(int i = 0 ;i<inorder.length;i++)   // finding that value in inOrder array
+        {
+            if(inorder[i] == r)
+            index = i;
+            
+        }
+
+        TreeNode root = new TreeNode(r);   // making node of root
+        root.left = buildTree(Arrays.copyOfRange(preorder,1,index+1),Arrays.copyOfRange(inorder,0,index));  // calling left with proper 
+        root.right = buildTree(Arrays.copyOfRange(preorder,index+1,preorder.length),Arrays.copyOfRange(inorder,index+1,inorder.length));
+
+        return root;        
+    }
+}
+
+*/
+
+/*******************APPROACH @ 2nd **************************************************************************************************************************************************/
+
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+
+        int n = preorder.length;
+
+        int preStart = 0 , preEnd = n-1 , inStart = 0,inEnd = n-1 ;
+
+        return help(preorder,inorder,preStart,preEnd,inStart,inEnd) ;
+    }
+
+    public TreeNode help(int[] preorder, int[] inorder,int preStart,int preEnd,int inStart,int inEnd)
+    {
+        if(inStart > inEnd)
+        return null;
+
+        // step 1 : make first value of preOrder as root
+
+        TreeNode root = new TreeNode(preorder[preStart]) ;
+
+        // find this root vlue in inOrder
+
+        int i = inStart ;  // from inorder k start se
+        for(;i<=inEnd;i++)
+        {
+            if(inorder[i] == root.val)
+            {
+                break;
+            }
+        }
+
+        // inorder k ith index p root mila ab bss left or right child k liye call krna h 
+
+        // left subtree me nodes 
+
+        int leftSize = i - inStart  ;
+        
+
+        root.left = help(preorder,inorder,preStart+1 , preStart + leftSize , inStart,i-1) ;  // inorder ka end i-1 hoga and start to wahi rhega & preStart ek aage 
+                                                                                            // bdhega and end to jitna start se lekr left size tkk aaya wo 
+        root.right = help(preorder,inorder,preStart + leftSize + 1 , preEnd , i+1 ,inEnd) ;                                                                           
+
+        return root ;   // end me root return krdo
+
+    }
+}
