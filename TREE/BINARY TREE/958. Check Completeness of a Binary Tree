@@ -1,0 +1,84 @@
+958. Check Completeness of a Binary Tree :: https://leetcode.com/problems/check-completeness-of-a-binary-tree/
+
+****************************************************************************************************************************************************
+
+// class Solution {
+//     public boolean isCompleteTree(TreeNode root) {
+
+//         /*
+
+//             saare nodes left to right hone chahiye to hum BFS ka logic lgaege and hrek node s puchege ki kya past m kbhi null aaya h
+//             qki ek baar null aagya to aage koi not null node nai ho skta agr hua to wo complete binary tree nai rhega
+
+
+//         */
+
+//         boolean past = false;  // abhi pasat m null nai dekha h hmne
+
+//         Queue<TreeNode> que = new LinkedList<>();
+
+//         que.offer(root);
+
+//         while(!que.isEmpty())
+//         {
+//             TreeNode temp = que.poll();
+
+//             if(temp != null)  // ye khud null nai h 
+//             {
+//                 if(past)    // and isne past m null dekha h toh false
+//                 {
+//                     return false ;
+//                 }else
+//                 {
+//                     // agr nai dekha to isk child ko que m daal do
+//                     que.offer(temp.left);
+//                     que.offer(temp.right);
+//                 }
+//             }else
+//             {
+//                 past = true ;  // y null hai to past m null dekh lia 
+//             }
+//         }
+//         return true ;  // agr kbhi b false nai hua to mtlb true hoga
+//     }
+// }
+
+/*************USING DFS******************************************************************************************************************************/
+
+class Solution {
+    public boolean isCompleteTree(TreeNode root) {
+
+        /*
+            logic : jb b complte bin tree CBT ko array m store krege to beech m gap nai aana chahye orr we can say ki 
+
+            uss array ka index totalNodes s jaada nai hona chahiye
+
+            so implement that
+        */
+
+        int totalNodes = count(root) ;
+
+        int i = 1 ;
+
+        return dfs(root,1,totalNodes);  // 1-based indexing
+    }
+
+    public int count(TreeNode root)
+    {
+        if(root == null) return 0;
+
+        return 1 + count(root.left) + count(root.right) ;
+    }
+
+    public boolean dfs(TreeNode root , int index , int total)
+    {
+        if(root == null) return true ; // qki cbt hoga
+
+        if(index > total)
+        {
+            return false;
+        }
+
+        return dfs(root.left , 2*index , total) && dfs(root.right , 2*index + 1 , total) ;
+    }
+}
