@@ -1,0 +1,28 @@
+979. Distribute Coins in Binary Tree :: https://leetcode.com/problems/distribute-coins-in-binary-tree/description/
+
+https://www.geeksforgeeks.org/problems/distribute-candies-in-a-binary-tree/1?itm_source=geeksforgeeks&itm_medium=article&itm_campaign=bottom_sticky_on_article
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+
+class Solution {
+    int moves = 0 ;
+    public int distributeCoins(TreeNode root) {
+        
+        help(root);
+
+        return moves ;
+    }
+
+    public int help(TreeNode root)
+    {
+        if(root == null) return 0;
+
+        int leftExtra = help(root.left);
+        int rightExtra = help(root.right);
+
+        moves += Math.abs(leftExtra) + Math.abs(rightExtra);   // absolute qki left + right negative hua to y move ko ghtaega but move is +ve
+
+        return (root.val + leftExtra + rightExtra ) - 1 ;  // -1 coz ye ek khud k paas rkh k aage bhej dega
+    }
+}
