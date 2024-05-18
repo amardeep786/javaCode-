@@ -1,0 +1,53 @@
+198. House Robber :: https://leetcode.com/problems/house-robber/
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+//------------------------------ recursion + memoization ----------------------------------------------------------------------------------------------------------------------// 
+
+// class Solution {
+//     public int rob(int[] nums) {
+        
+//         int n = nums.length;
+
+//         int[] out = new int[n+1];
+//         Arrays.fill(out,-1);
+
+//         return help(nums,n-1,out);
+//     }
+
+//     public int help(int[] nums,int index,int []output)
+//     {
+//         if(index==0)
+//         return output[index]=nums[0];
+
+//         if(index<0)
+//         return 0;
+
+//         if(output[index]!= -1)
+//         {return output[index];}
+
+//         int pick = nums[index]+help( nums, index-2,output);
+//         int notpick = 0  + help( nums, index-1,output);
+
+//         return output[index] = Math.max(pick,notpick);
+//     }
+// }
+
+//------------------------------ BOTTOM UP ----------------------------------------------------------------------------------------------------------------------// 
+class Solution {
+    public int rob(int[] nums) {
+
+        int dp[] = new int[nums.length + 1] ;  //dp[i] -> max profit till ith house
+        int n = nums.length;
+        dp[0] = 0 ;  // 0 house toh profit bhi 0
+
+        dp[1] = nums[0];   // 1 ghr hai toh utna hi pesa profit
+
+        for(int i = 2;i<=n;i++)  
+        {
+            dp[i] = Math.max(nums[i-1] + dp[i-2] , dp[i-1]); // agr pesa liya toh usey 2 ghr pehle ki val + wo pesa else usey 1 ghr pele ka pesa
+        }
+
+        return dp[n];
+    }
+}
