@@ -1,0 +1,44 @@
+446. Arithmetic Slices II - Subsequence :: https://leetcode.com/problems/arithmetic-slices-ii-subsequence/
+
+************************************************************************************************************************************************
+
+class Solution {
+    public int numberOfArithmeticSlices(int[] nums) {
+        
+        if(nums.length <= 2)   // agar 2 s kam element hai to koi subsequence nai bnega
+        return 0;
+
+        int n = nums.length;
+
+        Map<Long,Integer>[] map = new HashMap[n];   // ek map bnaege jisme differnece and kitne pair dekh chuke hain wo rkhege 
+        for (int i = 0; i < n; i++)
+        {
+            map[i] = new HashMap<>();
+        }
+
+        int result=0;
+
+        for(int i = 0;i<n;i++)   // for every element 
+        {
+            for(int j=0;j<i;j++)  // j shuru se i tkk jaega and hrek map me check krte jaaega ki nums[i]-nums[j] uss map m present hai ki nai 
+            {
+                long diff = (long)nums[i]-nums[j];
+                int count_at_j = 0;
+
+                if(map[j].containsKey(diff))  // agara hai to kitna present hai usey result m store krdo
+                {
+                     count_at_j = map[j].get(diff);
+                }
+
+            result += count_at_j;
+
+            map[i].put(diff,map[i].getOrDefault(diff,0)+count_at_j+1);  // or isi result ko difference k saath i wali position p update krdo ..DO DRY RUN
+
+
+            }
+        }
+
+        return result;
+
+    }
+}
