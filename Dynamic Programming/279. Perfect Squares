@@ -1,0 +1,68 @@
+279. Perfect Squares :: https://leetcode.com/problems/perfect-squares/description/
+
+_______________________________________________________________________________________________________________________________________________-
+
+/*
+
+greedily sbse paas wale square ko ghtaane pr ans wrong hoskta h  eg for 12 - 9 (3^2) = 3 and 3 times 1 ka square ghtaege tb 12 bnega to 4 but optimal is 3 ie 4 + 4 + 4
+
+hum ek baar 1 ka square ghtaege and 2 ka and 3 ka f unme b same to jo sbsbse pehle 0 bnega wahi ans hoga
+
+*/
+
+
+
+
+
+class Solution {
+    public int numSquares(int n) {
+        
+         int dp[] = new int[10001];
+         Arrays.fill(dp,-1);
+
+        return solve(n,dp);
+
+
+    }
+
+    public int solve(int n,int dp[])      //TOPDOWN
+    {
+        if(n == 0) return 0;
+
+        if(dp[n]!= -1)
+        return dp[n];
+
+        int minCount = Integer.MAX_VALUE;
+
+        for(int i = 1;i<= (int)Math.sqrt(n);i++)
+        {
+                int result = 1 + solve(n-i*i,dp);    // if we take that number or n- uska square ghtado 1 ,2 ,3 hrek s aise hi krk dekhgee and jo min dega wahi ans
+
+                minCount = Math.min(minCount,result);
+        }
+
+        return dp[n] = minCount;
+    }
+}
+
+ //-----------------------------BOTTOM UP----------------------------------------------------------------------------//
+
+// class Solution {
+//     public int numSquares(int n) {
+        
+//          int dp[] = new int[10001];    // dp[i] -> mini perfect square to get i
+//          Arrays.fill(dp,Integer.MAX_VALUE);
+       
+//       dp[0]=0;
+
+//       for(int i = 1;i<=n;i++)     // hm hrek no k liy ans nikaalege till n
+//       {
+//           for(int j=1;j*j<=i;j++)       // j = 1,2,3 and so on   
+//           {
+//               dp[i] = Math.min(dp[i], 1+ dp[i-j*j]);  // no of perfect square = minimum of waha p jo value hai , 1 + uss number me s j *j ghtane k baad jo aaya dono ka min
+//           }
+//       }
+//       return dp[n];
+//     }
+//     }
+// }
