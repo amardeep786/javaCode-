@@ -1,0 +1,86 @@
+1235. Maximum Profit in Job Scheduling :: https://leetcode.com/problems/maximum-profit-in-job-scheduling/
+
+***************************************************************************************************************************************************8
+
+
+class Pair implements Comparable<Pair>     // taaki sort kr ske to order chnge na hojae 3no array ka 
+{
+    int startTime;
+    int endTime;
+    int profit;
+
+    Pair(int startTime, int endTime, int profit)
+    {
+        this.startTime =startTime;
+        this.endTime =endTime;
+        this.profit = profit ;
+    }
+
+    @Override
+     public int compareTo(Pair other)
+     {
+         return Integer.compare(this.startTime,other.startTime);
+     }
+}
+
+
+
+class Solution {
+
+    public int jobScheduling(int[] startTime, int[] endTime, int[] profit) {
+
+         int[] memo = new int[50001];
+    Arrays.fill(memo,-1);
+
+        ArrayList<Pair> arr = new ArrayList<>();
+        for(int i = 0;i<startTime.length;i++)
+        {
+            arr.add(new Pair(startTime[i],endTime[i],profit[i]));
+        }
+
+        Collections.sort(arr);  // sort basis of startTime
+
+        return solve(arr,0,memo);
+        
+    }
+
+    public int solve(ArrayList<Pair> arr , int index,int[] memo)
+    {
+        if(index > arr.size()-1)
+        {return 0;}
+
+        if(memo[index] != -1)
+        return memo[index];
+
+        int next = getNextIndex(arr,index+1,arr.get(index).endTime);
+
+        int taken = arr.get(index).profit + solve(arr ,next,memo);   // agr current ka profit lete hain to next job ka index next m h wo jaega
+        int notTaken = solve(arr , index+1,memo);                   //  else agla index jaega
+
+        return memo[index] = Math.max(taken,notTaken);
+    }
+
+    public int getNextIndex(ArrayList<Pair> arr,int left,int end)  //using binary search -> we find agla joba knsa hoskta h uska index
+    {
+        int right = arr.size()-1;
+
+        int result = arr.size()+1 ;   // result abhi kuj b rkha 
+
+        while(left<= right)
+        {
+            int mid = left + (right-left)/2 ;
+
+            if(arr.get(mid).startTime >= end)   // agr aage kisi process ka starttime current k end time s bda h to wo candidate h next job ka 
+            {
+                result = mid;
+                right = mid-1;
+            }
+            else
+            {
+                left = mid+1 ;
+            }
+        }
+
+        return result ;
+    }
+}
