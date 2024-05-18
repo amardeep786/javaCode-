@@ -1,0 +1,70 @@
+1110. Delete Nodes And Return Forest :: https://leetcode.com/problems/delete-nodes-and-return-forest/description/
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+
+    hum agr top s bottom delete krte hue aaege to y dikkt hogi ki hmen kisi node ko delete krdia to usk subtree m b kisi ko delete krna tha but ab nai kr paega
+    coz no access
+
+    to hum bottom s up jaege and kisi ko delete krna hoga tohh usk left and right child ko pehle hi ans list m daal denge or null return krdenge
+
+*/
+class Solution {
+    public List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
+
+        List<TreeNode> result = new ArrayList<>();
+
+        /*
+            baar baar to_delelte m serch krne s acha h isey kisi set me daal dete h taaki efficiently serch krte rhege
+        */
+
+        Set<Integer> set = new HashSet<>();
+        for(var node : to_delete)
+        {
+            set.add(node);
+        }
+
+        dfs(root , set , result );
+
+        // bss ek wo dekhlo ko root ko bhi to nai delete krna tha agr nai to isko b result m aana chahiye
+
+        if(!set.contains(root.val))
+        {
+            result.add(root);   // root nai tha set m mtlb isko delete nai krana tha to result m add krdo
+        }
+
+        return result ;
+        
+    }
+
+    public TreeNode dfs(TreeNode root , Set<Integer> set ,List<TreeNode> result )
+    {
+
+        if(root == null) return null ;
+
+        // traverse krk ekdum bottom m jaao
+
+        root.left = dfs(root.left,set,result);
+        root.right = dfs(root.right,set,result);
+
+        // ab ekdum bottom m aagye to ye dekhlo ki isey delete kna h ya nai 
+
+        if(set.contains(root.val))
+        {
+            // isey b delete krna h to pehle iske child ko store krlo
+
+            if(root.left != null)
+            result.add(root.left);
+
+            if(root.right != null)   
+            result.add(root.right);
+
+            // left right to result m aagye hain to delete krdo
+            return null ;
+        }
+
+        // agar set m nai h mtlb isey delete nai krna h to isey hi return krdo
+        return root ;
+    }
+}
