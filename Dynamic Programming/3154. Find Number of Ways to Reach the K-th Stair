@@ -1,0 +1,84 @@
+3154. Find Number of Ways to Reach the K-th Stair :: https://leetcode.com/problems/find-number-of-ways-to-reach-the-k-th-stair/description/
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+//----------------------------RECURSION ----------------------------------------------------------------------------------------------
+
+/*
+class Solution {
+    
+    public int waysToReachStair(int k) {
+        
+        return help(1,0,1,k) ;  // 1-> start , 0-> jump value , 1-> can jump back 
+        
+    }
+    
+    public int help(int current ,int jump,int canJumpBack ,int k)
+    {
+        if(current > k+1)  // mtlb hme k p jana h or ussey 2 aage chle gye tb kbhi wapis nai aapaege agr ek aage gye to ek step back lekr 
+        return 0;           // wapis aa skte hain but 2 aage gye to kbhi nai
+
+        int ways = 0 ;
+        if(current == k)
+        {
+            ways+=1;  // return nai krna h qki yaha s fr s aage peeche hokr yeha fr s aaskte hain 
+        }
+
+        // canJumpBack=1 mtlb peeche jaa skte hain 1 step but ab canjumpback ko 9 krk bhejna hoga wrna do consecutive y hojaega which is not allowed
+        if(canJumpBack==1) 
+        {
+            ways += help(current-1 , jump, 0,k);
+        }
+
+        // jump to le skte hain hmesa tohh current 2 ki power s aage gya , jump 1 s bdhega (given in ques) , or isk baad peeche to jaa hi skte hain 
+        // to can jump back == 1 krdia
+
+        ways += help(current + (int)Math.pow(2,jump) , jump+1,1,k); 
+
+        return ways ;
+    }
+}
+
+*/
+
+
+// ---------------------------------------- MEMOIZATION -------------------------------------------------------------------------------//
+
+// 3 variable change ho rhe to 3D array ya string le lete hain 
+class Solution {
+    
+    public int waysToReachStair(int k) {
+        Map<String,Integer> map = new HashMap<>();
+        return help(1,0,1,k,map) ;  // 1-> start , 0-> jump value , 1-> can jump back 
+        
+    }
+    
+    public int help(int current ,int jump,int canJumpBack ,int k,Map<String,Integer> map)
+    {
+        if(current > k+1)  // mtlb hme k p jana h or ussey 2 aage chle gye tb kbhi wapis nai aapaege agr ek aage gye to ek step back lekr 
+        return 0;           // wapis aa skte hain but 2 aage gye to kbhi nai
+
+        if(map.containsKey(current+"_"+jump+"_"+canJumpBack))
+        return map.get(current+"_"+jump+"_"+canJumpBack);
+
+        int ways = 0 ;
+        if(current == k)
+        {
+            ways+=1;  // return nai krna h qki yaha s fr s aage peeche hokr yeha fr s aaskte hain 
+        }
+
+        // canJumpBack=1 mtlb peeche jaa skte hain 1 step but ab canjumpback ko 9 krk bhejna hoga wrna do consecutive y hojaega which is not allowed
+        if(canJumpBack==1) 
+        {
+            ways += help(current-1 , jump, 0,k,map);
+        }
+
+        // jump to le skte hain hmesa tohh current 2 ki power s aage gya , jump 1 s bdhega (given in ques) , or isk baad peeche to jaa hi skte hain 
+        // to can jump back == 1 krdia
+
+        ways += help(current + (int)Math.pow(2,jump) , jump+1,1,k,map); 
+
+        map.put(current+"_"+jump+"_"+canJumpBack , ways);  // store krdo return krne s pehle 
+        return ways ;
+    }
+}
