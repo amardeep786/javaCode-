@@ -1,0 +1,57 @@
+3153. Sum of Digit Differences of All Pairs :: https://leetcode.com/problems/sum-of-digit-differences-of-all-pairs/description/
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+class Solution {
+    public long sumDigitDifferences(int[] nums) {
+        
+        /*
+
+            hum hrek number k last digit then second last then 3rd last p visit krege 
+
+            suppose n numbers hain to ek col me n digits honge to ussey kitne pair bn skte hain nC2 = n*(n-1)/2 
+
+            ab jitne usme repeat ho rhe hain usse kitne pair bn skte h ..suppose x numbers are repeating so xC2
+
+            to total - repeated  = non repeated or different pairs so utna hi contribution hoga
+
+
+        */
+
+
+        //step 1 : konsa digit knse index p kitne baar aaya h toh iske liy ek map rkh lete hain 
+        int n = nums.length;
+        int digits = Integer.toString(nums[0]).length();
+
+        // hrek digit k hisaab max total itna hoga hi 12,13,12 hai -> to last digit assume same h sbka to kitne pair bn skte hain wo max possible hai 
+        long ans = (long) n*(n-1)/2 ;  
+        
+        long result = 0;  
+        while(nums[0]>0)  // jbtk digit hai element me 
+        {
+            // hrek place k liye map bnaege 
+            Map<Integer,Integer> map = new HashMap<>();
+
+            for(int i = 0;i<n;i++)
+            {
+                map.put(nums[i]%10 , map.getOrDefault(nums[i]%10,0)+1);  // storing ith position character fre or every element
+
+                nums[i] /= 10 ;
+            }
+
+            // ab hmaare paas sbhi element ka soecific position aagya h map me to ye sb values same hongi 
+            // mtlb inse jitne pairs bn skte hain wo ghtaane honge 
+
+            long temp = ans;
+            for(var val : map.values())  // ab actual m jitne same hai agr inko ghtaado to kitne not same pair bn skte hain wo aajaege
+            {
+                temp -= (long)val*(val-1)/2 ;
+            } 
+
+            result += temp;
+        }
+
+        return result ;
+    }
+}
