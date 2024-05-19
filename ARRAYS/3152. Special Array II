@@ -1,0 +1,65 @@
+3152. Special Array II :: https://leetcode.com/problems/special-array-ii/description/
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public boolean[] isArraySpecial(int[] nums, int[][] queries) {
+        
+        
+        /*
+         abhi bhi hme special array hi btaana h but agar hum hrek query k liy speiacil array dhudgee to O(nq) is TLE
+         
+         to iske liye hum ek prefix array bna k store kr lenge jaha jaha p value same parity wali h
+         
+        */
+        
+        int n = nums.length;
+
+        int prefix[] = new int[n];   // store  ki kaha kaha p same parity hai 
+        
+        
+            for(int i = 1;i<n;i++)
+            {
+                if((nums[i-1]%2) == (nums[i]%2))
+                {
+                    
+                    prefix[i] = 1+prefix[i-1] ;
+                    
+                }else
+                {
+                    prefix[i] = prefix[i-1] ;
+                }
+            }
+
+        for(var e : prefix)
+        System.out.print(e + " ");
+
+
+        // prefix array hume btaega ki knse knse index p value same hai 
+        
+        /* 
+            query[0] = l 
+            query[1] = r
+
+            to hume l se lekr r-1 tkk dekhna hoga ki special hai ya naii
+            
+            agar prefix[r-1] - prefix[l-1] > 0  hua mtlb iss array me koi na koi hai jaha p parity same h to false else true
+        
+        */
+        boolean result [] = new boolean[queries.length];
+        int idx= 0;
+        
+        for(var query : queries )
+        {
+            int left = query[0];
+            int right = query[1];
+            
+            int numberOfEquals = (right > 0 ? prefix[right]:0) - (left > 0 ? prefix[left]:0) ;
+
+            result[idx++] = numberOfEquals > 0 ? false : true ;  // numOfequal jada h mtlb ki koi n koi jgeh p same paity mili so false
+        }
+        
+        return result;        
+        
+    }
+}
