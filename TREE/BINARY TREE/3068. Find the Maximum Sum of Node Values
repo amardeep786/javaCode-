@@ -1,0 +1,102 @@
+3068. Find the Maximum Sum of Node Values :: https://leetcode.com/problems/find-the-maximum-sum-of-node-values/
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+
+// class Solution {
+//     public long maximumValueSum(int[] nums, int k, int[][] edges) {
+
+        /*
+            undirected tree mtlb a to b and b to a bhi ja skte hain 
+
+            orr hum kisi bhi 2 nodes ka XOR krskte hain even ki wo directly connected naa bhi ho tb bhi 
+
+            say 1--2--1  aisa tree hai and accor to question hum 1--2 ko utha k XOR Krege ya 2---1 ko 
+
+            ab k = 3 hai assume tohh 1 xor 3 = 2 to hum chahte hain ki dono 1 hi XOR ho but inke beech directly edge
+            to hai nahi but agr hum
+
+            1--2 edge ko pkde and do XOR 1 xor 3 and 2 xor 3 then 2nd edge ko bhi pkde 2--3 then 2 xor 3 and 1 xor 3
+
+            to overall  1 xor 3 , 2 xor 3 xor 3 , 1 xor 3 ,,beech wala 2 baar xor hoga and a xor a = 0 mtlb net effect 0 
+            hoga and baki k dono ka xor bhi hogya 
+
+            so we can xor any 2 nodes 
+
+
+            APPROACH 1 : so we will traverse evevry value in nums or dekhege ki XOR krne s value bdh rhi hai ki nai 
+                        agar haan to uski value bdha denge 
+            
+            at the end final maximum possible value aajaegi orr hum count bhi maintain krege ki kitni values ko 
+            hmne xor kia kiuki hmsa pair of nodes p xor hoga accrding to ques.
+
+            agr count ODD hua to hum uss node s sbhi edges p dekhenge ki knuska knsa neighbour kam ght rha h .
+            obviously wo ghtega tbhi hmne usey count m nai lia hoga to jo sbse kam ghtega usey hi 
+            maximum possible me s subtract kr denge or ans aajaega
+        */
+/*
+        int n = nums.length ;
+        int count = 0;
+        long maxPossible = 0 , minimumNuksaan = Integer.MAX_VALUE;
+        for(int i = 0;i < n;i++)
+        {
+            if((nums[i]^k) > nums[i])
+            {
+                maxPossible += nums[i]^k ;
+                count++ ;
+            }else
+            {
+                maxPossible += nums[i];
+            }
+
+            minimumNuksaan = Math.min(minimumNuksaan , Math.abs((nums[i] - (nums[i]^k))));
+        }
+
+        // to yaha tkk max possible aagya h agr count even hai mtlb hme pair of nodes ka XOR kia h and ans id this 
+        // else dekhna pdega ki kn minimum nuksaan waala h jo ki hme store krlia h
+
+        if(count%2 == 0)
+        return maxPossible ;
+        
+
+        return maxPossible - minimumNuksaan;
+    }
+}
+
+
+*/
+
+//------------------------------- Approach 2 --------------------------------------------------------------//
+
+class Solution {
+    public long maximumValueSum(int[] nums, int k, int[][] edges) {
+
+        long normalSum = 0;     // abhi sbhi elemetn ka sum store krlega
+        int n = nums.length;
+
+        List<Integer> fyda = new ArrayList<>();
+
+        for(int i = 0;i<n;i++)
+        {
+            normalSum += nums[i];
+
+            fyda.add((nums[i]^k)-nums[i]);
+        }
+
+        // fyda m xor krne k baad kitna fyda-ghaata hua h wahi store kra h
+
+        Collections.sort(fyda,Collections.reverseOrder());
+
+        for(int i = 0;i<fyda.size()-1;i+=2)  // do do ka pair bnaake agr fyda > 0 hai to normal sum m add kro
+        {
+            long pairSum = 0 ;
+
+            pairSum = fyda.get(i) + fyda.get(i+1);
+
+            if(pairSum > 0)
+            normalSum += pairSum ;
+        }
+
+        return normalSum;
+    }
+}
