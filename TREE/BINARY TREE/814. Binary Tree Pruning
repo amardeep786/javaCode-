@@ -1,0 +1,65 @@
+814. Binary Tree Pruning :: https://leetcode.com/problems/binary-tree-pruning/
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+    logic ye lgaaate hain ki hrek node k left or right s puchege ki uske left ya right m 1 hai ya nai 
+
+    agar hoga tb to kuj nai krna h lekin agr nai hua tohh null return krdege usk parent ko 
+
+*/
+
+// class Solution {
+//     public TreeNode pruneTree(TreeNode root) {
+        
+//         if(root == null) return null;
+
+//         if(!isOnePresent(root.left))
+//         root.left = null ;
+
+//         if(!isOnePresent(root.right))        
+//         root.right = null ;
+
+//         // current k left and right m one to dekh lia ab uske left or right ko as a root maankr unke bhi left right m dekho ki
+//         // 1 present hai ya nai 
+
+//         pruneTree(root.left);
+//         pruneTree(root.right);
+
+//         if(root.left == null && root.right == null && root.val == 0)  // left -right null hai and uski khud ki value o hai mtlb isko 
+//         return null;                                // nulll return krna pdega
+
+//         return root;
+//     }
+
+//     public boolean isOnePresent(TreeNode root)
+//     {
+//         if(root == null) return false;
+
+//         if(root.val == 1) return true;
+
+//         return isOnePresent(root.left)|| isOnePresent(root.right);
+//     }
+// }
+
+//----------------------------------  O(n^2)---- coz hrek node p jaa k poore tree ko serch kr rhe 
+
+
+//---------------------------- METHOD 2 --------- O(n) -----------------------------------------------------------------------------//
+
+class Solution {
+    public TreeNode pruneTree(TreeNode root) {
+        
+        if(root == null) return null;
+
+        root.left = pruneTree(root.left);
+        root.right = pruneTree(root.right);
+
+        // ab hum leaf tkk aagye honge left left ya right right jaak toh bss dekhlo ki 
+
+        if(root.left == null && root.right == null && root.val == 0)  // left -right null hai and uski khud ki value o hai mtlb isko 
+        return null;                                // nulll return krna pdega
+
+        return root;
+    }
+}
