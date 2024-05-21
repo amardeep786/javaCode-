@@ -1,0 +1,87 @@
+113. Path Sum II :: https://leetcode.com/problems/path-sum-ii/
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+ // -----------------------------  store path and calculate sum ------------------------------------------------------------------------//
+
+ /*
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+
+        List<List<Integer>> res = new ArrayList<>();
+
+        help(root,targetSum,new ArrayList<>(),res);
+        return res;
+        
+    }
+
+    public void help(TreeNode root, int targetSum,List<Integer> currPath,List<List<Integer>> res)
+    {
+        if(root == null)
+        return ;
+
+        // if(root.val > targetSum)   -> for negative it will fail
+        // return ;
+
+        if(root.left == null && root.right == null)
+        {
+            currPath.add(root.val);
+            List<Integer> tempPath = new ArrayList<>(currPath);
+            int sum = 0;
+            for(var i : tempPath)
+            {
+                sum += i;
+            }
+
+            if(sum == targetSum)
+            res.add(new ArrayList<>(tempPath));
+
+            currPath.remove(currPath.size()-1);
+            return ;
+        }
+
+        currPath.add(root.val);
+
+        help(root.left,targetSum,currPath,res);
+        help(root.right,targetSum,currPath,res);
+
+        currPath.remove(currPath.size()-1);
+    }
+}
+
+*/
+
+// -----------------------------  calculate sum on fly ------------------------------------------------------------------------//
+
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+
+        List<List<Integer>> res = new ArrayList<>();
+
+        help(root,targetSum,new ArrayList<>(),res);
+        return res;
+        
+    }
+
+    public void help(TreeNode root, int targetSum,List<Integer> currPath,List<List<Integer>> res)
+    {
+        if(root == null)
+        return ;
+
+        currPath.add(root.val);
+
+        if(root.left == null && root.right == null)
+        {
+            if(root.val == targetSum)
+            res.add(new ArrayList<>(currPath));
+
+            currPath.remove(currPath.size() - 1);  // return hone s pehle backtrack to krna hi h 
+            return ;
+        }
+
+        help(root.left,targetSum-root.val,currPath,res);
+        help(root.right,targetSum-root.val,currPath,res);
+
+        currPath.remove(currPath.size()-1);
+    }
+}
