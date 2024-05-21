@@ -1,0 +1,45 @@
+222. Count Complete Tree Nodes :: https://leetcode.com/problems/count-complete-tree-nodes/description/
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+// ---------- method 1 just count using preOrder,postOrder or inorder ------ tc -> O(n)--------------------------------------//
+
+//------method 2 we know if a tree id CBT then total nodes = 2^h - 1
+
+// we will serch for node that is CBT (right and left height is same ) so we apply formula and return so tc-> less than O(n)
+class Solution {
+    public int countNodes(TreeNode root) {
+        
+        if(root == null)
+        return 0;
+
+        int leftHeight = getLeftHeight(root);
+        int rightHeight = getRightHeight(root);
+
+        if(leftHeight == rightHeight)  // means ye complete binary tree hai 
+        {
+            return (int)Math.pow(2,leftHeight)-1 ;  // nodes in CBT 2 ki power h - 1
+        }
+
+        // agr left or right height brabr nai h toh hme left or right node p jaakr dekhna hoga ki kya wo CBT hai
+
+        return countNodes(root.left) + countNodes(root.right) + 1 ;  // left + right + khud ko
+
+    }
+
+    public int getLeftHeight(TreeNode root)
+    {
+        if(root == null)
+        return 0;
+
+        return 1 + getLeftHeight(root.left);
+    }
+
+    public int getRightHeight(TreeNode root)
+    {
+        if(root == null)
+        return 0;
+
+        return 1 + getRightHeight(root.right);
+    }
+}
