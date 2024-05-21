@@ -1,0 +1,75 @@
+1026. Maximum Difference Between Node and Ancestor :: https://leetcode.com/problems/maximum-difference-between-node-and-ancestor/
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+class Solution {
+
+    // --------------------------- METHOD-1 ---------------------------------------------------------------------------------//
+
+    int maxDiff;                             
+    public int maxAncestorDiff(TreeNode root) {
+        
+        maxDiff = -1;
+        sendRoot(root);
+
+        return maxDiff;
+    }
+
+    void findMaxDiff(TreeNode root, TreeNode child) // calculate distance bw 2 nodes
+    {
+        if(root == null) return;
+
+        if (child == null)
+        return;
+
+        int diff = Math.abs(root.val-child.val);
+
+        maxDiff = Math.max(maxDiff,diff);  // hr baar max diff ko update krte rhoo
+
+        findMaxDiff(root,child.left);  // same root ka child k childs s diff 
+        findMaxDiff(root,child.right);
+
+    }
+
+    void sendRoot(TreeNode root)  // ye har baar alg alg root bhejega
+    {
+        if(root == null) return;
+
+        findMaxDiff(root,root.left);
+        findMaxDiff(root,root.right);
+
+        sendRoot( root.left);
+        sendRoot( root.right);
+
+
+    }
+
+
+    */
+
+//------------------------  METHOD-2 -------------------------------------------------------------------------------------
+
+     public int maxAncestorDiff(TreeNode root) 
+     {
+        return findMaxDiff(root,root.val,root.val);   // hum ek min or max maintain krk chlege and baad m update hoga
+
+        // qki max-min hi max difference dega
+     }
+
+     public int findMaxDiff(TreeNode root,int minV,int maxV)
+     {
+         if(root == null)
+         return Math.abs(minV-maxV);   //  jb root null hua to uss smy max - min return 
+
+         minV = Math.min(minV,root.val);   // nahi hai to update min -max for every node
+         maxV = Math.max(maxV,root.val);
+
+        int left = findMaxDiff(root.left,minV,maxV);   // updated min-max ko root k left and right k liye call krdo
+        int right = findMaxDiff(root.right,minV,maxV);
+
+        return Math.max(left,right);   // max of left,right jaha s bhi bda diff aaye wo return 
+
+     }
+
+}
