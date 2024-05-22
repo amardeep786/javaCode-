@@ -1,0 +1,59 @@
+131. Palindrome Partitioning :: https://leetcode.com/problems/palindrome-partitioning/description/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//----------- brute force for every possible substring check if palindrome or not
+
+class Solution {
+    public List<List<String>> partition(String s) {
+
+        List<List<String>> res = new ArrayList<>();
+
+        
+        List<String> current = new ArrayList<>();  // current ko store krega
+
+        help(s,0,current,res);
+
+        return res;
+        
+    }
+
+    public void help(String s,int index , List<String> current,List<List<String>> res)
+    {
+        int n = s.length();
+        if(index >= n)
+        {
+            // means we have sucessfully done 1 partiotion so add to result
+
+            res.add(new ArrayList<>(current));
+            return ;
+        }
+
+        // aisa nai h to hme hrek index  p partitioning dekhmi h
+
+        for(int i = index;i<n;i++)
+        {
+            if(isPalindrome(s, index , i))
+            {
+                current.add(s.substring(index,i+1));  // agr palin hai toh curent m ad krdo
+
+                help(s,i+1,current,res);      // i tk ka ans aagya to ab i+1 s aage laao
+
+                current.remove(current.size()-1);  // fr s ek back taaki agli partition 
+            }
+        }
+    }
+
+    public boolean isPalindrome(String s,int left ,int right)
+    {
+        while(left < right)
+        {
+            if(s.charAt(left) != s.charAt(right))
+            return false;
+
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+}
