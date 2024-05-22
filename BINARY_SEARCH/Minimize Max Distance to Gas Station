@@ -1,0 +1,173 @@
+Minimize Max Distance to Gas Station :: https://www.geeksforgeeks.org/problems/minimize-max-distance-to-gas-station/1
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// ------------ O(n*k)---------------- giving TLE ----------------------------------------------//
+
+/*
+class Solution {
+    public static double findSmallestMaxDist(int stations[], int k) {
+        
+    // so we want to put k stations .if we put stations at extreeme end 
+    
+    // eg -> [1,10] and k = 1 diff = 10- 1 = 9  and if i put new station at 11 then [1,10,11]
+    //        max distance bw any w consecutive is still same  to we put 1 station somwwhere in between
+    
+    
+    // step 1 : pehle hme hrek adjacent ka diff chahiye then jo bhi max difference hoga unhi k beech
+    // hum apna station daalege 1 then fr s max diff dekhege ki kaha h fr waha daalege to station
+    // 1-1 krk maxdiff jaha h wahi beech m daalege taaki diff kam s kam hoga
+    
+    
+    
+    // ek array bna lete hain jo ki ye store krega ki kitne gas station kisi bhi 2 adjacent k beech m 
+    // honge ie hum difference calculate krege then jo bhi max diff hua uske beech m 1 station daalege 
+    // to array me store kr lenge ki eg howMany[0] = 1 mtlb ki 0th and 1st station k beech m 1 station dlgea
+    // aise krte hue hum hrek index k liy nikaal lenge ki kitna gas station dlega
+    
+    int n = stations.length;
+    int howMany[] = new int[n-1];
+    
+    for(int gasStation = 1;gasStation<=k;gasStation++)
+    {
+// abhi kisi me bhi nhi dla h gas station eg say 2 gas station dlega to 3 nye part bnege 
+// eg [1,10 ] k beech m  1 station dla toh [1,5,10] 2 gaps bne 
+        double maxSection = -1 ;  
+        int maxIndex = -1 ;
+        for(int i = 0;i<n-1;i++)
+        {
+            double difference = Math.abs(stations[i] - stations[i+1]);
+            
+// ye bta rha ki ek eleemnt say dalne baad ab jo cuurent length hogi section ki wo kya hogi
+            double sectionLength = difference / (howMany[i]+1);  
+            
+// or ye jo current section ki length aayi agr ye max section s bdi h to maxSection ko update krdege
+            if(maxSection < sectionLength)  
+            {
+                maxSection = sectionLength;
+                maxIndex = i;
+            }
+        }
+        
+        // ek baar ye khtm hogya to jaha max difference aaya tha waha 1 bdha do
+        howMany[maxIndex]++ ;
+    }
+    
+    // yaha tkk ek array aagya hai jo y store kiya hai ki kitne gas Station kinke beech hone chahiye
+    
+    // to ab hum ek baar frse difference nikal k section kalength nikalte jaege 
+    // but iss baar maximum jo section ka length ya diff hai wo b notedown krte jaege wahi ans hoga
+    
+    double maxAns = -1 ;
+    for(int i = 0;i<n-1;i++)
+    {
+       double diff = stations[i+1]-stations[i]; // sorted h number line to positive
+       double sectionLength = diff / (howMany[i]+1);
+       
+       // section length bta rha ki station daalne bad ab kitne ka distance bcha hua h
+       maxAns = Math.max(maxAns , sectionLength);  
+    }
+    return maxAns ;
+    }
+}
+
+
+*/
+
+
+//- ---------------- better solution -- gives --TLE coz O(nlogK + klogn) ------------------------------------------------
+
+
+/*
+  we are finding max difference every time using loop so we can use priorityQueue 
+  which will do insertion and give max in O(logn) and O(1) time respectively
+*/
+
+/*
+
+class pair implements Comparable<pair>
+{
+    double diff ;
+    int index ;
+    
+    pair(double diff,int index)
+    {
+        this.diff = diff;
+        this.index = index;
+    }
+    
+    public int compareTo(pair other)
+    {
+        int result = Double.compare(other.diff ,this.diff );
+        
+        if(result != 0)
+        return result;
+        
+        return Integer.compare(this.index,other.index);
+    }
+}
+
+
+class Solution {
+    public static double findSmallestMaxDist(int stations[], int k) {
+    
+    int n = stations.length;
+    int howMany[] = new int[n-1];
+    PriorityQueue<pair> pq = new PriorityQueue<>();  // max heap
+    for(int i = 0;i<n-1;i++)
+    {
+        pq.offer(new pair(stations[i+1]-stations[i] , i)); // saare elements ko pq , daal diay
+    }
+    for(int gasStation = 1;gasStation<=k;gasStation++)
+    {
+        if(!pq.isEmpty())
+        {
+            var temp = pq.poll();
+            int maxIndex = temp.index;
+            howMany[maxIndex]++ ;
+            
+            // ab nya difference daal do 
+            
+            double initialDifference = stations[maxIndex+1] - stations[maxIndex] ;
+            // +1 qki ek extra m tootega toh nya difference usk hisab se
+            double newDifference = initialDifference / (howMany[maxIndex]+1) ; 
+            
+            pq.offer(new pair(newDifference ,maxIndex));
+        }
+    }
+    
+        // ab array me k station daalne k baaad priorityQueue m top pe max diff hoga 
+        // k station daalne baad
+        
+        return pq.peek().diff;
+    }
+}
+
+*/
+
+
+//- ---------------- optimal solution -- BINARY SEARCH ------------------------------------------------
+ class Solution {
+ static boolean isPossible(int stations[],double mid,int k){
+        int total=0;
+        for(int i=1;i<stations.length;i++){
+            int dis = stations[i]-stations[i-1];
+            total+=Math.ceil(dis/mid)-1;
+        }
+        return total<=k;
+    }
+    public static double findSmallestMaxDist(int stations[], int k) {
+        // code here
+        int n = stations.length;
+        double low=0,high=stations[n-1]-stations[0],mid=0,ans=0;
+        ans=high;
+        while(high-low>=1e-6){
+            mid=(low+high)/2.0;
+            if(isPossible(stations,mid,k)){
+                ans=mid;
+                high=mid;
+            }
+            else low=mid;
+        }
+        return ans;
+    }
+}
