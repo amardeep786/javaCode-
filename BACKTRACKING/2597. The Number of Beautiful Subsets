@@ -1,0 +1,90 @@
+2597. The Number of Beautiful Subsets :: https://leetcode.com/problems/the-number-of-beautiful-subsets/description/
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+// ----------- USING MAP ----------------------------------------------------
+class Solution {
+    public int beautifulSubsets(int[] nums, int k) {
+        
+        // find subset and maintain count
+
+        int count = 0;
+        Map<Integer,Integer>map = new HashMap<>();
+
+        return help(nums,map,k,0) - 1; // -1 to exclude empty subset
+    }
+
+    public int help(int[] nums,Map<Integer,Integer>map, int k,int index)
+    {
+        if(index == nums.length)
+        {
+           return 1;
+        }
+        int ans = 0;
+
+        // not take
+        ans += help(nums,map,k,index+1);
+        
+
+        // take when diff element is not present
+        if((!map.containsKey(nums[index]-k)) && (!map.containsKey(nums[index]+k)))
+        {
+            map.put(nums[index],map.getOrDefault(nums[index],0)+1);
+            ans+= help(nums,map,k,index+1);
+            map.put(nums[index],map.get(nums[index])-1);
+
+            if (map.get(nums[index]) == 0) {
+                map.remove(nums[index]);
+            }
+        }
+
+        return ans;
+    }
+}
+
+
+//----------------why not set ?-------------------
+
+
+
+
+
+
+
+// class Solution {
+//     public int beautifulSubsets(int[] nums, int k) {
+        
+//         // find subset and maintain count
+
+//         int count = 0;
+//         Set<Integer>set = new HashSet<>();  // issue ye h ki aage kbhi same element aaya to backtarck krege to saare same element ht jaege
+
+//         return help(nums,set,k,0) - 1; // -1 to exclude empty subset
+//     }
+
+//     public int help(int[] nums,Set<Integer>set, int k,int index)
+//     {
+//         if(index == nums.length)
+//         {
+//            return 1;
+//         }
+//         int ans = 0;
+
+//         // not take
+//         ans += help(nums,set,k,index+1);
+        
+
+//         // take when diff element is not present
+//         if((!set.contains(nums[index]-k)) && (!set.contains(nums[index]+k)))
+//         {
+//             set.add(nums[index]);
+//             ans+= help(nums,set,k,index+1);
+//             set.remove(nums[index]);
+//         }
+
+//         return ans;
+//     }
+// }
+
+
+
+
