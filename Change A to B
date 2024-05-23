@@ -1,0 +1,139 @@
+Change A to B :: https://www.codechef.com/problems/CHANGEXY
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+// class Codechef
+// {
+// 	public static void main (String[] args) throws java.lang.Exception
+// 	{
+		
+// 		Scanner sc = new Scanner(System.in);
+		
+// 		int t = sc.nextInt();
+		
+// 		while(t-- > 0)
+// 		{
+// 		   int a = sc.nextInt();
+// 		   int b = sc.nextInt();
+// 		   int k = sc.nextInt();
+		   
+		   
+// 		   int moves = help(a,b,k,0);
+		   
+// 		   System.out.println(moves);
+// 		}
+
+// 	}
+	
+// 	public static int help(int a,int b,int k,int steps)
+// 	{
+// 	    if(a>b)
+// 	    {
+// 	        return 0;
+// 	    }
+	    
+//         PriorityQueue<int[]> que = new PriorityQueue<>((x,y)->x[1]-y[1]);
+//         Set<Integer> visited = new HashSet<>();
+//         que.offer(new int[]{a,0});
+//         visited.add(a);
+        
+//         while(!que.isEmpty())
+//         {
+//             int curr[] = que.poll();
+//             int currValue = curr[0];
+//             int currSteps = curr[1];
+            
+//             if(currValue+1 == b)
+//             return currSteps+1;
+            
+//             if(currValue+1 < b && !visited.contains(currValue+1))
+//             {
+//                 que.offer(new int[]{currValue+1,currSteps+1});
+//                 visited.add(currValue+1);
+//             }
+            
+            
+//             if(currValue*k == b)
+//             return currSteps+1;
+            
+//             if(currValue*k < b && !visited.contains(currValue*k))
+//             {
+//                 que.offer(new int[]{currValue*k,currSteps+1});
+//                 visited.add(currValue*k);
+//             }
+            
+            
+//         }
+        
+//         return -1;
+// 	}
+// }
+
+// due to constraint recursu=ion stack itna milega nai 
+
+
+
+
+
+
+
+
+// ------- method 2 we will look from B to A ------------------------------------------------------------------------------------------------------------------------------------
+
+class Codechef
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		Scanner sc = new Scanner(System.in);
+		
+		int t = sc.nextInt();
+		
+		while(t-- > 0)
+		{
+		   int a = sc.nextInt();
+		   int b = sc.nextInt();
+		   int k = sc.nextInt();
+		   
+		   int diff = b-a ;
+		   
+		   int operation = 0;
+		   
+		   // we want all gaps to be covered
+		   while(true)
+		   {
+		       // case 1
+		       if((b%k == 0) && (b/k >= a))
+		       {
+		           operation++ ;
+		           b = b/k ;
+		       }else if((b%k == 0)) // b/k divisible toh tha pr a se chhota aa rha tha 
+		       {
+		           operation += (b-a); // jitne bche h utne ghtaado bss
+		           break;
+		       }else{
+		           // case ki b%k hi 0 naa ho rha ho to uske paas jaane h hme 
+		           // jitna bcha utna operation subtract baaki ab to divide hojaega
+		           
+		           operation += b%k ; 
+		           b-= (b%k);
+		           
+		       }
+		       
+		   }
+		   
+		   System.out.println(operation);
+		}
+	    
+	}
+}
+
+
+
+
+
+
+
+
