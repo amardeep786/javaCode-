@@ -1,0 +1,92 @@
+Partitions with Given Difference :: https://www.geeksforgeeks.org/problems/partitions-with-given-difference/1
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+    logic : maintain a sum of array and sum of elements that we have picked till now 
+            when we reached at end of subset we check thet diff is d or not 
+
+*/
+
+// ------------------------ recursion ------------------------------------------------------------
+
+/*
+
+class Solution {
+    static int mod = 1000000007;
+    public static int countPartitions(int n, int d, int[] arr) {
+        
+        int totalSum = 0 ;
+        
+        for(int i = 0;i<n;i++)
+        totalSum += arr[i];
+        
+        return help(n,d,arr,totalSum,0,0) ;  // 0 represents current sum , 0->index
+    }
+    
+    public static int help(int n, int d, int[] arr , int totalSum,int currentSum,int index)
+    {
+        if(index == n)
+        {
+            int sumOfSecondSubSet = totalSum - currentSum ;
+            
+            if(currentSum - sumOfSecondSubSet == d)
+            {
+                return 1;
+            }
+            return 0;
+        }
+        
+        // pic - notPick
+        
+        int pick = help(n,d,arr,totalSum,currentSum+arr[index],index+1);
+        int notPick = help(n,d,arr,totalSum,currentSum,index+1);
+        
+        
+        return (pick+notPick)%mod ;
+    }
+}
+
+*/
+
+// ------------------------ MEMOIZATION ------------------------------------------------------------
+        
+class Solution {
+    static int mod = 1000000007;
+    public static int countPartitions(int n, int d, int[] arr) {
+        
+        int totalSum = 0 ;
+        
+        for(int i = 0;i<n;i++)
+        totalSum += arr[i];
+        int dp[][] = new int[n][totalSum+1];
+        for(var t : dp)
+        Arrays.fill(t,-1);
+        
+        return help(n,d,arr,totalSum,0,0,dp) ;  // 0 represents current sum , 0->index
+    }
+    
+    public static int help(int n, int d, int[] arr , int totalSum,int currentSum,int index,int dp[][])
+    {
+        if(index == n)
+        {
+            int sumOfSecondSubSet = totalSum - currentSum ;
+            
+            if(currentSum - sumOfSecondSubSet == d)
+            {
+                return 1;
+            }
+            return 0;
+        }
+        
+        if(dp[index][currentSum]!= -1)
+        return dp[index][currentSum];
+        
+        // pic - notPick
+        
+        int pick = help(n,d,arr,totalSum,currentSum+arr[index],index+1,dp);
+        int notPick = help(n,d,arr,totalSum,currentSum,index+1,dp);
+        
+        
+        return dp[index][currentSum] = (pick+notPick)%mod ;
+    }
+}
