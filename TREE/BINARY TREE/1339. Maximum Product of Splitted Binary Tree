@@ -1,0 +1,51 @@
+1339. Maximum Product of Splitted Binary Tree :: https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/description/
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+    hum ek to saare nodes ka ie total tree ka sum  store krege 
+    then hrek subtree ka sum calculate krte  jaaege to dusri tree ka sum total me s ghta k aajaega 
+    product krk max sum bhi saath m hi update krte jaege
+
+ */
+class Solution {
+    long maxProduct = 0 ;
+    public int maxProduct(TreeNode root) {
+        if(root == null) return 0;
+
+        int totalSumOfTree = totalSum(root);
+
+        findMaxProduct(root,totalSumOfTree);
+        return (int)(maxProduct%1000000007);
+    }
+
+    public long findMaxProduct(TreeNode root,int totalSumOfTree)
+    {
+        if(root == null)
+        return 0;
+
+        long leftSum = findMaxProduct(root.left,totalSumOfTree);
+        long rightSum = findMaxProduct(root.right,totalSumOfTree);
+
+        long subTreeSum = root.val + leftSum + rightSum ;  // ye subtree ka sum nikalta jaega
+
+        long remainingSubTreeSum = totalSumOfTree - subTreeSum;  // remaining ka sum
+
+        maxProduct = Math.max(maxProduct,subTreeSum*remainingSubTreeSum);  // update krdia 
+
+        //lekin ye jo subtree ka sum h isey return krna hoga qki aage koi or bhi max product de skta h
+
+        return subTreeSum;
+
+    }
+
+    public int totalSum(TreeNode root)
+    {
+        if(root == null )
+        return 0;
+
+        int leftSum = totalSum(root.left);
+        int rightSum = totalSum(root.right);
+
+        return root.val + leftSum + rightSum ; // return totalSUm from given node
+    }
+}
