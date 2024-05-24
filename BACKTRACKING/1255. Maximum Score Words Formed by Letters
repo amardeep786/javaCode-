@@ -1,0 +1,64 @@
+1255. Maximum Score Words Formed by Letters :: https://leetcode.com/problems/maximum-score-words-formed-by-letters/description/
+-------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+we will pick and not pick every string to get max score
+
+*/
+class Solution {
+    public int maxScoreWords(String[] words, char[] letters, int[] score) {
+        
+        int n = words.length;
+
+       int[] freq = new int[26];  // to store frequency of 26 characters
+
+        for(var ch : letters)
+        {
+            freq[ch-'a']++ ;
+        }
+
+        int maxScore[] = new int[1];  // taaki maxscore ko call by reference bhej sken ..y nai krna to global bnalo
+        maxScore[0] = Integer.MIN_VALUE;
+
+        return help(words,freq,score,maxScore,0,0);
+
+    }
+
+    public int help(String[] words, int[] freq, int[] score,int maxScore[],int index,int currentScore)
+    {
+        maxScore[0] = Math.max(maxScore[0],currentScore);
+        if(index >= words.length)
+        return 0;
+
+        // pick and not pick now
+
+        // pick only when words available
+        int tempFreq[] = Arrays.copyOf(freq,freq.length);  // qki pick krege to freq chnge krni hogi
+
+        int j = 0;
+        int tempScore = 0;
+        while(j < words[index].length())
+        {
+            char ch = words[index].charAt(j);
+
+            tempFreq[ch-'a']-- ;        // freq ghta do 
+            tempScore += score[ch-'a'] ; // temporary score m add krdo
+
+            if(tempFreq[ch-'a'] < 0)   // mtlb ki current character ki freq 0 thi or ab negative hogyi to hum bs breaek kr jaege
+            break;
+
+            j++;
+        }
+        int pick = 0 , notPick = 0;
+        if(j == words[index].length())  // mtlb ki upr break nai chla and hum is word ko le skte hain 
+        {
+            // current string ko le skte hain or temporary wali frequency iski frequency hogi
+
+            pick = help(words,tempFreq,score,maxScore,index+1,currentScore+tempScore);
+        }
+
+        // not pick  toh original freq ski freq hogi
+        notPick = help(words,freq,score,maxScore,index+1,currentScore);
+
+        return maxScore[0];
+    }
+}
