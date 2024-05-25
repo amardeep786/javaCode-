@@ -1,0 +1,31 @@
+124. Binary Tree Maximum Path Sum :: https://leetcode.com/problems/binary-tree-maximum-path-sum/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+class Solution {
+    int maxSum = Integer.MIN_VALUE;;
+    public int maxPathSum(TreeNode root) {
+    helper(root);
+    return maxSum ;
+        
+    }
+
+    public int helper(TreeNode node)
+    {
+        if(node == null) return 0;
+
+        int LeftSum = helper( node.left);   // leftsum
+
+        int RightSum = helper( node.right);  // rightsumm
+
+        LeftSum = Math.max(0,LeftSum);   // agr leftsum negative hai to 0 lelo ie not consider leftsum , || ly right 
+        RightSum = Math.max(0,RightSum);
+ 
+        int sum = LeftSum + RightSum + node.val ;   // isko return nai krskte kiuki ye left s root and root s right bootom 
+        // ki trf chla gya to ye ek path hai agr isko return kia toh ye path nai rhega 
+        maxSum = Math.max(sum,maxSum);
+
+        return Math.max(LeftSum,RightSum) + node.val;  // hme left ya right m s jo bhi max hai usme root ko daal k return krna h
+        // qki ye hi path bna skte hain upr
+    }
+}
