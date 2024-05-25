@@ -1,0 +1,106 @@
+140. Word Break II :: https://leetcode.com/problems/word-break-ii/description/
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+// class Solution {
+//     public List<String> wordBreak(String s, List<String> wordDict) {
+//         List<String> res = new ArrayList<>();
+//         StringBuilder sb = new StringBuilder();
+
+//         Set<String> set = new HashSet<>();  // taaki baar baar dictionary m dhundna na pde
+//         for(var str : wordDict)
+//         {
+//             set.add(str);
+//         }
+//         help(0,s,set,res,sb);
+//         return res;
+//     }
+//     public void help(int idx ,String s,Set<String> set,List<String> res,StringBuilder currSentence)
+//     {
+//         if(idx >= s.length())
+//         {
+//             res.add(new String(currSentence.toString()));
+//             return ;
+//         }
+
+//         // hrek partition krte jaao
+
+//         for(int j = idx;j<s.length();j++)
+//         {
+//             String tempString = s.substring(idx,j+1);
+
+//             if(set.contains(tempString))
+//             {
+
+//                  /*  -------------  we can use to store original elemnts  -----------------------------
+//                     StringBuilder originalSentence =new StringBuilder( currSentence);  // store krlia original ko 
+                
+                
+                
+//                 if (!currSentence.isEmpty()) {
+//                         currSentence.append(" ");
+//                     }
+//                     currSentence.append(tempString);
+
+//                     help(j+1,s,set,res,currSentence); //explore krne k baad
+//                     currSentence = originalSentence ;  //  fr currsentence ko wahi bna dia
+
+//                 */
+
+//                 /* ------- or we can use length  to revret back -------------------------------------------------*/
+//                 int len = currSentence.length(); // store the current length of currSentence
+
+//                 if (len != 0) {
+//                     currSentence.append(" ");
+//                 }
+//                 currSentence.append(tempString);
+
+//                 help(j + 1, s, set, res, currSentence);
+
+//                 // backtrack
+//                 currSentence.setLength(len);
+//             }
+
+//         }
+//     }
+// }
+
+
+//-------------- we can also try length of 1 then 2 then 3 and so on ------memoization---------------------------------------------------------------------------//
+public class Solution {
+    private Set<String> dict;
+    private Map<String, List<String>> memo;
+
+    private List<String> solve(String s) {
+        if (s.isEmpty()) {
+            return Arrays.asList("");
+        }
+        
+        if (memo.containsKey(s)) {
+            return memo.get(s);
+        }
+
+        List<String> result = new ArrayList<>();
+        for (int l = 1; l <= s.length(); l++) {
+            String currWord = s.substring(0, l);
+            if (dict.contains(currWord)) {
+                String remainWord = s.substring(l);
+                List<String> remainResult = solve(remainWord);
+                for (String w : remainResult) {
+                    String toAdd = currWord + (w.isEmpty() ? "" : " ") + w;
+                    result.add(toAdd);
+                }
+            }
+        }
+
+        memo.put(s, result);
+        return result;
+    }
+
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        dict = new HashSet<>(wordDict);
+        memo = new HashMap<>();
+
+        return solve(s);
+    }
+}
