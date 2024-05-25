@@ -1,0 +1,36 @@
+652. Find Duplicate Subtrees :: https://leetcode.com/problems/find-duplicate-subtrees/description/
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+hme kuj aisa store krna pdega ki haan hmne iss subtree ko pehle dekha hai ya nai -> map rkh lenge 
+lekin poore subtree ko store krge usse bdia uska string format bna k store krege and dekhege ki wo map m hai ya nai 
+*/
+class Solution {
+    public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+        Map<String,Integer> map = new HashMap<>();
+        List<TreeNode> res = new ArrayList<>();
+        help(root,map,res) ;
+        return res;
+    }
+
+    public String help(TreeNode root,Map<String,Integer> map,List<TreeNode> res)
+    {
+        if(root == null)
+        {
+            return "N";
+        }
+
+        String subTreeString = Integer.toString(root.val)+","+help(root.left,map,res)+","+help(root.right,map,res);
+
+        // check krlo ki ye map m hai ya nai 
+        // hme sirf frequency 1 hi check krni h qki freq 2 ya jaada hui toh mtlb hmne ise pehle hi result m add krdia hoga or fr 
+        // dubara kr denge isliy jiski freq 1 hai usey hi daalege
+        if(map.containsKey(subTreeString) && map.get(subTreeString)==1)  
+        {
+            res.add(root);
+        }
+        map.put(subTreeString,map.getOrDefault(subTreeString,0)+1);
+        return subTreeString;
+
+    }
+}
