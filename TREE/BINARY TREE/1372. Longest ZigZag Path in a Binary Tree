@@ -1,0 +1,31 @@
+1372. Longest ZigZag Path in a Binary Tree :: https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    int maxSteps = 0;
+    public int longestZigZag(TreeNode root) {
+        
+        solve(root,0,true);
+        solve(root,0,false);
+        return maxSteps;
+    }
+
+    public void solve(TreeNode root,int steps,boolean goLeft)
+    {
+        if(root == null)
+        return ;
+
+       maxSteps = Math.max(maxSteps,steps);
+
+        if(goLeft == true)   // agr left jana tha 
+        {
+            solve(root.left,steps+1,false);  // or left hi gye to steps + 1 or ab left nahi jana h toh false
+            solve(root.right,1,true);       // or right  gye to 1 se start kro  or ab left  jana h toh true
+        }
+        else                // agr left nahi jana tha 
+        {
+            solve(root.left,1,false);  // or left hi gye to 1 se start kro  or ab left  nahi jana h toh false
+            solve(root.right,steps+1,true); // or right hi gye to steps + 1 or ab left  jana h toh false
+        }        
+    }
+}
