@@ -1,0 +1,51 @@
+1002. Find Common Characters :: https://leetcode.com/problems/find-common-characters/description/
+-------------------------------------------------------------------------------------------------------------------------------------------------
+// logic - hm ek frequency array maintain krege jisme job string dekh rhe hain unme common knsa aaya h abtk 
+// ek temp array jisme curent word ki freq orr usey global wale s compare krk update krte jaege 
+class Solution {
+    public List<String> commonChars(String[] words) {
+        
+        int globalFreq[] = new int[26];
+
+        // first string ka daaldo isme
+
+        String str = words[0];
+
+        for(var ch : str.toCharArray())
+        {
+            globalFreq[ch-'a']++;
+        }
+
+        for(int i = 1;i<words.length;i++)
+        {
+            String temp = words[i];
+            int tempFreq[] = new int[26];
+            for(var ch : temp.toCharArray())  // current word ki freq 
+            {
+                tempFreq[ch-'a']++;
+            }
+
+            for(int j = 0;j<26;j++)
+            {
+                globalFreq[j] = Math.min(globalFreq[j],tempFreq[j]);   // global m hmne nye string k according update krdia
+            }
+        }
+        List<String> res = new ArrayList<>();
+
+        for(int i = 0;i<26;i++)
+        {
+            if(globalFreq[i] > 0 )  // global contains jo sbme hai 
+            {
+                while(globalFreq[i] > 0)
+                {
+                    String toAdd = String.valueOf((char)('a'+ i));
+                    res.add(toAdd);
+
+                    globalFreq[i]--;
+                }
+            }
+        }
+        
+        return res;
+    }
+}
