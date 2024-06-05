@@ -1,0 +1,70 @@
+3170. Lexicographically Minimum String After Removing Stars :: https://leetcode.com/problems/lexicographically-minimum-string-after-removing-stars/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+    1st observation - agr multiple smallest character hain to hme sbse baad wala delete krne m fyda hai qki hm lexicographically 
+    smallest chahiye to baad ka chhota delete krne m fyda hai
+
+    brute force - hm hrek star milne pr fr s peeche traverse kre and smallest ko delete kre  ---> TLE
+
+    since hme hr baar peechhe jaakr smallest character chahiye to hum ek MIN-HEAP rkh skte hain jisme smallest character hum O(1)
+    me dhund lenge
+
+    multiple same character hue to sbse baad wala smallest delete krna h eg aaba*  --> to last wala a delete krna h for lexicographically
+    smallest.
+
+
+*/
+
+class pair
+{
+    char c;
+    int i;
+
+    pair(char c,int i)
+    {
+        this.c = c;
+        this.i = i;
+    }
+}
+class Solution {
+    public String clearStars(String s) {
+        
+        char arr[] = s.toCharArray();
+        // custom agr char equal hai tohh index descending me
+        PriorityQueue<pair> que = new PriorityQueue<>((a,b)->{
+            if(a.c == b.c)
+            return b.i - a.i;
+
+            return Character.compare(a.c,b.c);
+        });
+
+        for(int i = 0;i<s.length();i++)
+        {
+            char ch = s.charAt(i);
+
+            if(ch != '*')
+            {
+                que.offer(new pair(ch,i));
+                continue;
+            }
+
+            if(!que.isEmpty())
+            {
+                pair temp = que.poll();
+                arr[temp.i] = '*';      // sbse baad wale smallest ko array me * bna dia means it is deleted
+            }
+        }
+
+        // ab jo aray me bcha h wo lexicographically smallest hai
+        StringBuilder res = new StringBuilder();
+        for(int i = 0;i<arr.length;i++)
+        {
+            if(arr[i] != '*')
+            {
+                res.append(arr[i]);
+            }
+        }
+
+        return res.toString();
+    }
+}
