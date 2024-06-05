@@ -1,0 +1,46 @@
+Swapping pairs make sum equal :: https://www.geeksforgeeks.org/problems/swapping-pairs-make-sum-equal4142/1
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    long findSwapValues(long a[], int n, long b[], int m) {
+        
+        Arrays.sort(a);
+        Arrays.sort(b);
+        
+        long sum1 = Arrays.stream(a).sum();
+        long sum2 = Arrays.stream(b).sum();
+        
+        // dono ka sum aagya to ab dekhte hain ki kitna difference hai 
+        
+        long diff = sum1 - sum2 ;
+        
+        if(diff%2 != 0)  // kiuki diff integer hona chahoy ..point m nahi hona chahiye
+        return -1;
+        
+        long neededToMakeEqual = diff/2;  // mtlb itna ek array ko bdhana h orr dusre ko ghtana h brabr krne k liye
+        
+        if(neededToMakeEqual == 0)  // already equal h orr ab kuj nai chahiye
+        return 1;
+        
+        // ab array sorted hai and usp traverse krk dekhte hain kisi pair ka diff jitna chahiy usk brabr
+        // hai ya nai . agr mil gya to hm swap krk bna skte hain else not
+        
+        int i = 0 , j = 0;
+        
+        while(i<n && j<m)
+        {
+            if(a[i]-b[j] == neededToMakeEqual)  // agar diff utna hi aa rha jitna chahiy tohh hme pair mil gya
+            {
+                return 1;
+            }else if(a[i]-b[j] > neededToMakeEqual)  // agr diff bda aaya tohh dusre array m bde values kro
+            {                                       // tbhi b[j] bdhega to overall diff ghtega 
+                j++;
+            }else       // else pehle array m bdi values diff chhota h tohh
+            {
+                i++ ;
+            }
+        }
+        
+        return -1;
+    }
+}
