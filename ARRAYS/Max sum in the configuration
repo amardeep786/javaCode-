@@ -1,0 +1,59 @@
+Max sum in the configuration :: https://www.geeksforgeeks.org/problems/max-sum-in-the-configuration/1
+-------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+brute force - find every rotation and then find sum so O(n^2)
+
+optimized -  suppose ki first value ko left rotate kia to usk baad k sbhi elements 
+            ka contribution 1 se ght jaega qki sb ek ek index pehle aajaege 
+jo first element rotate hua bss uska contribution (n-1) se bdhega ie wo 0 index s n-1 index p chla gya
+hoga
+
+suppose baaki elements jinka 1 se contribution less hua wo x hai 
+
+intial sum = S 
+
+after 1 rotation new sum is = S - x + first element * n-1 ;
+
+also x can be written as x = S - first elemnt === baaki element ka sum qki ye sb ek ek baar ghte hain 
+
+eg {8,3,1,2} -> ans = 11
+
+after rotation {3,1,2,8} to 3,2,1 inn elements ka contribution ab 1 s ght gya ie 3+2+1 = 6
+
+to total sum se 6 ghta hoga so 6  = 8+3+1+2 - 8 ie totalSum - element which is shifted 
+
+so newSum = oldSum - (totalSum - element which is shifted) + shifted element * (n-1)
+
+==   oldSum - totalSum + shifted element + shifted element * (n-1)
+==   oldSum - totalSum + shifted element * n ;  
+
+tc : O(n)  -> totalSum , oldsum is precomputed
+*/
+
+class Solution {
+    long max_sum(int a[], int n) {
+        
+        long totalSum = 0;
+        long oldSum = 0;
+        for(int i = 0;i<n;i++)
+        {
+              totalSum += a[i];
+            oldSum += i * (long)a[i];
+        }
+        
+        // yaha tkk total sum of array and ek baar ka sum aagya h
+        long res = oldSum ;
+        
+        for(int i = 1;i<n;i++)   // i point krega ki usk pichle wala element shift hua actual m shift nai krege
+        {
+            long updateSum = oldSum - totalSum + a[i-1]*(long)n ;
+            
+            oldSum = updateSum ;   // for future calculations
+            
+            res = Math.max(oldSum , res);
+        }
+        
+        return res;
+    }
+}
+
