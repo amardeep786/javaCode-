@@ -1,0 +1,37 @@
+648. Replace Words :: https://leetcode.com/problems/replace-words/description/
+-----------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public String replaceWords(List<String> dictionary, String sentence) {
+        
+        String arr[] = sentence.split(" ");
+
+        StringBuilder res = new StringBuilder();
+
+        Set<String> set = new HashSet<>(dictionary);
+
+        for(int i = 0;i<arr.length;i++)
+        {
+            String word = arr[i];
+
+            res.append(findRoot(word,set)).append(" ");
+        }
+
+        return res.toString().trim();  // last m space hoga to usey remove krdega
+    }
+
+    public String findRoot(String word , Set<String> set)
+    {
+        // pehle ek length then 2 then 3 ka try krte jaao or set m dekho hai ki nahi 
+        // agar hai to wahi string return krdo nai to wo word 
+
+        for(int i = 0;i<word.length();i++)   
+        {
+            if(set.contains(word.substring(0,i)))
+            {
+                return word.substring(0,i);
+            }
+        }
+
+        return word;
+    }
+}
