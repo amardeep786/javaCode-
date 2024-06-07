@@ -1,0 +1,53 @@
+Maximum occured integer :: https://www.geeksforgeeks.org/problems/maximum-occured-integer4602/1
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+// brute force for every left to right find freq and rturn max which is n^2
+
+// optimized - hm hrek array k starting point ko 1 mark kr denge ek array me and wo array 0 s initialise hoga
+
+// or end k agle index ko -1 s mark krdenge which tell ki isse ek pehle tkk ek array tha 
+
+/*
+    eg -> {0,0,1,1,0,0,0,-1,-1,0,0,0}
+    
+    it means ki ek array 2 s start hua too 6 ya 7 tkk gya ans koi dusra array 3 s start hua orr 7 tkk gya ya 6 tkk 
+    agr kahi 2 hai to mtlb 2 range h jo waha s start honge
+    fr iska prefix sum le lenge to jo element max time aaya hoga wahi ans hoga
+
+*/
+class Solution {
+    // Function to find the maximum occurred integer in all ranges.
+    public static int maxOccured(int n, int l[], int r[], int maxx) {
+        
+        int arr[] = new int[maxx+2];
+        
+        for(int i = 0;i<n;i++)
+        {
+            int left = l[i] , right = r[i];
+            
+            arr[left]++ ;
+            arr[right+1] -= 1 ;
+        }
+        
+        // do prefix sum to count 
+        
+        for(int i = 1;i<arr.length;i++) 
+        {
+            arr[i] = arr[i]+arr[i-1];
+        }
+        
+        // now check ki knse index ki max value hai
+        int res = Integer.MIN_VALUE ;
+        int ans = 0;
+        for(int i = 0;i<arr.length;i++)
+        {
+            if(arr[i] > res)
+            {
+                res = arr[i];
+                ans = i ;
+            }
+        }
+        return ans;
+    }
+}
