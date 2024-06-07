@@ -1,0 +1,143 @@
+3171. Find Subarray With Bitwise AND Closest to K :: https://leetcode.com/problems/find-subarray-with-bitwise-and-closest-to-k/
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+    brute force : 
+
+    for every subarray find AND and check diff from k and which ever is minimum that is the ans. 
+
+    CODE : 
+
+        for(i=1 to n)   ----> O(n)
+        {
+            for(j = 0 to n) ----> O(n)
+            {
+                DO AND from nums[i] to nums[j] ;   ----> O(n)
+
+                compare 
+            }
+        }
+
+        O(n^3) which gives TLE 
+
+
+        // --------------  1 simple optimization  we can do is -------------------------------------------
+
+        for(i=1 to n)   ----> O(n)
+        {
+            AND = nums[i];
+            for(j = 0 to n) ----> O(n)
+            {
+                AND = AND & nums[j] ;   ----> O(1)
+
+                compare ie res = Math.min(res , Math.abs(k-AND)) ;
+            }
+        }
+
+        it is O(n^2) but still gives TLE
+*/
+
+
+/*
+        --------------------- OPTIMIZED VERSION ---------------------------------------------------
+
+        observation 1 : jb bhi hum kisi 2 no ka AND krege to wo dono s kam ya brabr aaege 
+
+        observation 2 : kisi ka 2 no ka and maanlo A1 aaya to ab usme kisi 3rd no ka and krege to wo A1 k brabr ya ussey chhota hi aagea
+
+        mtlb ki hum no of elements bdhaate jaaege too  AND ki value ght ti jaegi ya utni hi rhegi kbhi bdhegi nai 
+
+        VICE - VERSA -
+            agr no of elements kam krte gye tohh AND ki value bdhty jaaegi 
+            ie AND of 5 numbers <= AND of 4 no's <= ----  <= AND of 2 numbers
+
+
+    
+        suppose ki hmaare paas ek subArray hai jiska [i..j] and iska AND aaya A1.
+        ab hme | k - A1 | ko minimize krna hai (A1 < k)
+        mtlb hme A1 ki value jyada s jyada chahiye tbhi overall value kamm s kamm hogi (what we required )
+        A1 is AND of [i.. j] tha to ab A1 ki value bdhaane k liy elements kam krna hoga as discosed above 
+        to hum i ko shift krege [i+1 .. j]  too ab [i+1 .. j] ka nya AND niklana hoga (will see during code kese niklega)
+
+        so lets n1,n2,n3,n4 are 4 no and their AND is A1 so ab we want to decrease value of and so we assume remove n1
+        to n2&n3&n4 nikaalne k liy individual bits store krege and jb b koi number remove hoga to usey remove krke bits ka count update
+        krege and suppose 3 number hain or jis position p 3 1 honge waha 1 likho else koi position hogi jaha 0 hoga to ans m 0
+
+        agar A1 > k hua too |k - A1| ki value bdi aane lgegi coz of absolute value
+        to iss case me hme AND ki value ko ghtaana hai to subarray pehle [i..j] tkk ka tha too ab [i... j+1] ie element add taaki value ghte
+
+
+*/
+
+
+
+class Solution {
+    public int minimumDifference(int[] nums, int k) {
+        
+        int freqBits[] = new int[32];  // to store freq of each bits 
+        int ans = Integer.MAX_VALUE ;
+
+        int windowAnd = nums[0] ;   // current window ka AND store krege
+
+        int i = 0, j = 0,n = nums.length;
+
+        while(j<n)
+        {
+            windowAnd &= nums[j];
+            updateFreq(1,nums[j],freqBits);   // 1 ki freqBits m nums[j] ko add krne baad kya freq hai 
+            ans  = Math.min(ans , Math.abs(k-windowAnd));
+
+            if(windowAnd > k)
+            {
+                // hme windowAnd ko chhota krna pdega taaki diff kam s kam aaye to uske liy element add krna pdega to j aage bdhega
+                j++ ;
+                continue;  // nahi to 2 baar j++ hojaega
+
+            }else if(windowAnd < k)
+            {
+                // hme windowAnd ko bda krna pdega taaki and bdhe or diff kam s kam aaye to uske liy element add krna pdega to i aage bdhega
+                // i ko tbtk aage bdhana h jbtk AND < k se
+                while(i<=j && windowAnd < k)
+                {
+                     updateFreq(-1,nums[i],freqBits);   // -1 mtlb ki freqBits m nums[i] ko remove  krne baad kya freq hai coz i shift hua h 
+                     i++ ;
+
+                     // ab element htaya h to nya AND bhi calculate krna hoga
+                     windowAnd = 0;
+
+                     for(int b = 0;b<32;b++)
+                     {
+                        if((j-i+1) == freqBits[b])
+                        {
+                            // jth bit of all numbers in the window (j-i+1) are set to 1 ie jitne number hai window m unk bth position p 1 hai  to nya window m 1 add krdia
+                            windowAnd = windowAnd | (1 << b);
+                        }
+                     }
+                     ans  = Math.min(ans , Math.abs(k-windowAnd));
+
+                }
+            }else
+            {
+                // diff 0 hoga to return 0
+                return 0;
+            }
+            j++;
+        }
+        return ans;
+    }
+    private void updateFreq(int operation,int element,int[]freqBits)
+    {
+
+        int i = 0;
+        while(element > 0)
+        {
+            if((element&1) == 1)
+            {
+                freqBits[i] += operation;  // +1 hoga to add hojaega and -1 hua to subtract hojaega
+                
+            }
+            element /= 2;
+            i++ ;
+        }
+    }
+}
