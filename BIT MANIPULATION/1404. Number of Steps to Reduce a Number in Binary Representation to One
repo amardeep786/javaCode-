@@ -1,0 +1,87 @@
+1404. Number of Steps to Reduce a Number in Binary Representation to One :: https://leetcode.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one/
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ------------ O(n^2)-------------------------------------------------------------------//
+class Solution {
+    public int numSteps(String s) {
+
+        StringBuilder sb = new StringBuilder(s);
+        int steps = 0;
+        while(sb.length()>1)
+        {
+            int n = sb.length();
+          if(sb.charAt(n-1) == '0')   // agar lst 0 hai mtlb even hai toh
+            {
+
+                sb = sb.deleteCharAt(n-1);  // last 0 hta dia == divide by 2
+                steps++ ;
+        }else
+            {
+                addOne(sb);
+                steps++ ;
+            }  
+        }
+        return steps;
+    }
+    
+
+
+private void addOne(StringBuilder sb)
+{
+    int i = sb.length()-1;
+
+    while(i>=0 && sb.charAt(i) != '0')
+    {
+        sb.setCharAt(i,'0');
+        i--;
+    }
+
+    if(i<0) // i negative hua mtlb sbhi 1 hi mile toh aage 1 append krna hoga
+    {
+        sb.insert(0,'1');
+    }else
+    {
+        sb.setCharAt(i,'1');
+    }
+
+}
+
+}
+
+// ------------------------ optimized approach ---------O(n)-----------------------------------------------------------------------------//
+
+/*
+jb odd hai to 2 operation lg rhe hain ek baar even bnao and then last ko remove kro
+to usk left k 1's ab as 0 bnege or ek 0 1 to isk liy carry variable 
+if carry = 1 , mtlb curr value m carry add kro wahi btaega ki ab iss character ki kese treat krna h   try DRY RUN
+jb evene hai to ek hi 
+*/
+
+// class Solution {
+//     public int numSteps(String s) {
+//        int n = s.length();
+
+//         int op = 0;
+
+//         int carry = 0;
+
+//         for(int i = n-1; i >= 1; i--) {
+
+//             if(((s.charAt(i) - '0') + carry) % 2 == 1) { //odd
+
+//                 op += 2;
+
+//                 carry = 1;
+
+//             } else {
+
+//                 op += 1;
+
+//             }
+
+//         }
+
+//         return op + carry; 
+//     }
+// }
+
+
