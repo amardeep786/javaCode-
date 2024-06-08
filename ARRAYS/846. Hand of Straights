@@ -1,0 +1,35 @@
+846. Hand of Straights :: https://leetcode.com/problems/hand-of-straights/
+-----------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public boolean isNStraightHand(int[] hand, int groupSize) {
+        int n = hand.length;
+
+        if (n % groupSize != 0) {    // agr number of elements hi groupsize ka multiple nai h to pehle hi false return krdo
+            return false;
+        }
+
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        for (int card : hand) {     // sbhi values ko uski freq k according map m daal dia and in sorteed order
+            map.put(card, map.getOrDefault(card, 0) + 1);
+        }
+
+        // sorted isliy chahiy ki pair hum smallest to largest m bna paayen
+
+        while (!map.isEmpty()) {
+            int curr = map.firstKey();   // har baari pehli entry lenge
+
+            for (int i = 0; i < groupSize; i++) {   // or usk next value present nai h to false 
+                if (!map.containsKey(curr + i)) {
+                    return false;
+                }
+
+                map.put(curr + i, map.get(curr + i) - 1);  // hai to usk next ki freq ek s ghta do 
+                if (map.get(curr + i) == 0) {
+                    map.remove(curr + i);
+                }
+            }
+        }
+
+        return true;
+    }
+}
