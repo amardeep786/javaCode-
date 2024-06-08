@@ -1,0 +1,51 @@
+204. Count Primes :: https://leetcode.com/problems/count-primes/description/
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+  hrek number p jaao and then check to O(n^2) gives TLE
+
+  for checking if we check till root[n] then complexity n root n which is again TLE
+
+  so use sieve of eratosthenes
+*/
+class Solution {
+    public int countPrimes(int n) {
+        if(n==0 || n==1)
+        return 0;
+
+        boolean isPrime[] = new boolean[n];
+        for(int i = 0;i<n;i++)
+        {
+            isPrime[i] = true;
+        }
+
+        isPrime[0] = false;
+        isPrime[1] = false;
+
+        // ab 2 se lekr n tkk jitne bhi multiple hain sbko false krdo
+
+        for(int i = 2;i*i<n;i++)    // 2 to sqrt n
+        {
+            for(int j = i*i ; j<n;j+=i)     // sqrt i se n and j += i qki j ab agle i ko ppint krega
+            {
+                if(isPrime[j] == true)
+                {
+                    isPrime[j] = false;
+                }
+            }
+        }
+
+        // ab jitne true hain wahi count hoga
+        int count = 0;
+        for(int i = 0;i<n;i++)
+        {
+            if(isPrime[i] == true)
+            {
+                count++ ;
+            }
+        }
+
+        return count;
+
+    }
+}
