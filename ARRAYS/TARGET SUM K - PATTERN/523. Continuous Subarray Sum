@@ -1,0 +1,46 @@
+523. Continuous Subarray Sum :: https://leetcode.com/problems/continuous-subarray-sum/description/
+---------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public boolean checkSubarraySum(int[] nums, int k) {
+        
+     //sliding window s issue hoga isko solve krne me qki hum decision kis base p lenge
+        //ki aage jaana h ya nai 
+        
+        
+//         CONCEPT : (a) % m == t  and (a + somthing) % m == t
+//             then 
+             
+//             somthing is multiple of m
+        
+        int n  = nums.length;
+        Map<Integer,Integer> map = new HashMap<>();  // to store remainder and index 
+        
+        if(n==1)
+        {
+            return false;
+        }
+        
+        map.put(0,-1) ;  //we have seen 0 at index -1
+
+        int sum = 0 ;
+        for(int i = 0;i<n;i++)
+        {
+            sum += nums[i];
+            if(map.containsKey(sum%k))  // agar same remainder pehle mila hai to mtlb ek array sum multiple of k aaya
+            {
+                if(i - map.get(sum%k)  >= 2)  // pichhla kis imdex p tha taaki number of elements pta lg ske 2 ya ussey jada hai ki nai 
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                map.put(sum%k , i);
+            }
+        }
+        
+        return false;
+        
+        
+    }
+}
