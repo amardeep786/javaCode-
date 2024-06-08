@@ -1,0 +1,79 @@
+260. Single Number III :: https://leetcode.com/problems/single-number-iii/description/
+------------------------------------------------------------------------------------------------------------------------------------------
+/*
+    brute force : map m frequency store krlo pr jiski freq 1 hai usey ans m daal do
+*/
+
+/*
+    BETTER VERSION : 
+
+    we know ki XOR of same element is 0 to agar hum saare elements ka XOR krte hain to jo 2 baar aaye hain unka XOR 0 hojaega
+    pr ans me hmaaare paas single lement nai blki uska XOR aa jaega 
+
+    agar hum kisi treh s single elements ko alag alag group m daal de ya differntiatekr paaye or fr XOR kre to wo single element aajaega
+
+    example test case 1  : group1 = 1,1,3 group 2 : 2,2,5 kuj is tra ka 
+
+    to hum kya krege sbhi ka XOR kr denge or jo result aaya maanlo usk ith position p 1 hai 
+
+    mtlb ki ye dono number ith position p different honge to hum ky akrege ek mask bna lege 
+    ith position p 1 or baaki sbhi p 0 ie 000010000 orr sbhi number ko iss AND krege jo 0 dia wo ek group me or jo non zero dia wo dusre
+
+    issey single elements alg alag group m chle gye to bs XOR Krdo group ka
+    single elemenrs aajaege
+*/
+
+
+class Solution {
+    public int[] singleNumber(int[] nums) {
+
+        int n = nums.length;
+
+        long xor = 0;
+
+        for(int i = 0;i<n;i++)
+        {
+            xor ^= nums[i];
+        }
+
+        // ab baaki to cancel ho gye honge or dono single nu ka xor bcha hoga
+
+        // dekhlo ki iss xor m 1 kis posiition p mtlb si position p dono single diff honge
+
+
+        long mask = xor & (-xor) ;
+
+        List<Integer>group1 = new ArrayList<>();
+        List<Integer>group2 = new ArrayList<>();
+
+        for(int i = 0;i<n;i++)
+        {
+            if((nums[i]&mask )== 0)
+            {
+                group1.add(nums[i]);
+            }else
+            {
+                group2.add(nums[i]);
+            }
+        }
+
+        int res[] = new int[2];
+
+        int ans1 = 0;
+        for(int i = 0;i<group1.size();i++)          // group1 ka xor
+        {
+            ans1^=group1.get(i);
+        }
+        res[0] = ans1;
+
+        ans1 = 0;
+        for(int i = 0;i<group2.size();i++) // group2 ka xor
+        {
+            ans1^=group2.get(i);
+        }
+
+        res[1] = ans1;
+        return res;
+        
+    }
+}
