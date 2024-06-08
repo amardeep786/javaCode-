@@ -1,0 +1,52 @@
+Index of an Extra Element :: https://www.geeksforgeeks.org/problems/index-of-an-extra-element/1
+----------------------------------------------------------------------------------------------------------------------------------------------------
+// ----------------------------- O (n) -----------------------------------------------------------------------//
+
+// class Solution {
+//     public int findExtra(int n, int arr1[], int arr2[]) {
+        
+//         Set<Integer> set = new HashSet<>();
+//         for(var e : arr2)
+//         {
+//             set.add(e);
+//         }
+        
+//         for(int i = 0;i<n;i++)  // for every element check in second array
+//         {
+//             if(!set.contains(arr1[i]))
+//             return i;
+//         }
+        
+//         return -1;
+//     }
+// }
+
+// ----------------------------- O (log n) --------BINARY SEARCH---------------------------------------------------------------//
+class Solution {
+    public int findExtra(int n, int arr1[], int arr2[]) {
+        
+        // dono sorted hain to binary search lga skte hain 
+        // mid wali position k dono aray p same hai toh mtln left s mid tkk sare same element orr added element right side m
+        // hoga
+        // else left m hoga
+        
+        int ansIndex = n-1;     // assume ki lst eleemt ans h
+        int left = 0 , right = n-2 ;
+        
+        while(left <= right)
+        {
+            int mid = left + (right-left)/2 ;
+            
+            if(arr2[mid] == arr1[mid])
+            {
+                left = mid+1;
+            }else
+            {
+                ansIndex = mid;  // update ans if not equal found
+                right = mid-1;
+            }
+        }
+        
+        return ansIndex;
+    }
+}
