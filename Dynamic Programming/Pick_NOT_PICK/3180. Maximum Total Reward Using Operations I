@@ -1,0 +1,49 @@
+3180. Maximum Total Reward Using Operations I :: https://leetcode.com/problems/maximum-total-reward-using-operations-i/description/
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public int maxTotalReward(int[] rewardValues) {
+        
+        int n = rewardValues.length;
+        Arrays.sort(rewardValues);   // sort nahi krege tohh aage wala pick krk peeche nai aapaege isliy sort krdege taai peeche ane ki jrurt 
+                                    // naa hoo
+        int max = Integer.MIN_VALUE;
+        for(int i = 0;i<n;i++)
+            max = Math.max(max,rewardValues[i]);
+        
+        int dp[][] = new int[n+1][2*max];  // 2 times max isliy ki agr ek 1999 hua to agla 2000 hoskty h value isssey jada nai hoga
+        for(var t:dp)
+        {
+            Arrays.fill(t,-1);
+        }
+        return help(rewardValues , 0 , 0 ,dp);
+       
+
+        }
+    
+        public int help(int[] rewardValues , int idx , int currReward ,int dp[][])
+        {
+            if(idx >= rewardValues.length)
+            {
+                return 0;       // no further rewards
+            }
+            
+            if(dp[idx][currReward] != -1)
+            {
+                return dp[idx][currReward];
+            }
+            // pick - not pick
+            int pick = 0;
+            if(currReward < rewardValues[idx])
+            {
+                
+                pick =  rewardValues[idx] +  help(rewardValues , idx+1 , rewardValues[idx] + currReward,dp );
+                
+            }
+            
+            int notPick = help(rewardValues,idx+1,currReward,dp);
+            
+            return dp[idx][currReward] = Math.max(pick,notPick);
+        }
+    
+}
