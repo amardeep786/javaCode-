@@ -1,0 +1,124 @@
+3181. Maximum Total Reward Using Operations II :: https://leetcode.com/problems/maximum-total-reward-using-operations-ii/description/
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+// ------------------ approach 1 ------------------------------------------------------------------------------------------------------//
+
+/*
+
+    sbse pehle to array ko sort kr denge taaki aage wale elements pichhle s bde hoo
+
+    supppse sum = x hai or hmne ek element a1 orr kia to hum add to tbhi kr paege jabb x < a1 ho to a1 ko add krdia
+
+    suppose [a1,a2,a3,a4,a5] tha  orr x = a1+a2+a3 kia orr ab koi element nahi add kr paa rhe qki iska sum baaki elements s bda ho gya h
+
+    to hum a1+a2+a3 ki jgeh a1+a2+a5 choose krna chahege qki ssort tha or a3 < a5 to hum a1+a2+a5 bnana chahage
+
+    so  suppose x is sum and new element by taking suppose a1,a4,a6 and abb a8 hai new element tohh hum a8 ko a1,a4 or a6 s jod kar jo jo 
+    sum bnega sbko store krlunga (will see ki all possible sum kese store krege )
+
+    jb bhi current sum max element s jaada hua to hum uss element ko chhor kar max element lena chahege
+
+    so we will use list to store sums 0-> sum is not pssible and 1 -> sum is possible
+
+    ax sum can be 5*10^4 + 5*10^4 = 25 ^ 10^8 will give TLE but hum bhot saaare calls reduce 
+    kr rghe hain tohh ye ekdum boundary line p jaa k accept hoga
+
+*/
+
+class Solution {
+    public int maxTotalReward(int[] r) {
+        int n = r.length;
+        
+        // duplicate lement pehle hi hta do set se ya phr code m manage hojaega 
+        // coz dusra same element hmaare kisi kaam ka nahi h
+        Arrays.sort(r);
+
+        int max = r[n-1]; // max element
+
+        int []dp = new int[max];
+
+        dp[0] = 1;  // ie 0 bnaane ka ek way hai kuj naai loo  idx -> sum , 0/1 -> poss or not
+        int prev = -1 ;  // tells ki same elemnt h picchle waala k nai 
+
+        for(int i = 0;i<n;i++)
+        {
+            if(r[i] == max)   // agr koi max mila to break ;
+            break;
+
+            if(prev == r[i])  continue ; // pichhla or curr same hai to aage bdho -> pruning
+
+            for(int j = 0;j< Math.min(r[i] , max-r[i]);j++)
+            {
+                if(dp[j] == 1)
+                {
+                    dp[j+r[i]] = 1; // ab j+r[i] bhi possible hai 
+                }
+            }
+            prev = r[i];
+        }
+
+        int ans = max -1 ;
+        // list me dekhlo ki knsa last 1 hai wahi sbse bda possible  hoga jisme max add krege ro max possible
+
+        while(dp[ans] != 1)
+        ans-- ;
+
+        return ans + max;
+
+    }
+}
+
+// --------- have some error in below approach -----------------------------------------------//
+/*
+    max sum can be 5*10^4 + 5*10^4 = 25 ^ 10^8 will give TLE
+
+    but if we use bitset to store sum then complexity (25 * 10^8)/64
+
+    = approx 10^7 and will be accepted
+*/
+// class Solution {
+//     public int maxTotalReward(int[] rewardValues) {
+        
+//         BitSet dp = new BitSet(10000);
+//         BitSet validPrev = new BitSet();
+//         BitSet mask = new BitSet();
+
+//         dp.set(0) ;
+//         Arrays.sort(rewardValues);
+//         int maskId = 0;
+//         for(var val : rewardValues)
+//         {
+//             while(maskId < val)
+//             mask.set(maskId++);
+//             BitSet dpClone = (BitSet)dp.clone();
+//              dpClone.and(mask);
+//              validPrev = dpClone;
+
+//             BitSet shiftRes = leftShift(validPrev,val);
+
+//             dp.or(shiftRes);
+//         }
+
+//         int ans = 10000;
+//         while(!dp.get(ans))
+//         {
+//             ans-- ;
+//         }
+
+//         return ans;
+
+
+//     }
+//      public static BitSet leftShift(BitSet bitSet, int shift) {
+//         BitSet result = new BitSet();
+//         int length = bitSet.length();
+//         for (int i = 0; i < length; i++) {
+//             if (bitSet.get(i)) {
+//                 result.set(i + shift);
+//             }
+//         }
+//         return result;
+//     }
+// }
+
+
