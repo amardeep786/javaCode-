@@ -1,0 +1,45 @@
+TrafficLights :: https://practice.geeksforgeeks.org/contest/gfg-weekly-158-rated-contest/problems
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public static String trafficLights(int n, int q, int[][] queries) {
+        
+        int start[] = new int[n+2];
+        
+        for(int i = 0;i<q;i++) // O(q)
+        {
+            int f = queries[i][0];
+            int s = queries[i][1];
+            
+            start[f]++;
+            start[s+1]--;
+        }
+        
+        // do prefix
+        
+        for(int i = 2;i<start.length;i++)   //O(n)
+        {
+            start[i] = start[i]+start[i-1];
+        }
+        StringBuilder sb = new StringBuilder(); 
+        for(int i = 1;i<=n;i++)    // O(n)
+        {
+            if(start[i]%3 == 0)
+            {
+                sb.append('R');
+            }
+            else if(start[i]%3 == 1)
+            {
+                sb.append('Y');
+            }
+            else
+            {
+                sb.append('G');
+            }
+        }
+        
+        return sb.toString();
+        
+        
+    }
+}
