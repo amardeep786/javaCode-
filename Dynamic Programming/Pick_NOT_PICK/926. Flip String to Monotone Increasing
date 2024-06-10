@@ -1,0 +1,76 @@
+926. Flip String to Monotone Increasing :: https://leetcode.com/problems/flip-string-to-monotone-increasing/
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public int minFlipsMonoIncr(String s) {
+        if(s.length()==1)
+        return 0;
+        int dp[][] = new int[s.length()+1][2];
+        for(var k : dp)
+        Arrays.fill(k,-1);
+        return help(s,0,0,dp);      // assume ki prev = 0 hai to dono option explore krlege 
+        
+    }
+
+    public int help(String s , int idx, int prev,int dp[][])
+    {
+        if(idx == s.length()) return 0;
+
+        if(dp[idx][prev] != -1)
+        return dp[idx][prev];
+
+        int flip = Integer.MAX_VALUE , notFlip = Integer.MAX_VALUE;
+        if(prev == -1)      // first character hai to 2 option 
+        {
+            char ch = s.charAt(0);
+            flip = 1 + help(s,idx+1,1 - (ch-'0'),dp);  // 
+            notFlip = help(s,idx+1,ch-'0',dp);
+        }
+        else if(s.charAt(idx) == '1')
+        {
+            if(prev == 0)       // case 01 toh isme 1 ko 0 bna skte hai or 1 ko 1 hi rehne de skte hain
+            {
+                flip = 1 + help(s,idx+1,0,dp); // assuming ki 1 ko flip krdia isliy 0 bheja next k liy 0 is prev now
+                notFlip = help(s,idx+1,1,dp);
+            }else
+            {
+                // case like 11 -> toh last ko 0 nai bna skte to isme only not flip hoga
+                notFlip = help(s,idx+1,1,dp);
+
+            }
+        }else
+        {
+            //current 0 hai an previous 1 hai 
+            if(prev == 1)       // case like 10 toh 0 ko flip krna hi pdega ,, not flip ka option nai h
+            {
+                flip = 1+help(s,idx+1,1,dp);   // current 0 ko flip kia to assume ki aage wale k liy prev ab 0 hai
+            }else
+            {
+                // case like 00
+                flip = 1+help(s,idx+1,1,dp); 
+                notFlip = help(s,idx+1,0,dp);
+            }
+        }
+
+        return dp[idx][prev] = Math.min(flip,notFlip);
+    }
+}
+
+
+// --------------------------------------- method 2 -------------------------------------------------------------------------------//
+
+class Solution {
+    public int minFlipsMonoIncr(String s) {
+        int a=0,b=0;
+        for(int i=0;i<s.length();i++)
+            {  if(s.charAt(i)=='1')
+                   { b++;
+                   }
+                else 
+                   {a++;
+                    a=Math.min(a,b);
+                   }
+            }
+        return a;
+    }
+}
