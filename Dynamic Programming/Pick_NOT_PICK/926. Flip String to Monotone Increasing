@@ -61,16 +61,17 @@ class Solution {
 
 class Solution {
     public int minFlipsMonoIncr(String s) {
-        int a=0,b=0;
+        int flips=0,countOfOnes=0;
         for(int i=0;i<s.length();i++)
-            {  if(s.charAt(i)=='1')
-                   { b++;
+            {  if(s.charAt(i)=='1') // count of 1 bdhega 
+                   { countOfOnes++;
                    }
                 else 
-                   {a++;
-                    a=Math.min(a,b);
-                   }
+                   {
+                    flips++;                                // count0 bdhega since 0 hai tohh do option yaa to 0 rehne do ya to 1 bnaado
+                    flips=Math.min(flips,countOfOnes);    //  0 hi rehne dia to jitne 1 the unko flip krna pdega for monoto increasing or 1 bnaya to purane flips+1
+                   }                                       // to dono m jo minimum hai wahi ans hoga
             }
-        return a;
+        return flips;
     }
 }
