@@ -1,0 +1,112 @@
+1122. Relative Sort Array :: https://leetcode.com/problems/relative-sort-array/description/
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// class Solution {
+//     public int[] relativeSortArray(int[] arr1, int[] arr2) {
+        
+//         Map<Integer,Integer> map = new HashMap<>();
+//         int n = arr1.length;
+//         for(var i : arr1)
+//         {
+//             map.put(i,map.getOrDefault(i,0)+1);
+//         }
+
+        
+//             // print map
+//             for(Map.Entry<Integer,Integer>entry : map.entrySet())
+//             {
+//                 System.out.println(entry.getKey()+" "+ entry.getValue());
+//             }
+        
+
+//         int present = 0 ;
+//         List<Integer>list = new ArrayList<>();
+//         Set<Integer>set = new HashSet<>();
+//         int []ans = new int[n];
+//         for(var e : arr2)
+//         {
+//             set.add(e);
+//             if(map.containsKey(e))
+//             {
+//                 int freq = map.get(e);
+
+//                 while(freq-- != 0)
+//                 {
+//                     ans[present++]=e ;
+//                 }
+//             }
+            
+//         }
+//         for(var e : arr1)
+//         {
+//             System.out.println(e+" "+(!set.contains(e)));
+//             if(!set.contains(e))
+//             {               
+//                 list.add(e);
+//             }
+//         }
+
+//         // yaha tkk saare dono m present wale sahi s array 1 m aagye honge and present us location ko point kr rha h jaha s not present wale hain
+//         System.out.println(list);
+//         Collections.sort(list);
+//         System.out.println(list);
+//         for(var e : list)
+//         {
+//             ans[present++] = e ;
+//         }
+//         return ans;
+//     }
+// }
+
+
+// ----------------- using lambda expression --------------------------------------------------------------------------------------//
+class Solution {
+    public int[] relativeSortArray(int[] arr1, int[] arr2) {
+
+        //pehle to arr2 k elenebts ko map m daal do or usko bhi jo arr1 me hai pr array 2 me nai
+        Map<Integer,Integer> map = new HashMap<>();
+        for(int i = 0;i<arr2.length;i++)
+        {
+            map.put(arr2[i],i) ; // qki unique h and index daala h qki dusre m jiska index pehle hoga 
+            // wahi arr me pehle aaega
+        }
+
+        for(int i = 0;i<arr1.length;i++)
+        {
+            if(!map.containsKey(arr1[i]))
+                map.put(arr1[i],1001) ; //  maximum array length 1000 hai toh jo arr1 me hai but arr2 m nai unko 1001 de dia inko alg s compare kr lenge
+            
+        }
+
+         // Define the comparator using a lambda expression
+         Comparator<Integer> comparator = (num1,num2) -> {
+
+            int index1 = map.get(num1);
+            int index2 = map.get(num2);
+
+            if(index1 == index2)
+            {
+                return Integer.compare(num1,num2);
+            }
+            return Integer.compare(index1,index2);
+         };
+
+        // convert primitive to object 
+        List<Integer>list = new ArrayList<>();
+
+        for(var e : arr1)
+        {
+            list.add(e);
+        }
+
+        Collections.sort(list,comparator);
+
+        int i = 0 ;
+        for(var e : list)
+        {
+            arr1[i++] = e;
+        }
+        return arr1;
+
+    }
+
+}
