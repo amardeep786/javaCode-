@@ -1,0 +1,48 @@
+Maximum Tip Calculator :: https://www.geeksforgeeks.org/problems/maximum-tip-calculator2631/1
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public static long maxTip(int n, int x, int y, int[] arr, int[] brr) {
+        
+        // hme hrek order k liy values + diff store krege wo bhi descending order me 
+        // then jo bhi max h usey oick krege
+        
+        int [][]diff = new int[n][3];
+        
+        for(int i = 0;i<n;i++)
+        {
+            diff[i][0] = arr[i];
+            diff[i][1] = brr[i];
+            diff[i][2] = Math.abs(arr[i]-brr[i]);
+        }
+        
+        Arrays.sort(diff, (a,b)->b[2]-a[2]);  // descending order based on diff of eement
+        long res = 0;
+        for(int i = 0;i< n ;i++)
+        {
+            if(x==0) // a cant take orders
+            {
+                res += diff[i][1];  // b will take
+                
+            }else if(y==0)
+            {
+                res += diff[i][0];
+                
+            }else
+            {
+                // jo bda h usey lelo
+                if(diff[i][0] > diff[i][1])
+                {
+                    // we weill pick arr so x will decrease
+                    res += diff[i][0];
+                    x-- ;
+                }else
+                {
+                     res += diff[i][1];
+                     y-- ;
+                }
+            }
+        }
+        return res;
+    }
+}
