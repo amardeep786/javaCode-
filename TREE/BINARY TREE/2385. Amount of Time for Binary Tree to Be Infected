@@ -1,0 +1,102 @@
+2385. Amount of Time for Binary Tree to Be Infected :: https://leetcode.com/problems/amount-of-time-for-binary-tree-to-be-infected/
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+/*  graph bna k bfs maardo*/ 
+
+
+
+// class Solution {
+//     public void convert(TreeNode current, int parent, Map<Integer, List<Integer>> adj) {
+//         if (current == null) {
+//             return;
+//         }
+
+//         if (parent != -1) {
+//             adj.computeIfAbsent(current.val, k -> new ArrayList<>()).add(parent);
+//         }
+
+//         if (current.left != null) {
+//             adj.computeIfAbsent(current.val, k -> new ArrayList<>()).add(current.left.val);
+//         }
+//         if (current.right != null) {
+//             adj.computeIfAbsent(current.val, k -> new ArrayList<>()).add(current.right.val);
+//         }
+//         convert(current.left, current.val, adj);
+//         convert(current.right, current.val, adj);
+//     }
+
+//     public int amountOfTime(TreeNode root, int start) {
+//         Map<Integer, List<Integer>> adj = new HashMap<>();
+//         convert(root, -1, adj);
+
+//         Queue<Integer> que = new LinkedList<>();
+//         que.add(start);
+//         Set<Integer> visited = new HashSet<>();
+//         visited.add(start);
+//         int minutes = 0;
+
+//         while (!que.isEmpty()) {
+//             int n = que.size();
+
+//             while (n-- > 0) {
+//                 int curr = que.poll();
+
+//                 for (int ngbr : adj.getOrDefault(curr, Collections.emptyList())) {
+//                     if (!visited.contains(ngbr)) {
+//                         que.add(ngbr);
+//                         visited.add(ngbr);
+//                     }
+//                 }
+//             }
+//             minutes++;
+//         }
+
+//         return minutes - 1;
+//     }
+// }
+
+
+// ------------------- using DFS --------------------------------------------------------------------------------------------------------//
+
+// jo bhi start hoga wo negative value bhejega taaki pta lge ki start  left m hai ya right m
+// baaki valuues -1 add krk upr bhejte jaege taaki root ko paas dono trf ki height hogi tohh 
+// wo bs abs lekr add krdega
+
+class Solution {
+
+    int res = Integer.MIN_VALUE ;
+    public int amountOfTime(TreeNode root, int start) {
+
+        help(root,start);
+        return res;
+
+    }
+
+    public int help(TreeNode root, int start)
+    {
+        if(root == null)
+        return 0;
+
+        int LH = help(root.left,start);
+        int RH = help(root.right,start);
+
+        if(root.val == start)   // khud hi start ai to isk sub tree s max height result m update krdo pehle
+        {
+            res = Math.max(res , Math.max(LH,RH));
+            return -1 ;  // ki isk upr wale node s iski doori 1 hai or - means ki start s hote hue value jaa rhi h
+        }else if(LH >= 0 && RH >= 0)
+        {
+            // mtlb  ki start abhi mila nai h tohh bss height return krdo
+            return Math.max(LH,RH)+1 ;
+        }else
+        {
+            // koi ek negative hai mtlb ki start mil chuka h to res update krdo
+            int dist = Math.abs(LH) + Math.abs(RH) ;
+
+            res = Math.max(res,dist);
+
+            return Math.min(LH,RH) - 1 ;  // kiuki jitna upr jaege utna dist bdega 
+        }
+    }
+}
