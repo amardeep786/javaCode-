@@ -1,0 +1,27 @@
+153. Find Minimum in Rotated Sorted Array :: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+---------------------------------------------------------------------------------------------------------------------------------------------
+// linear search - O(n)
+// we do bin search
+class Solution {
+    public int findMin(int[] arr) {
+
+        int l = 0 , r = arr.length - 1 ;
+
+        while(l<r)
+        {
+            int mid = l + (r-l)/2 ;
+
+            if(arr[mid] > arr[r]) // mtlb ki minimum value right side m kahi hogi or wo mid + 1 hoga mid to nai hoga
+            {
+                l = mid + 1;  // qki sorted hota mid p element chhota hota right side s
+            }                  
+            else
+            {
+                r = mid ;  // mid hoskta h ans to mid krdia or further left dekhte jaao
+            }
+        }
+
+        return arr[r] ;
+        
+    }
+}
