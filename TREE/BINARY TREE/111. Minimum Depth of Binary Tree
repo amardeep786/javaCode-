@@ -1,0 +1,59 @@
+111. Minimum Depth of Binary Tree :: https://leetcode.com/problems/minimum-depth-of-binary-tree/
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public int minDepth(TreeNode root) {
+        
+        int level = 1;
+        Queue<TreeNode> que = new LinkedList<>();
+
+        if(root == null) return 0;
+        que.offer(root);
+
+        while(!que.isEmpty())
+        {
+            int n = que.size();
+
+            while(n-- != 0)
+            {
+                TreeNode temp = que.poll();
+
+                if(temp.left == null && temp.right == null)
+                {
+                    return level;
+                }
+
+                if(temp.left != null)
+                que.offer(temp.left);
+
+                if(temp.right != null)
+                que.offer(temp.right);
+            }
+            level++ ;
+        }
+
+        return level ;  // contains one node in path as soon as leaf return nodes count == level
+    }
+}
+
+
+// -------------------------- dfs -------------------------------------------------------------------------------------------------//
+// class Solution {
+//     public int minDepth(TreeNode root) {
+//             if(root == null)
+//             return 0;
+
+//         return dfs(root);
+//     }
+
+//     public int dfs(TreeNode root)
+//     {
+//         if(root == null)
+//         return Integer.MAX_VALUE;
+
+//         if(root.left == null && root.right == null)
+//         return 1;
+
+//         return 1 + Math.min(dfs(root.left) , dfs(root.right));
+//     }
+// }
