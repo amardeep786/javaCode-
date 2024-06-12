@@ -1,0 +1,32 @@
+74. Search a 2D Matrix ::https://leetcode.com/problems/search-a-2d-matrix/
+------------------------------------------------------------------------------------------------------------------------------------------------
+// 1-D me convert krk binsearch lgaado ya 2-d me hi
+
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        
+        // hum 0th row or n-1 th col s start krge agr target bda h to row++ else col -- 
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+
+        int i = 0 , j = cols - 1 ;
+
+        while(i>= 0 && i < rows && j>= 0 && j<cols)  // jbtk within bounds hai
+        {
+            if(matrix[i][j] > target)
+            {
+                j-- ;
+            }else if(matrix[i][j] < target)
+            {
+                i++ ;
+            }else
+            {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+}
