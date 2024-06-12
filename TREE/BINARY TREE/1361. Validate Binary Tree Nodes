@@ -1,0 +1,69 @@
+1361. Validate Binary Tree Nodes :: https://leetcode.com/problems/validate-binary-tree-nodes/
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+    binary tree properties -  1) every child has 1 parent only
+                            2) one root only
+                            3) connected
+
+    first 2 properties can be checked using map only
+*/
+class Solution {
+    public boolean validateBinaryTreeNodes(int n, int[] leftChild, int[] rightChild) {
+        Map<Integer,Integer> map = new HashMap<>();
+
+        for(int i = 0;i<n;i++)
+        {
+            if(map.containsKey(leftChild[i]) && i != map.get(leftChild[i]))   
+            return false;       // coz 2 diff parent
+
+            if(map.containsKey(rightChild[i]) && i != map.get(rightChild[i]))
+            return false;  // coz 2 diff parent
+
+            if(leftChild[i] != -1)
+            map.put(leftChild[i],i);
+
+            if(rightChild[i] != -1)
+            map.put(rightChild[i],i);
+        }
+
+        // ab isi map m koi ek aisi value honi chahiy ki null ho wahi root hoga
+        int countNonNull = 0,root = -1;
+        for(int i = 0;i<n;i++)
+        {
+            if(map.get(i) != null)
+            countNonNull++ ;
+            else
+            root = i ;       // root stored
+        }
+
+        if(n - countNonNull != 1)
+        return false;
+
+        // yaha aaye h mtlb ek root bhi hai  to bss connected dekhlo
+
+        return isConnected(root,leftChild,rightChild);
+    }
+
+    public boolean isConnected(int root,int[] leftChild,int[] rightChild)
+    {
+        int count = 0 ;
+
+        Queue<Integer> que = new LinkedList<>();
+        que.offer(root);
+
+        while(!que.isEmpty())
+        {
+            int temp = que.poll();
+            count++ ;
+
+            if(leftChild[temp] != -1)
+            que.offer(leftChild[temp]);
+
+            if(rightChild[temp] != -1)
+            que.offer(rightChild[temp]);
+        }
+
+        return count == leftChild.length;  // length store no of nodes
+    }
+}
