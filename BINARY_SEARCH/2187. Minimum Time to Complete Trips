@@ -1,0 +1,51 @@
+2187. Minimum Time to Complete Trips :: https://leetcode.com/problems/minimum-time-to-complete-trips/description/
+----------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ time ko ek ek s bdhaate rho and hrek bus ka dekhlo kitna complete hua h .. jb totalTrip k brabr aajaega 
+ tbb rukjaege
+*/
+
+/*
+    BINARY search 
+
+    suppose totalTrips  100 sec m complete hua to 101,102,103,,,m bhi hojaega to hum left jaak dekhege
+    to minimum 1 lgega baaki max dekh lege fr bin serch lga skte hain
+*/
+class Solution {
+    public long minimumTime(int[] time, int totalTrips) {
+        
+        long l = 1 ;
+
+        int n = time.length;
+        long mini = Long.MAX_VALUE ;
+        for(int i = 0;i<n;i++)
+        {
+            mini = Math.min(mini , time[i]);
+        }
+
+        long r = (long)Math.ceil(totalTrips * mini) ;  // worst case m itna time lgega
+
+        while(l < r)
+        {
+            long mid = l + (r-l)/2 ;
+
+            long trips = 0;
+
+            for(int i = 0;i<n;i++)   // hrek k paas jaakr total trips nikal lia particular mid time p
+            {
+                trips += mid/time[i] ;
+            }
+
+            if(trips >= totalTrips)
+            {
+                r = mid ;
+            }else 
+            {
+                l = mid + 1;
+            }
+
+        }
+
+        return l;
+    }
+}
