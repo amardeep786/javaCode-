@@ -34,3 +34,40 @@ class Solution {
         
     }
 }
+
+
+
+// -------------- gfg variation ie we have check from 1st element of array and not form 1 ----------------------------------------//
+
+class Complete{
+    
+  
+    int KthMissingElement(int arr[], int n, int k)
+    {
+         int l = 0 , r = arr.length-1;
+         
+        while(l<=r)
+        {
+            int mid = (l+r)>>1;
+
+           int missing = arr[mid] - (arr[0]+mid) ;    // mid + 1 jo hai wo bta rha ki 1 se lekr mid tkk agr sahi s sequence hote toh mid pe (mid+1 hona chahiye)
+
+                if(missing >= k)
+                {
+                    r = mid -1 ;
+                }else 
+                {
+                    l = mid+1 ;
+                }
+              
+        }
+
+         // end m l point kr rha uss index ko jo nta rha h ki pichhe kitne element dekh chuke hain
+
+        int ans = l + k + arr[0] - 1 ;
+
+        return ans > arr[n-1] ? -1 : ans  ;  // l no dekh chuke hain and k missed wale to l+k
+    }
+  
+    
+}
