@@ -1,0 +1,36 @@
+1539. Kth Missing Positive Number :: https://leetcode.com/problems/kth-missing-positive-number/
+-----------------------------------------------------------------------------------------------------------------------------------
+/*
+   agar array sequence hota and given array suupose sequence m 5 hai but given array me 8 likha hai mtlb ki yaha tkk 3 number missing hai
+
+   to bss aise krte krte dekh lege ki kitna missing hai usk hisaab s right left jaege
+*/
+class Solution {
+    public int findKthPositive(int[] arr, int k) {
+
+        int l = 0 , r = arr.length-1;
+         
+        while(l<=r)
+        {
+            int mid = (l+r)>>1;
+
+           int missing = arr[mid] - (mid+1) ;    // mid + 1 jo hai wo bta rha ki 1 se lekr mid tkk agr sahi s sequence hote toh mid pe (mid+1 hona chahiye)
+
+                if(missing >= k)
+                {
+                    r = mid -1 ;
+                }else
+                {
+                    l = mid+1 ;
+                }
+              
+        }
+
+         // end m l point kr rha uss index ko jo nta rha h ki pichhe kitne element dekh chuke hain
+
+
+
+        return k+l ;  // l no dekh chuke hain and k missed wale to l+k
+        
+    }
+}
