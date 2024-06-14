@@ -1,0 +1,37 @@
+875. Koko Eating Bananas :: https://leetcode.com/problems/koko-eating-bananas/description/
+-------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        int n = piles.length;
+        int maxi = Integer.MIN_VALUE ;
+        for(int i = 0;i<n;i++)
+        {
+            maxi = Math.max(maxi,piles[i]);
+        }
+        int l = 1 , r = maxi ;  // minimum 1 ghnta or maximum element jitna ek ghnte me 
+
+        while(l<r)
+        {
+            int mid = (l+r)>>1;
+
+            // check ki mid time m finish krpaegi ki nai 
+
+            int time = 0;
+            for(int i = 0;i<n;i++)
+            {
+                time += (int)Math.ceil(1.0*piles[i]/mid);
+            }
+
+            if(time <= h)
+            {
+                r = mid; // possible ans
+            }else
+            {
+                l = mid+1;
+            }
+
+        }
+
+        return r;
+    }
+}
