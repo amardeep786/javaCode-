@@ -1,0 +1,72 @@
+2300. Successful Pairs of Spells and Potions :: https://leetcode.com/problems/successful-pairs-of-spells-and-potions/
+--------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+brte force give TLE
+
+    observation ki  ->  x * y >= z then x * (y+1) is also >= z
+
+    to agar hum potion array ko sort krde orr hme ek element mil jae jisse speel k ek element ko potion k uss element s multiply krne p
+
+    suppose x * (required element) >= sucess
+
+    so reqired element >= success / x ;
+
+
+*/
+
+
+
+class Solution {
+    public int[] successfulPairs(int[] spells, int[] potions, long success) {
+        
+        int n = spells.length;
+        int[] res = new int[n];
+        int idx = 0;
+
+        Arrays.sort(potions);
+
+        for(int i = 0;i<n;i++)
+        {
+            int spell = spells[i];
+
+            int requiredValue = (int)Math.ceil(1.0 * success/spell) ;
+
+            if(requiredValue > potions[potions.length -1])
+            {
+                res[idx++] = 0 ;
+                continue;
+            }
+
+            int indexOfRequiredValue = binarySearch(potions,requiredValue);  // ye index dega smallest element jo ki wo ya use bda ho
+
+            
+            res[idx++] = potions.length - indexOfRequiredValue ;
+            
+
+            
+        }
+
+        return res;
+    }
+
+    public int binarySearch(int[]potions,int target)
+    {
+        int l = 0 , r = potions.length-1, possible = -1;
+
+        while(l<=r)
+        {
+            int mid = (l+r)>>1 ;
+
+            if(potions[mid] >= target)
+            {
+                possible = mid ;
+                r = mid -1;
+            }else
+            {
+                l = mid+1 ;
+            }
+        }
+
+        return possible ;  // arrayme element nai h
+    }
+}
