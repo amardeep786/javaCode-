@@ -1,0 +1,70 @@
+2439. Minimize Maximum of Array :: https://leetcode.com/problems/minimize-maximum-of-array/
+-----------------------------------------------------------------------------------------------------------------------------------------------
+/*
+    ek to hum check kr skte hain ki 1 maximum achieve kr skte hain then 2 then 3 to ye kaafi time lega wki 
+    fr y b check krna hoga ki itna le skta h ki nai ye b O(n) to n^2 tkk jaega 
+
+
+    OPTIMIZED - to hum y kr skte hain ki 1,2,3 lene k bjaaye hum lower = 1 and maxim = maximim value orr is ans p binary search 
+    lgaa kr check krle
+
+    O(logn)*n = nlogn
+*/
+
+class Solution {
+    public int minimizeArrayValue(int[] nums) {
+        
+        int maxi = Integer.MIN_VALUE , n = nums.length;
+
+        for(var i : nums)
+        {
+            maxi = Math.max(maxi , i);
+        }
+
+        int l = 1 , r = maxi ;
+        int res = 0;
+        while(l<= r)
+        {
+            int mid = (l+r)>>1;
+
+            // check kro ki y valid h ya nai
+            if(isValid(nums , mid))
+            {
+                res = mid;
+                r = mid - 1;
+            }else
+            {
+                l = mid + 1;
+            }
+        }
+
+        return res;
+    }
+
+    public boolean isValid(int[]nums , int mid)
+    {
+        long []copy = new long[nums.length];
+        int idx = 0;
+        for(var i : nums)
+        {
+            copy[idx++] = (long)i;
+        }
+
+        int n = nums.length;
+
+        for(int i = 0;i<n-1;i++)
+        {
+            if(copy[i] > mid)
+            return false;
+
+            long buffer = mid - copy[i] ;   // nums[i  chhota h lekin buffer hitna bdh skta h]
+
+            copy[i+1] = copy[i+1] - buffer;  // agla buffer jitna hi ght skta h
+        }
+
+
+        // last element ka agala nai h toh bsss isey dekhlo
+        return copy[n-1] <= mid;
+
+    }
+}
