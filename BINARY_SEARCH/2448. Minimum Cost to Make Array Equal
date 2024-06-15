@@ -1,0 +1,55 @@
+2448. Minimum Cost to Make Array Equal :: https://leetcode.com/problems/minimum-cost-to-make-array-equal/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// hum chahege ki beech wale element ki trf b jaaye taaki sbko kam steps lge hence less cost
+
+class Solution {
+    public long minCost(int[] nums, int[] cost) {
+        
+        long res = Long.MAX_VALUE;
+
+        int mini = Integer.MAX_VALUE , maxi = Integer.MIN_VALUE ,n = nums.length;
+
+        for(int i = 0;i<n;i++)
+        {
+            mini = Math.min(mini,nums[i]);
+            maxi = Math.max(maxi,nums[i]);
+        }
+
+        int l = mini , r = maxi ;
+
+        while(l <= r)
+        {
+            int mid = l + (r-l)/2 ;
+
+            // ab y dekhna h kis base p left ya right jaana h to hum mid or mid+1 dono k liy cost nikalege 
+            // agr mid + 1 ki cost jaad aayi mtlb hme left jaaana chahiye else right
+
+            long costMid = findCost(nums,cost,mid);
+            long costMidPlusOne = findCost(nums,cost,mid+1);
+
+            res = Math.min(res , Math.min(costMid,costMidPlusOne));
+
+            if(costMidPlusOne > costMid)   // agar baad wale ki cost jaad aaa rhi mtlb aage or bhi jaaada hogi to hum peeche jaege
+            {
+                r = mid - 1;
+            }else
+            {
+                l = mid+1 ;
+            }
+        }
+        return res;
+
+    }
+
+    public long findCost(int[]nums,int[]cost,int mid)
+    {
+        long costToMid = 0;
+        int n = nums.length;
+
+        for(int i = 0;i<n;i++)
+        {
+            costToMid += (long)Math.abs(nums[i] - mid) * cost[i] ; // sbko equal krne ki cost
+        }
+        return costToMid;
+    }
+}
