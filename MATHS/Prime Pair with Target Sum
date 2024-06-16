@@ -1,0 +1,48 @@
+Prime Pair with Target Sum  :: https://www.geeksforgeeks.org/problems/sum-of-prime4751/1
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public static ArrayList<Integer> getPrimes(int n) {
+        
+        boolean isPrime[] = new boolean[n+1];
+        
+        Arrays.fill(isPrime,true);
+        
+        isPrime[0] = false ;
+        isPrime[1] = false ;
+        
+        for(int i = 2;i*i<=n;i++)
+        {
+            for(int j = i*i ;j<=n;j+=i )
+            {
+                if(isPrime[j] == true)
+                    isPrime[j] = false;
+            }
+        }
+        
+        // ab jo true honge wo prime honge
+        boolean flag = false;
+        ArrayList<Integer> res= new ArrayList<>();
+        
+        for(int i = 2;i <= n;i++)  // ab bs travel krk dekhlo ki i or n-i true h ki nai 
+        {
+            if(isPrime[i] && isPrime[n-i])
+            {
+                res.add(i);
+                res.add(n-i);
+                flag = true;
+                break;
+            }
+        }
+        if(flag)
+        return res;
+        else
+        {
+            res.add(-1);
+            res.add(-1);
+            return res;
+        }
+        
+        
+    }
+}
+ 
