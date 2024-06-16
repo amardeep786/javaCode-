@@ -1,0 +1,81 @@
+1970. Last Day Where You Can Still Cross :: https://leetcode.com/problems/last-day-where-you-can-still-cross/
+----------------------------------------------------------------------------------------------------------------------------------------------
+/*
+
+brute - hrek cell m water fill krne k baad bfs/dfs lgaado
+        give TLE
+
+some optimization ki mid nikaalo and fr 0 se mid tkk paani bhr k check krlo so it is nlogn
+*/ 
+
+class Solution {
+    int [][] dir = {{-1,0},{1,0} , {0,-1},{0,1}};
+    public int latestDayToCross(int row, int col, int[][] cells) {
+        
+        int lastDay = 0 , l = 0 , r = cells.length - 1 ;   // 0 based index bnane k liy cell.length 
+
+        while(l<= r)
+        {
+            int mid = (l+r)>>1;
+
+            int[][] dupArray = new int[row][col];
+            for (int i = 0; i <= mid; i++) {
+                int r1 = cells[i][0] - 1;
+                int c1 = cells[i][1] - 1;
+                dupArray[r1][c1] = 1; // Fill with water
+            }
+
+            int startRow = 0;
+            boolean flag = false;
+
+            for(int j = 0;j<col;j++)
+            {
+                if(dupArray[startRow][j] == 0)
+                {
+                    if(canGoDown(dupArray,0,j))
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+
+            if(!flag )
+                r = mid - 1 ;
+            else
+            {
+                lastDay = mid ;
+                l = mid+1;
+            }
+
+            
+        }
+        return lastDay+1;  // 1 based indexing
+    }
+    public boolean canGoDown(int[][]dupArray,int i,int j)
+    {
+        if(i<0 || i>= dupArray.length || j < 0 || j>= dupArray[0].length || dupArray[i][j] == 1)
+        return false;
+
+        if(i == dupArray.length-1)
+        return true;
+
+        dupArray[i][j] = 1 ;  // mark visited
+
+        // go in all directions
+        for(var d : dir)
+        {
+            int i_new = i + d[0];
+            int j_new = j + d[1];
+
+            if( canGoDown(dupArray,i_new,j_new) == true)
+            return true;
+
+        }
+
+        // unvisited krne ki jrurt nai h qki iss rste s nai gye the to aage b kabi nai jaege
+        return false;
+
+
+    }
+}
