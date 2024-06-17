@@ -1,0 +1,68 @@
+633. Sum of Square Numbers :: https://leetcode.com/problems/sum-of-square-numbers/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// class Solution {
+//     public boolean judgeSquareSum(int c) {
+        
+//         for(long i = 0; i*i <= c ;i++)
+//         {
+//             double ans = Math.sqrt(c-(i*i));
+
+//             if(ans%1 == 0)  // check whether as is Integer or not
+//             return true;
+//         }
+
+//         return false;
+//     }
+// }
+
+//Approach-2 (Binary Search to find b)
+//T.C : sqrt(c * log(c))
+//S.C : O(1)
+// class Solution {
+//     public boolean judgeSquareSum(int c) {
+//         for (long a = 0; a * a <= c; a++) {
+//             int x = c - (int) (a * a);
+//             // b*b == x (we need to find the b which satisfies this)
+
+//             int b_start = 0, b_end = x;
+
+//             while (b_start <= b_end) {
+//                 long mid = b_start + (b_end - b_start) / 2;
+
+//                 if (mid * mid == x) {
+//                     return true;
+//                 } else if (mid * mid < x) {
+//                     b_start = (int) mid + 1;
+//                 } else {
+//                     b_end = (int) mid - 1;
+//                 }
+//             }
+//         }
+//         return false;
+//     }
+// }
+
+
+//Approach-3 (Using 2-Pointers)
+//T.C : O(sqrt(c))
+//S.C : O(1)
+class Solution {
+    public boolean judgeSquareSum(int c) {
+        long a = 0;
+        long b = (long) Math.sqrt(c);
+
+        while (a <= b) {
+            long k = a * a + b * b;
+
+            if (k < c) {
+                a++;
+            } else if (k > c) {
+                b--;
+            } else {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
