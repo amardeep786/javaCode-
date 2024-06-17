@@ -1,0 +1,71 @@
+Matrix Chain Multiplication :: https://www.geeksforgeeks.org/problems/matrix-chain-multiplication0303/1
+---------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution{
+     
+     int matrixMultiplication(int N, int arr[])
+    {
+        int dp[][] = new int[N][N];
+        for(var k : dp)
+        {
+            Arrays.fill(k,-1);
+        }
+        return help(arr,1,N-1,dp);
+    }
+    
+    public  int help(int[]arr,int i, int j,int dp[][])
+    {
+        if(i==j)    // agar ek hi matrix hai to 0 operations
+        return 0;
+        
+        if(dp[i][j] != -1)
+        return dp[i][j];
+        // try all partitions
+        int mini = Integer.MAX_VALUE ;
+        for(int k = i;k<j;k++) // j-1 tkk chlega qki atleast 1 matric hona chahiy partition k liy
+        {
+            int steps = arr[i-1]*arr[k]*arr[j] + help(arr,i,k,dp) + help(arr,k+1,j,dp); // cost + i se k tkk + k se j tkk
+            
+            mini = Math.min(mini,steps);
+        }
+        
+        return dp[i][j] = mini;
+    }
+}
+
+*/
+
+// ---------------- BOTTOM UP --------------------------------------------------------------//
+
+class Solution{
+     
+    int matrixMultiplication(int N, int arr[])
+    {
+        int dp[][] = new int[N][N];
+        
+        // 1 matrix ka multiply 0 
+        
+        for(int i = 1;i<N;i++)  // base case
+        {
+            dp[i][i] = 0 ;
+        }
+        
+        
+        for(int i = N-1;i>= 1;i--)  // i ko bde s chhote ki trf laa rhe 
+        {
+            for(int j = i+1;j<N;j++)    // j hmesa right m tha to j ko i+1 s start kia
+            {
+                int mini = Integer.MAX_VALUE ;
+                for(int k = i;k<j;k++) // j-1 tkk chlega qki atleast 1 matric hona chahiy partition k liy
+                {
+                    int steps = arr[i-1]*arr[k]*arr[j] + dp[i][k] + dp[k+1][j]; // cost + i se k tkk + k se j tkk
+                    
+                    mini = Math.min(mini,steps);
+                }
+        
+             dp[i][j] = mini;
+            }
+        }
+        
+        return dp[1][N-1];
+    }
+}
