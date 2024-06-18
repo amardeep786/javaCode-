@@ -1,0 +1,181 @@
+826. Most Profit Assigning Work :: https://leetcode.com/problems/most-profit-assigning-work/
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+// ------------------------------------- USING HEAP ---------------------------------------------------------------------------------------------------------//
+
+/*
+
+class Solution {
+    public int maxProfitAssignment(int[] difficulty, int[] profit, int[] worker) {
+        
+        // hme profit max chahiy to hm max profit ko store kr lenge or saath me corresponding difficulty ko
+        int n = profit.length , m = worker.length;
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->
+        {
+            return Integer.compare(b[0],a[0]);
+        });
+
+        
+        for(int i = 0;i<n;i++)
+        {
+            pq.offer(new int[]{profit[i],difficulty[i]});
+        }
+        // workers ko b descending order m sort krna hoga qki koi worker queue ki top kaam ko nai kr paaya to baaki b nai krp aege to 
+        // uss element ko hum nikal denge apne queue s
+
+        Arrays.sort(worker);
+        reverse(worker);
+
+        //  ab bss hreak worker k paas jaakr dekho ki kitna max profit la pata h
+
+        int res = 0;
+        //int i = 0;
+        
+            for(int i = 0;i<m;i++)
+            {            
+                if(!pq.isEmpty())
+                {
+                   int top[] = pq.peek();
+                    if(worker[i] >= top[1])  // max pofit wala kaam  hi worker i dekh rha h 
+                    {
+                        res += top[0];  // profit add krne k baad remove nai krna h qki hoskta h koi dusra b isi kaam ko krle
+                        
+                    }else
+                    {
+                        // worker i nai kr paya to aage b koini kr paega to isko pq s htado
+                        pq.poll();
+                        i-- ;   // taaki usi worker pr rhe
+                    } 
+                }
+                
+            }
+
+        return res;
+    }
+
+    public void reverse(int [] worker)
+    {
+        int l = 0 , r = worker.length-1 ;
+
+        while(l<r)
+        {
+            int temp = worker[l];
+            worker[l] = worker[r];
+            worker[r] = temp;
+            l++;
+            r--;
+        }
+    }
+}
+
+
+*/
+
+// ----------------------------------- BINARY SEARCH -------------------------------------------------------------------------------------------------------//
+
+/*
+class Solution {
+    public int maxProfitAssignment(int[] difficulty, int[] profit, int[] worker) {
+
+        int n = profit.length , m = worker.length;
+
+        List<int[]> list = new ArrayList<>();
+
+        for(int i = 0;i<n;i++)
+        {
+            list.add(new int[]{difficulty[i],profit[i]});
+        }
+
+        // difficulty k base p sort krdia (fyda -> ab jb worker array p traverse krege to  usk liy knsi diffculty ki wo krskta h wo logn m nikl jaega )
+        Collections.sort(list, (a,b)-> Integer.compare(a[0],b[0]));
+
+        // lekin hme kisi task ko krna h to uski profit milega but hme  mid tkk ki sbse jaada 
+        // profit kisse mil rha h wo dekhna h
+
+
+        // Pre-processing to find the maximum profit till index i at constant time
+
+
+        // ye iskliy krna h ki maanlo work 4 krskta h koi bnda to wo work3 work2 sb krlega ki sort h list to maximum fyda hoskta h koi deta jiski difficulty isse kam 
+        // hai and profit jaada to hm cumulative hi max profit till i nikal lege
+        int maxi = list.get(0)[1];
+        for (int i = 1; i < list.size(); i++) {
+            int []temp = list.get(i);
+            maxi = Math.max(maxi,temp[1]); // dekhlo knsa bda h wo daal do
+            temp[1] = maxi;
+           
+        }
+
+        int totalProfit = 0;
+
+        for(int i = 0;i<m;i++)      // all workers
+        {
+            int l = 0, r = list.size()-1;
+            int maxProfit = 0;
+
+            while(l<=r)
+            {
+                int mid = (l+r)>>1 ;
+
+                if(list.get(mid)[0] <= worker[i])
+                {
+                    maxProfit = Math.max(maxProfit,list.get(mid)[1]) ;
+                    l = mid+1 ;  // aage dekhlo ki kya pta aage max mile
+                }else
+                {
+                    r = mid -1 ;
+                }
+            }
+
+            totalProfit += maxProfit ;
+        }
+
+        return totalProfit;
+
+    }
+}
+
+*/
+
+// ----------------------------------- TWO POINTER -------------------------------------------------------------------------------------------------------//
+class Solution {
+    public int maxProfitAssignment(int[] difficulty, int[] profit, int[] worker) {
+
+        
+        int n = profit.length , m = worker.length;
+        List<int[]> list = new ArrayList<>();
+
+        for(int i = 0;i<n;i++)
+        {
+            list.add(new int[]{difficulty[i],profit[i]});
+        }
+
+        Collections.sort(list, (a,b)-> Integer.compare(a[0],b[0]));
+
+        // ab worker ko sort krdege yaha or 2 pointer rkhege ek worker ko point krega or ek dusre ko
+        // koi owrker kisi difculty p rukega to agla worker bhi utna profitt to kma hi paega kuki ascending m sort h worker to wo nya ki difficulty of work jada hogii
+
+
+        Arrays.sort(worker);  // ek worker jaha ruega dusra wahi s aage kree
+        int  j = 0 ;
+
+        int total = 0 , curr = 0 ;  // total and current profit
+        for(int i = 0;i<m;i++)
+        {
+            // curr ko 0 nai krna h baar baar kuki curr jitna profit to next worker kmaega hi
+            while(j<n && worker[i] >= list.get(j)[0])
+            {
+                curr = Math.max(curr, list.get(j)[1]) ; // sbse acha profit aayega
+                j++ ;  // next worker
+                
+            }
+
+            // yaha tkk wek worker apna max profit le aaya toh usey ans m add krdp
+            total += curr;
+        }
+
+        return total;
+
+    }
+}
+
