@@ -1,0 +1,101 @@
+73. Set Matrix Zeroes :: https://leetcode.com/problems/set-matrix-zeroes/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// ------------ brute force O(n^2) approx ------space O(n+m) for arrays-------------------------------------------------------------//
+
+// class Solution {
+//     public void setZeroes(int[][] matrix) {
+        
+//         int n = matrix.length;
+//         int m = matrix[0].length ;
+
+//         boolean zeroRows[] = new boolean[n];
+//         boolean zeroCols[] = new boolean[m];
+
+//         for(int i = 0;i<n;i++)
+//         {
+//             for(int j = 0;j<m;j++)
+//             {
+//                 if(matrix[i][j] == 0)  // marked all rows and cols
+//                 {
+//                     zeroRows[i] = true;
+//                     zeroCols[j] = true;
+//                 }
+//             }
+//         }
+
+
+//         for(int i = 0;i<n;i++)
+//         {
+//             for(int j = 0;j<m;j++)
+//             {
+//                 if(zeroRows[i] || zeroCols[j])
+//                 {
+//                     matrix[i][j] = 0;
+//                 }
+//             }
+//         }
+
+//     }
+// }
+
+
+
+// ------------ optimized O(n^2) approx ------space O(1)-------------------------------------------------------------//
+// wo jo space le rhe the usey ab first row and col m store krdege alg s row nai lege
+// pehle element first row or col dono m aarha h toh col0 ek variable bna dege uss common ko alg store keaane k liy
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        
+        int n = matrix.length;
+        int m = matrix[0].length ;
+
+        int col0 = matrix[0][0];
+
+        for(int i = 0;i<n;i++)
+        {
+            for(int j = 0;j<m;j++)
+            {
+                if(matrix[i][j] == 0)  // marked all rows and cols
+                {
+                    if(j==0) col0 = 0;
+                    else
+                    matrix[0][j] = 0;
+
+                    matrix[i][0] = 0;
+                }
+            }
+        }
+
+        // abhi 0th row and col ko nahi chhedna hai baaki k liy dekhlo ki usk 0th row or col me 0 hai ki nai 
+        for(int i = 1;i<n;i++)
+        {
+            for(int j = 1;j<m;j++)
+            {
+                
+                if((matrix[i][0]== 0) || (matrix[0][j] == 0))
+                {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        // ab pehle 0th col ko dekhlo 
+
+        for(int i = 1;i<m;i++)
+        {
+            if(matrix[0][0] == 0)  // agr row 0 = 0 hai toh
+            matrix[0][i] = 0;
+        }
+
+        if(col0 == 0)
+        {
+            for(int i = 0;i<n;i++)
+            {
+            
+                matrix[i][0] = 0;
+            }
+
+        }
+
+    }
+}
