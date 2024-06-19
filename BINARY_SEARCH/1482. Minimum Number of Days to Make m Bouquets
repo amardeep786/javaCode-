@@ -1,0 +1,58 @@
+1482. Minimum Number of Days to Make m Bouquets :: https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// hum days p binary search lga denge orr dekh lege ki mid days tkk m bouque bn rhe hain ki nai 
+ 
+
+class Solution {
+    public int minDays(int[] bloomDay, int m, int k) {
+        
+        //  bloomDay ko sort krne ki jurut nai h qki hum days p bonsary sarch lgaege
+        int start_day = 0 ,end_day =  -1;
+
+        for(var d : bloomDay)
+        {
+            if(d > end_day)
+            end_day = d;  // max element
+        }
+
+        int minDays = -1;
+        while(start_day <= end_day)
+        {
+            int mid = start_day + (end_day - start_day)/2 ;
+
+            if(canMakeBouquet(bloomDay,mid,m,k))
+            {
+                minDays = mid ;
+                end_day = mid-1;
+            }else
+            {
+                start_day = mid+1;
+            }
+        }
+        return minDays ;
+    }
+
+    public boolean canMakeBouquet(int[]bloomDay,int mid,int m , int k)
+    {
+        int bouquetCount = 0 , adjacentDays = 0;
+
+        for(int i = 0;i<bloomDay.length;i++)
+        {
+            if(bloomDay[i] <= mid)    // agar value kamm hai to mtlb wo bloom k chuka h
+            {
+                adjacentDays++ ;
+            }else
+            {
+                adjacentDays = 0;   // nahi kia to adjacent k=count = 0
+            }
+
+            if(adjacentDays == k)
+            {
+                bouquetCount++;
+                adjacentDays = 0;
+            }
+        }
+
+        return bouquetCount >= m;
+    }
+}
