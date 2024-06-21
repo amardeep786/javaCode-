@@ -1,0 +1,47 @@
+1052. Grumpy Bookstore Owner :: https://leetcode.com/problems/grumpy-bookstore-owner/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// hum hrek minutes k window m dekh lenge ki kaha jaada customers unsatisfied hain 
+// bss max unsatisfied ko satisfied kr dege
+
+class Solution {
+    public int maxSatisfied(int[] customers, int[] grumpy, int minutes) {
+
+        // pehle initial k window me dekh lo ki kitne unsatisfied hain 
+
+        int currentUnsatisfied = 0 ;
+        for(int i = 0;i<minutes;i++)
+        {
+            currentUnsatisfied += customers[i]*grumpy[i] ;  // agar grumpy[i] 1 hua to add hoga current unsatified me else nai
+        }
+
+        int maxUnsatified = currentUnsatisfied ;
+
+        int i = 0 , j = minutes;
+
+        // ab window ko aage slide krte jaao
+        while(j < customers.length)
+        {
+            currentUnsatisfied += customers[j]*grumpy[j] ;
+            currentUnsatisfied -= customers[i]*grumpy[i] ;
+
+            maxUnsatified = Math.max(maxUnsatified,currentUnsatisfied);
+            j++;
+            i++;
+        }
+
+
+        // ab poore array me traverse krk dekhlo jo pehle hi satisfied the wo to ans me honge hi 
+        // + max unsatisfied wale or add hojaege
+
+        int totalSatisfied = maxUnsatified;
+        int joPehleHiSatisfiedThe = 0;
+        // jo pehle hi satisfied the
+        for(int k = 0;k<customers.length;k++)
+        {
+            joPehleHiSatisfiedThe += customers[k]*(1 - grumpy[k]);  // qki grumpy 0 mtlb satisfied isliy 1- kia taaki 1-0 = 1or value add hojaegi
+        }
+
+        return totalSatisfied + joPehleHiSatisfiedThe ;
+        
+    }
+}
