@@ -1,0 +1,98 @@
+1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit :: https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+    hme hrek subarray me agr min -max pta lga jaae to agr uss max-min ka diff kimit s kam h to us array me sbhi ka limit s kam hpga
+
+    to hum min - max varaible rkh skte hain pr hme minimum element ka index bhi chahiy hoga qki suppose kbhi max-min limit s jada aaya
+    to hme to hme apne window ko miimum element k baad tk lekr jana hoga usk liy minimum element ka index chahiye hoga
+
+    lekin fr minimum index k baad tkk s jo bhi window h aage ka usme fr minimum chahiye hoga to hm traverse krege tohh complexity bdhegi
+
+    isliy hum minheap or maxheap rkh lege taaki minimum maximum or uska index wgera sbb rhegea paas me 
+
+    (obviously we cannot sort qki subarray hi bdl jaega) 
+
+*/
+
+/*
+class Solution {
+    public int longestSubarray(int[] nums, int limit) {
+        
+        PriorityQueue<int[]> maxPq = new PriorityQueue<>((a, b) -> b[0] - a[0]); // max-heap
+        PriorityQueue<int[]> minPq = new PriorityQueue<>((a, b) -> a[0] - b[0]); // min-heap
+
+        int n = nums.length;
+
+        int i = 0 , j = 0 , maxLength = 0;
+
+        while(j<n)
+        {
+            maxPq.offer(new int[]{nums[j],j});
+            minPq.offer(new int[]{nums[j],j});
+
+            while(maxPq.peek()[0] - minPq.peek()[0] > limit)
+            {
+                // shift window towards min element + 1
+                i = Math.min(maxPq.peek()[1],minPq.peek()[1])+1;  // eg 10,1 to maxheap k index s aage movekran pdega
+
+                // pq me jo element ab window k baahr k hain unhe pop krdo
+
+                while(minPq.peek()[1]<i)
+                {
+                    minPq.poll();
+                }
+
+                while(maxPq.peek()[1]<i)
+                {
+                    maxPq.poll();
+                }
+            }
+
+            maxLength = Math.max(maxLength,j-i+1);
+            j++;
+
+        }
+
+        return maxLength;
+    }
+}
+
+*/
+
+// ------------------------  METHOD @@ 2 ---------------------------------------------------------------------------------------------------------------//
+
+// hume 2 priority queue nahi lena h blki hme aisi chij chahiye jisme hum element daale to wo sorted rkhe 
+// duplicates daal sken to wo TREEMAP hai
+
+class Solution {
+    public int longestSubarray(int[] nums, int limit) {
+        
+        TreeMap<Integer,Integer> set = new TreeMap<>(); // use as set
+
+        int n = nums.length;
+
+        int i = 0 , j = 0 , maxLength = 0;
+
+        while(j<n)
+        {
+            set.put(nums[j],set.getOrDefault(nums[j],0)+1);
+
+            while(set.lastKey() - set.firstKey() > limit)
+            {
+                set.put(nums[i],set.get(nums[i])-1);  // ek freq ghta di
+
+                if(set.get(nums[i]) == 0)
+                set.remove(nums[i]);
+
+                i++;
+            }
+
+            maxLength = Math.max(maxLength,j-i+1);
+            j++;
+
+        }
+
+        return maxLength;
+    }
+}
