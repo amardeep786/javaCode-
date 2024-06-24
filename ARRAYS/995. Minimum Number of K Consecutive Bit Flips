@@ -1,0 +1,119 @@
+995. Minimum Number of K Consecutive Bit Flips :: https://leetcode.com/problems/minimum-number-of-k-consecutive-bit-flips/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// AGR  hrek index p jaakr k flips maare toh O(n*k) hojaegae  --> TLE
+
+// Optimised 1 : 
+
+/*
+
+    hme hrek index k liy ek count rkhege ki wo flip hua h ya nai ya fr pichle kisi flips s usp koi effect hai ya nai 
+    jb b flips k baad element 0 bnta dikhega to hum flips bdha denge orr hrek index pr i-k jaakr dekhege ki waha flip hua tha ki nai
+    qki waha ka flip abhi b flipcount m contri kr rha hoga jbki i index pr i-k ka koi kaam nai h to flip ko ghtana pdega ek se 
+
+    O(N) -> do dry run
+ 
+*/
+
+
+// class Solution {
+//     public int minKBitFlips(int[] nums, int k) {
+        
+//         int n = nums.length;
+
+//         int flipCountAtI = 0;
+//         int totalFlips = 0;
+//         boolean isFlipped[] = new boolean[n];
+
+//         for(int i = 0;i<n;i++)
+//         {
+//             if(i>=k && isFlipped[i-k])  // i-k ab i p asr nai dalega isliy agr flip hua tha toh
+//             {
+//                 flipCountAtI--;         // ek minus krdo taki waha ka flip ab current index p koi effect na dale
+//             }
+
+//             if(flipCountAtI%2 == nums[i])
+//             {
+//                 if(i+k>n)   // mtlb kahi 0 mila pr k size ka array hi nahi bcha
+//                     return -1;
+
+//                 flipCountAtI++ ;
+//                 totalFlips++;
+
+//                 isFlipped[i] = true;
+//             }
+//         }
+
+//         return totalFlips;
+//     }
+// }
+
+//----------------- same code bs usi array ko modify krdo instead ek array lene s-----------------O(1)space--------//
+
+// class Solution {
+//     public int minKBitFlips(int[] nums, int k) {
+        
+//         int n = nums.length;
+
+//         int flipCountAtI = 0;
+//         int totalFlips = 0;
+        
+
+//         for(int i = 0;i<n;i++)
+//         {
+//             if(i>=k && nums[i-k]==2)  // i-k ab i p asr nai dalega isliy agr flip hua tha toh
+//             {
+//                 flipCountAtI--;         // ek minus krdo taki waha ka flip ab current index p koi effect na dale
+//             }
+
+//             if(flipCountAtI%2 == nums[i])
+//             {
+//                 if(i+k>n)   // mtlb kahi 0 mila pr k size ka array hi nahi bcha
+//                     return -1;
+
+//                 flipCountAtI++ ;
+//                 totalFlips++;
+                
+//                 nums[i] = 2;   // usi array me 2 daal dia jaha jaha flip tha
+//             }
+//         }
+
+//         return totalFlips;
+//     }
+// }
+
+// --------- agr usi array ko modify nai krskte tbb deque lelo or k size and pehla element y btaega ki i-k p modify hua tha ki nai-------------------------
+class Solution {
+    public int minKBitFlips(int[] nums, int k) {
+        
+        int n = nums.length;
+
+        int flipCountAtI = 0;
+        int totalFlips = 0;
+        
+        Deque<Integer> deq = new ArrayDeque<>();
+
+        for(int i = 0;i<n;i++)
+        {
+            if(i>=k )  // i-k ab i p asr nai dalega isliy agr flip hua tha toh
+            {
+                flipCountAtI -= deq.pollFirst();  // agr 0 hua to kuj minus nai hoga agr 1 hua to 1 hoga
+            }
+
+            if(flipCountAtI%2 == nums[i])   // mtlb flip krna pdega
+            {
+                if(i+k>n)   // mtlb kahi 0 mila pr k size ka array hi nahi bcha
+                    return -1;
+
+                flipCountAtI++ ;
+                totalFlips++;
+                
+               deq.offer(1);   // usi array me 2 daal dia jaha jaha flip tha
+            }else
+            {
+                deq.offer(0);
+            }
+        }
+
+        return totalFlips;
+    }
+}
