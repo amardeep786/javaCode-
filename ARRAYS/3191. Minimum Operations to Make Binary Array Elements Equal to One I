@@ -1,0 +1,37 @@
+3191. Minimum Operations to Make Binary Array Elements Equal to One I :: https://leetcode.com/problems/minimum-operations-to-make-binary-array-elements-equal-to-one-i/
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// explanation given in its hard version :  https://leetcode.com/problems/minimum-number-of-k-consecutive-bit-flips/
+
+class Solution {
+    public int minOperations(int[] nums) {
+        int n = nums.length;
+
+        int k = 3;
+
+        int flipCountAtI = 0;
+        int totalFlips = 0;
+        
+
+        for(int i = 0;i<n;i++)
+        {
+            if(i>=k && nums[i-k]==2)  // i-k ab i p asr nai dalega isliy agr flip hua tha toh
+            {
+                flipCountAtI--;         // ek minus krdo taki waha ka flip ab current index p koi effect na dale
+            }
+
+            if(flipCountAtI%2 == nums[i])
+            {
+                if(i+k>n)   // mtlb kahi 0 mila pr k size ka array hi nahi bcha
+                    return -1;
+
+                flipCountAtI++ ;
+                totalFlips++;
+                
+                nums[i] = 2;   // usi array me 2 daal dia jaha jaha flip tha
+            }
+        }
+
+        return totalFlips;
+    
+    }
+}
