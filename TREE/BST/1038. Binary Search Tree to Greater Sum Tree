@@ -1,0 +1,25 @@
+1038. Binary Search Tree to Greater Sum Tree :: https://leetcode.com/problems/binary-search-tree-to-greater-sum-tree/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// brute - inorder ko store krlo then baar baaar root s jo bdi values h array me usey add krdo but it TLE
+// pehle right ko process krlo taaki bdi values ka cumulative sum hmesa rhe then left aao
+
+class Solution {
+    public void solve(TreeNode root, int[] sum) {
+        if (root == null) {
+            return;
+        }
+
+        solve(root.right, sum); // Process right subtree
+
+        sum[0] += root.val; // Update the sum with the value of the current node
+        root.val = sum[0]; // Update the current node value with the sum
+
+        solve(root.left, sum); // Process left subtree
+    }
+
+    public TreeNode bstToGst(TreeNode root) {
+        int[] sum = new int[1]; // Use an array to hold the sum because Java passes by value
+        solve(root, sum); // Start the conversion
+        return root; // Return the modified tree
+    }
+}
