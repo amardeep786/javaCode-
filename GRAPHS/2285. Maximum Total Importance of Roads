@@ -1,0 +1,31 @@
+2285. Maximum Total Importance of Roads :: https://leetcode.com/problems/maximum-total-importance-of-roads/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+// jiski degree jaada hai usey bda number denge tohh wo jaada add krege maximum krne me
+
+class Solution {
+    public long maximumImportance(int n, int[][] roads) {
+        
+        int degree[] = new int[n];
+
+        for(var road : roads)
+        {
+            int x = road[0];
+            int y = road[1];
+
+            degree[x]++ ;
+            degree[y]++ ;
+        }
+
+        // ab degreee ko sort krdo since ascending m hoga toh pehle ko value 1 dedo and 2no ko 2 and so on
+        Arrays.sort(degree);
+
+        long ans = 0;
+        for(int i = 1 ;i<=n;i++)
+        {
+            ans += (long)degree[i-1]*i ;  // coz degree 5 to uslo jo value assign krege wo 5 baar add hoga
+        }
+
+        return ans;
+    }
+}
