@@ -1,0 +1,61 @@
+Sum of Query II :: https://www.geeksforgeeks.org/problems/sum-of-query-ii5310/1
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// SEGMENT TREE IMPLEMENTATION 
+
+class Solution{
+    List<Integer> querySum(int n, int arr[], int q, int queries[])
+    {
+        int []segTree = new int[4*n];
+        
+        buildSegTree(arr,0,n-1,segTree,0); // 0 -> n-1 represents range represnet by root and 0th ki index of segtree and 0 is root index 
+        
+        List<Integer> result = new ArrayList<>();
+        
+        for(int i = 0;i< 2*q;i+=2)
+        {
+            int start = queries[i]-1 ;  // 0 based indexing
+            int end =  queries[i+1]-1 ;
+            
+            result.add(Query(start,end,0,0,n-1,segTree)); // 0-> root node index , 0->n-1  = range represent by root
+        }
+        
+        return result;
+    }
+    
+    public void buildSegTree(int []arr,int l, int r,int[] segTree,int idx)
+    {
+        if(l == r)
+        {
+            segTree[idx] = arr[l];
+            return;
+        }
+        
+        // mid s divide kro orr next nodex fill krwao pehle
+        int mid = l + (r-l)/2 ;
+        
+        buildSegTree(arr,l,mid,segTree,2*idx+1); 
+        buildSegTree(arr,mid+1,r,segTree,2*idx+2); 
+        
+        // abb aage ka array fill hogya hoga to current ka fill krdo
+        segTree[idx] = segTree[2*idx+1] + segTree[2*idx+2];
+    }
+    
+    public int Query(int start,int end,int idx,int l, int r,int[] segTree)  // index node ka or l and r uske ranges
+    {
+        if(l > end || start > r)
+        {
+            return 0;
+        }else if(l>=start  && r<=end )  // kisi node ki range agr completely withing range hai to node ki value hi return krdo
+        {
+            // tree me neeche orr jaane ki jrurt nai h yehi sum store kia h to isi ko return krdo
+            return segTree[idx];
+        }
+        
+        // aadha to curr node sum store kia h aadha nai to recursively dono trf jaakr dekho
+        int mid = l + (r-l)/2 ;
+        
+        return Query(start,end,2*idx+1,l,mid,segTree) + Query(start,end,2*idx+2,mid+1,r,segTree);
+    }
+    
+    
+}
