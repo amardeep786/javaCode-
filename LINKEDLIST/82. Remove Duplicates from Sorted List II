@@ -1,0 +1,40 @@
+82. Remove Duplicates from Sorted List II :: https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/
+Remove all occurences of duplicates in a linked list  :: https://www.geeksforgeeks.org/problems/remove-all-occurences-of-duplicates-in-a-linked-list/1
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+class Solution {
+    public Node removeAllDuplicates(Node head) {
+        
+        Node dummy = new Node(0);
+        dummy.next = head;
+        
+        Node prev = dummy;
+        Node curr = head ;
+        
+        while(curr != null)
+        {
+            if(curr.next != null && curr.data == curr.next.data)
+            {
+                
+                while(curr.next != null && curr.data == curr.next.data)
+                {
+                    curr = curr.next;
+                }
+                
+                prev.next = curr.next;  // prev k next ko update kro and  prev ko nai qki hoskta h 
+                                        // curr wala b repeat ho 
+            }
+            else
+            {
+
+                prev = prev.next;  
+            }
+
+                curr = curr.next;
+        }
+        
+        return dummy.next;
+    }
+}
