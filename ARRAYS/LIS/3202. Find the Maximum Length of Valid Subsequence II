@@ -1,0 +1,41 @@
+3202. Find the Maximum Length of Valid Subsequence II :: https://leetcode.com/problems/find-the-maximum-length-of-valid-subsequence-ii/description/
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/* 
+method 1 -> USING LIS variant 
+
+possible remainder 0 and 1 to n * 2 ka 2D array orr hrek element k liy dekh lenge ki pichle kis length s mil k wo jaada length bnaega 
+
+time complexity -  O(n^k)  which works fine
+  
+*/
+
+class Solution {
+    public int maximumLength(int[] nums, int k) {
+        
+        int n = nums.length;
+        int dp[][] = new int[n][k];     // to store remainder
+        
+        for(int i = 0;i<n;i++)
+        {
+            Arrays.fill(dp[i],1);   // initially sbhi subsequence ki length 1 hai
+        }
+        
+        int maxLength = 1;
+        
+        for(int i = 1;i<n;i++)
+        {
+            for(int j = 0;j<i;j++)
+            {
+                int rem = (nums[i] + nums[j])%k ;  // remainder dekhlo kya aaega hrek j p add krne p
+                
+                dp[i][rem] = Math.max(1 + dp[j][rem] , dp[i][rem] );   // say rem is 5 to dp[j][5] tkk jo max length thi usme ek add krk
+                                                                        // or khud ka dp[j][5] usme s jo max h wo ans 
+                maxLength = Math.max(maxLength, dp[i][rem]);            // maximum saath k saath hi nikalte rho
+                
+            }       
+        }
+        
+        return maxLength;
+    }   
+}
