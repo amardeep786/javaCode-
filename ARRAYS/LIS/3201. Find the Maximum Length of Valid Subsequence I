@@ -1,0 +1,93 @@
+3201. Find the Maximum Length of Valid Subsequence I :: https://leetcode.com/problems/find-the-maximum-length-of-valid-subsequence-i/
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+method 1 -> observation  -> O(n)
+
+
+class Solution {
+    public int maximumLength(int[] nums) {
+        
+        int n = nums.length;
+
+        // agar pehle dono ka sum even hai to next 2 or aage sbhi bhi ka sum bhi even hona vhahiye tbhi remainder same hoga
+        // same for odd
+        // or ek odd and dusra even hai to mod2 = 1 hoga to next 2 k liy even odd hona chahy to alternate 
+
+        // to overall hum saare odd number le skte hain 
+        // saare even le skte h
+        // alternate le skte hain  inhi teeno m jo bhi max h wahi ans hoga
+
+
+
+        // co -> count of odd , ce -> count of even , c -> alternating count
+        int co = 0 , ce = 0 , c = 0 , flag = -1;  // flag = -1 mtlb abhi kuj nai dekha , flag = 0 mtlb even dekha tha last , flag = 1 = odd dekha 
+
+
+        for(var i : nums)
+        {
+            if(i%2 == 1)
+            {
+                co++ ;
+
+                if(flag != 1)
+                {
+                    c++ ;
+                    flag = 1;
+                }
+            }else
+            {
+                ce++ ;
+                if(flag != 0) // agar even nai dekha h pehle 
+                {
+                    c++ ;    // to hmne ya to kuj nai dekha ya odd dekha to alternate b ++
+                    flag = 0;  // ab hmne even dekh lia 
+                }
+            }          
+
+        }
+
+        return Math.max(co , Math.max(ce,c));
+        
+    }   
+}
+
+*/
+
+/* 
+method @ 2 -> USING LIS variant 
+
+possible remainder 0 and 1 to n * 2 ka 2D array orr hrek element k liy dekh lenge ki pichle kis length s mil k wo jaada length bnaega 
+
+time complexity -  O(n^2)
+ -> which give TLE so above observation method will work 
+*/
+class Solution {
+    public int maximumLength(int[] nums) {
+        
+        int n = nums.length;
+        int dp[][] = new int[n][2];     // to store remainder
+        
+        for(int i = 0;i<n;i++)
+        {
+            Arrays.fill(dp[i],1);   // initially sbhi subsequence ki length 1 hai
+        }
+        
+        int maxLength = 1;
+        
+        for(int i = 1;i<n;i++)
+        {
+            for(int j = 0;j<i;j++)
+            {
+                int rem = (nums[i] + nums[j])%2 ;
+                
+                dp[i][rem] = Math.max(1 + dp[j][rem] , dp[i][rem] );
+
+                maxLength = Math.max(maxLength, dp[i][rem]);
+                
+            }       
+        }
+        
+        return maxLength;
+    }   
+}
