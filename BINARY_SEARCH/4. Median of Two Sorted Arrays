@@ -1,0 +1,215 @@
+4. Median of Two Sorted Arrays :: https://leetcode.com/problems/median-of-two-sorted-arrays/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+// -------------------------APPROACH 1 brute force  Tc O(n) and space O(m+n) ------------------------------------------------------------/
+
+// class Solution {
+//     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+
+//         int m = nums1.length;
+//         int n = nums2.length;
+
+//         int i = 0, j = 0,k=0;
+//         int temp[] = new int[m+n];
+
+//         while(i<m && j<n)
+//         {
+//             if(nums1[i] == nums2[j])
+//             {
+//                 temp[k++] = nums1[i++];
+//             }
+//             else if(nums1[i] < nums2[j])
+//             {
+//                 temp[k++] = nums1[i++];
+//             }else
+//             {
+//                 temp[k++] = nums2[j++];
+//             }
+
+//         }
+
+//         while(i<m)
+//         {
+//             temp[k++] = nums1[i++];
+//         }
+
+//         while(j<n)
+//         {
+//             temp[k++] = nums2[j++];
+//         }
+
+//         if((m+n)%2 == 1)
+//         return (temp[(m+n)/2])/1.0;
+//         else
+//         return (temp[temp.length/2]+temp[(temp.length/2)-1])/2.0;
+         
+//     }
+// }
+
+
+//-----------------------------------------APPROACH 2 better  Tc O(n) and space O(1) ---------------------------------------------------
+
+/*
+
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+
+        //  isme bss wo temp array ko htakr index store krlia knsa nikaalna h jb b pointer uss 
+        //   index p phocha toh waha k element ko store kr lia
+
+        int m = nums1.length;
+        int n = nums2.length;
+
+        int i = 0, j = 0, k = 0 ;
+        int idx1= 0 , idx2 = 0;
+       
+        idx1 = (m+n)/2 -1 ;
+        idx2 = (m+n)/2 ;
+
+        int ele1 = Integer.MIN_VALUE , ele2 = Integer.MIN_VALUE ;
+
+        while(i<m && j<n)
+        {
+            if(nums1[i] <= nums2[j])
+            {
+                if(k==idx1)
+                    ele1 = nums1[i++];          
+                else if(k==idx2)
+                    ele2 = nums1[i++];
+                else 
+                    i++;
+            }
+            else
+            {
+                if(k==idx1)
+                    ele1 = nums2[j++];               
+                else if(k==idx2)
+                    ele2 = nums2[j++];
+                else 
+                    j++;
+            }
+            k++ ;
+        }
+
+        while(i<m)
+        {
+           if(k==idx1)
+                    ele1 = nums1[i++];          
+            else if(k==idx2)
+                ele2 = nums1[i++];
+            else 
+                i++;
+
+                k++ ;
+        }
+
+        while(j<n)
+        {
+            
+                if(k==idx1)
+                    ele1 = nums2[j++];               
+                else if(k==idx2)
+                    ele2 = nums2[j++];
+                else 
+                    j++;
+
+                k++;
+        }
+
+        if((m+n)%2 == 1)
+            return ele2;
+        else
+            return (ele1+ele2)/2.0;
+
+    }
+}
+
+*/
+
+//-----------------------------------------APPROACH 3 BINARY SEARCH  Tc O(log(min(m,n)))---------------------------------------------------
+
+/*
+    to agar kisi treh s hum dono array ko milakar 2 parts m divide krle half-half me or pta krle wo part sorted hai 
+    to hum median nikal skte h
+
+*/
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+
+
+        int m = nums1.length , n = nums2.length;
+
+        if(m > n)
+        {
+             return findMedianSortedArrays(nums2, nums1)  ;
+
+        }
+
+        // agr do parts m divide krege to left m kitna aaega or right m kitna aaega 
+        // (m+n+1)/2 itne elements left m honge tohh ( m+n - jitne left m honge ) utne right half m honge
+
+        // hum jo dono m s minimum array hai usp lgaege binary search to pehle jo chhota h usey rkhte hain 
+        int left = (m+n+1)/2 ;
+
+        // ab left m bhi  choices hongi ki nums1 s kitne lu or nums2 se 
+        // to we maanege ki nums1 s kuj nai lia to mtlb poore ka poora left side hmne dusre array s bhr dia orr right side wale m 
+        // nums1 wale element gye 
+
+        // ya phr nums1 s ek element lia to baaki k left-1 elements humne nums2 s liy and right side m nums1 k baaki elements and nums2
+        // k baaki elements
+
+        // to isko linear fashion m krne ki jgeh hum binary m krege 
+
+        int l = 0 , r = m;  // ie left k liy hum minim kuj b naa le nums1 se yaa phr max me sbkuj lele nums1 ka 
+
+        while(l <=r)
+        {
+            int Px = l + (r-l)/2 ;   // itne elements from nums1
+
+            // means ki mid elements hum nums1 s lenge and left - mid nums2 se
+
+            int Py = left - Px ;  // itne from nums2
+
+            // left half wale
+            int x1 = (Px == 0)?Integer.MIN_VALUE:nums1[Px-1];       // left part m nums1 ka sbse bda elements
+            int x2 =  (Py == 0)?Integer.MIN_VALUE:nums2[Py-1];      // left part m nums2 ka sbse bda elements
+           
+           
+           // right half waale
+            int x3 = (Px == m)?Integer.MAX_VALUE: nums1[Px];        // right part m nums1 ka sbse chhota elements
+            int x4 = (Py == n)?Integer.MAX_VALUE:  nums2[Py] ;       // right part m nums2 ka sbse chhota elements
+
+
+            if(x1 <= x4 && x2 <= x3)   // mtlb hmne sorted order m divide krdia 
+            {
+                // agr even tha to left k max + right k min hi beech m honge to insa avaerage
+                if((m+n)%2 == 0)
+                {
+                    // left ka sbse bda 
+                    int bigLeft = Math.max(x1,x2);
+                    int smallRight = Math.min(x3,x4);
+
+                    return  (bigLeft + smallRight)/2.0 ;
+                }else
+                {
+                    // odd hai to middle wala jo ki left part m last m tha
+                    int bigLeft = Math.max(x1,x2);
+                    return bigLeft*1.0 ;
+                }
+            }
+
+            // mtlb unsorted tha to koi upr wali condition fail hui hogi
+
+            if(x1 > x4)  // mtlb hmne nums1 s jaada element pick krliy hain to kam krna pdega 
+            {
+                r = Px-1 ;
+            }else
+            {
+                l = Px+1 ;
+            }
+
+        }
+        return 1.0;
+
+    }
+}
