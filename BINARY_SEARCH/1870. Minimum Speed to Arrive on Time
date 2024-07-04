@@ -1,0 +1,56 @@
+1870. Minimum Speed to Arrive on Time :: https://leetcode.com/problems/minimum-speed-to-arrive-on-time/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+    hum 1 se lekr ek ek spped check krte jaate hain ki iss speed m posible hai ki nai offic ephochne within givin time 
+    O(n2) ->TLE
+
+    to ek ek speed check krne k bjaaye hum binary search lgakr spped nikale to then O(nlogn) ->accepted
+*/
+
+class Solution {
+    public int minSpeedOnTime(int[] dist, double hour) {
+
+
+        int n = dist.length;
+        
+        int l = 1 , r = (int)1e7;  // given  h ki max sppeed 10^7
+
+        int minSpeed = -1 ;
+
+        while(l <= r)
+        {
+            int mid = l + (r-l)/2 ;
+
+            if(isPossible(dist,hour,n,mid)) // agar iss speed s possible hai 
+            {
+                minSpeed = mid ;   // ye to ans m store krhi lo 
+                r = mid - 1 ;   // orr peeche jaakr dekhoo
+            }else
+            {
+                 l = mid  + 1 ;
+            }
+        }
+
+        return minSpeed;
+        
+    }
+
+    public boolean isPossible(int[] dist , double hour , int n , int mid)
+    {
+        // last wale k liy Integer lena jruri nai h qki usk baad koi train nai h to last ka point wla time hi include krege
+
+        double time = 0;
+
+        // last k liy alg s dekh lege baaki k liy abhi time calculate krte h
+
+        for(int i = 0;i<n-1;i++)
+        {
+            time += Math.ceil(1.0*dist[i]/mid) ;
+        }
+
+        time += 1.0*dist[n-1]/mid ;
+
+        return time <= hour ;
+    }
+}
