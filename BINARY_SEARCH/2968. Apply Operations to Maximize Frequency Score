@@ -1,0 +1,121 @@
+2968. Apply Operations to Maximize Frequency Score :: https://leetcode.com/problems/apply-operations-to-maximize-frequency-score/description/
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+/*
+    in BRUTE Force , hum hrek element ko kisi ek array k element k brabr bnana chahege 
+
+    SORT -> taaki distance kam wwale elements aas paas ho issey freq ko equal bnaane m help rhega 
+
+    ab agar hreak elements ko jaakr dekhege ki kitne frequency bna skte hain to O(n*n) : n for all elements and n for try to make freq equal
+
+
+    ---------------  OPTIMISED  - binary serach on anser ------------------------------------------------------
+
+    to hme pta h minimum score 1 hoga qki 1 to hai hi sbki frequency 
+    maximum frequency n hogi ki saare elements hi same ho jaaye to max score n 
+
+    itna continue krte h 
+*/
+class Solution {
+    public int maxFrequencyScore(int[] nums, long k) {
+        int n = nums.length;
+        Arrays.sort(nums);
+        int minScore = 1 , maxScore = n ;
+
+        // hme ek prefix sum bhi chahiye taaki hum ez calculte krle ki kisi window ko particular element bnane m kitne 
+        // operation lgege
+
+        long prefixSum[] = new long[n];
+        prefixSum[0] = nums[0];
+
+        for(int i = 1;i<n;i++)
+        {
+            prefixSum[i] = prefixSum[i-1] + nums[i];
+        }
+
+
+        int res = 0;
+        while(minScore <= maxScore)
+        {
+            int midScore = minScore + (maxScore-minScore)/2 ;
+
+            if(isPossible(nums,prefixSum,midScore,k)) 
+            {
+                res = midScore ;
+                minScore = midScore + 1 ;   // aage check krlo ki orr score bdh skta hai kya 
+            }
+            else
+            {
+                maxScore = midScore - 1 ;
+            }
+        }
+        return res;
+    }
+
+    private boolean isPossible(int[] nums , long prefixSum[] ,int score , long k)
+    {
+        int n = nums.length;
+
+        // muje hreak score size subarray ko dekhna h ki kya kisi bhi score size subarray ko equal bna skta hu kya 
+        // agar haan to true else  false
+
+        // ab ek sorted subArray h to mai chahuga ki usk sbhi elements ko usk middle k brabr bnau taaki 
+        // left-right dono trf s bnana ez pde
+
+        int i = 0 , j = score-1;    // initiall window size qk score = 3 btaega ki 3 freq chahiy to mtlb hme 3-3 ki window
+                                    // chahiye hogi to index 0 to 2 hoga initially
+        while(j<n)
+        {
+            int target_idx = (i+j)/2;
+            long target_element = nums[target_idx] ;   // hum window ko iss element k brabr bnana chahte h
+
+            // to iss index s pehle jitne elements the agr sbko target element bna dia toh 
+            int numberOfElementsBeforeTargetIndex = target_idx - i ;  // after i and before target
+
+            // agr insbko target bnaadu to sum kya hoga
+            long newSumLeft = numberOfElementsBeforeTargetIndex * target_element ;
+
+            // itne hi elements ka purana sum kya tha wo calculate kro 
+            long oldSumLeft  = 0;
+
+            if(target_idx == 0)
+            {
+                oldSumLeft = 0;
+            }else
+            {
+                oldSumLeft  = prefixSum[target_idx - 1] - (i==0?0:prefixSum[i-1]);
+            }
+
+            long operationNeedOnLeft = Math.abs(newSumLeft - oldSumLeft) ;
+
+
+            // --------- for right side----------------------------------------------------------------
+
+            int numberOfElementsAfterTargetIndex = j - target_idx ;
+
+             // agr insbko target bnaadu to sum kya hoga
+            long newSumRight = numberOfElementsAfterTargetIndex * target_element ;
+
+             // itne hi elements ka purana sum kya tha wo calculate kro 
+            long oldSumRight = prefixSum[j] - prefixSum[target_idx];
+
+            long operationNeedOnRight = Math.abs(newSumRight - oldSumRight) ;
+
+
+            long totalOperation  = operationNeedOnLeft + operationNeedOnRight ;
+
+            if(totalOperation <= k)
+            return true;
+
+            i++;
+            j++;
+
+
+        }
+
+        // agr kbhi b true nai hua to false
+        return false;
+
+    }
+}
