@@ -1,0 +1,139 @@
+93. Restore IP Addresses :: https://leetcode.com/problems/restore-ip-addresses/description/
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+// jo bola h wo krdo ie kisi b point s 3 length tkk lelo and jb b 2-3 length k lenge to validity check krlo ki 0 s start naa ho 
+// 0-255 k beech m ho orr hmara pointer jb outof bound ho to 4 parts ho uske 
+
+// last m jo extrA DOT HOGA USE htana pdega
+
+class Solution {
+    public List<String> restoreIpAddresses(String s) {
+        
+        List<String> res = new ArrayList<>();
+        int n = s.length();
+
+        if(n>12 || n < 3)
+        {
+            return res;
+        }
+
+        int parts = 0 ;
+        StringBuilder sb = new StringBuilder();
+
+        solve(s,0,0,res,sb);
+        return res;
+    
+    }
+
+    public void solve(String s,int idx,int parts , List<String> res,StringBuilder sb)
+    {
+        int n = s.length();
+
+        if(idx==n && parts==4)
+        {
+            // last decimal ko remove krdo as backtrack hoksr aaye hain 
+            sb.deleteCharAt(sb.length()-1);
+            res.add(sb.toString());
+            return ;
+        }
+
+        // 3 possiblility
+
+        if(idx+1 <= n)      // try for 1 length
+        {
+            int lengthBefore = sb.length();
+
+            solve(s,idx+1,parts+1,res,sb.append(s.substring(idx,idx+1)).append("."));
+
+            sb.setLength(lengthBefore);     // shared across all recursive calls to backtrack krna pdega 
+        }
+        
+
+        if(idx+2 <= n && isValid(s.substring(idx,idx+2)))       // try for 2 length
+        {
+             int lengthBefore = sb.length();
+              solve(s,idx+2,parts+1,res,sb.append(s.substring(idx,idx+2)).append("."));
+               sb.setLength(lengthBefore); 
+        }
+      
+
+        if(idx+3 <= n && isValid(s.substring(idx,idx+3)))       // try for 3 length
+        {
+            int lengthBefore = sb.length();
+            solve(s,idx+3,parts+1,res,sb.append(s.substring(idx,idx+3)).append("."));
+            sb.setLength(lengthBefore); 
+
+        }
+
+    }
+
+    public boolean isValid(String str)
+    {
+        if(str.charAt(0) == '0')
+        {
+            return false;
+        }
+
+        if( Integer.parseInt(str) >255)
+        return false;
+
+        return true;
+    }
+}
+
+
+
+
+// --- using string --- each recursive call has separate copy of string but stringbuilder has same copy ------------------------------
+// class Solution {
+//     public List<String> restoreIpAddresses(String s) {
+//         List<String> res = new ArrayList<>();
+//         int n = s.length();
+
+//         if (n > 12 || n < 4) {
+//             return res;
+//         }
+
+//         solve(s, 0, 0, res, "");
+//         return res;
+//     }
+
+//     public void solve(String s, int idx, int parts, List<String> res, String curr) {
+//         int n = s.length();
+
+//         if (idx == n && parts == 4) {
+//             // Remove the last dot before adding to the result
+//             res.add(curr.substring(0, curr.length() - 1));
+//             return;
+//         }
+
+//         // If there are too many parts or we've gone beyond the length of the string
+//         if (parts >= 4 || idx >= n) {
+//             return;
+//         }
+
+//         // Try length 1
+//         if (idx + 1 <= n) {
+//             solve(s, idx + 1, parts + 1, res, curr + s.substring(idx, idx + 1) + ".");
+//         }
+
+//         // Try length 2
+//         if (idx + 2 <= n && isValid(s.substring(idx, idx + 2))) {
+//             solve(s, idx + 2, parts + 1, res, curr + s.substring(idx, idx + 2) + ".");
+//         }
+
+//         // Try length 3
+//         if (idx + 3 <= n && isValid(s.substring(idx, idx + 3))) {
+//             solve(s, idx + 3, parts + 1, res, curr + s.substring(idx, idx + 3) + ".");
+//         }
+//     }
+
+//     public boolean isValid(String str) {
+//         if (str.length() > 1 && str.charAt(0) == '0') {
+//             return false; // Leading zeros are not allowed except for "0"
+//         }
+
+//         int value = Integer.parseInt(str);
+//         return value >= 0 && value <= 255;
+//     }
+// }
