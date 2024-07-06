@@ -1,0 +1,26 @@
+944. Delete Columns to Make Sorted :: https://leetcode.com/problems/delete-columns-to-make-sorted/description/
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public int minDeletionSize(String[] strs) {
+        
+        int n = strs.length;
+        int k = strs[0].length();
+        int count = 0;
+
+        for(int i = 0;i<k;i++)  // hreak word k length tkk jana h 
+        {
+            for(int j = 1;j<n;j++)
+            {
+                if(strs[j].charAt(i) < strs[j-1].charAt(i))  // agr aage ka word chhota hojaega peeche k word s to delete
+                {
+                    count++ ;
+                    break;    // wrna aage k character chote hue to extra ans add hoga
+                }
+            }
+
+        }
+
+        return count;
+    }
+}
