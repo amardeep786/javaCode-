@@ -1,0 +1,44 @@
+520. Detect Capital :: https://leetcode.com/problems/detect-capital/description/
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public boolean detectCapitalUse(String word) {
+        
+        if(allCapital(word) || allSmall(word) || restSmall(word.substring(1)))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean allCapital(String word)
+    {
+        for(var ch : word.toCharArray())
+        {
+            if(ch < 'A' || ch > 'Z')
+            return false;
+        }
+        return true;
+    }
+
+    private boolean allSmall(String word)
+    {
+        for(var ch : word.toCharArray())
+        {
+            if(ch < 'a' || ch > 'z')
+            return false;
+        }
+        return true;
+    }
+
+    private boolean restSmall(String word)
+    {
+        for(var ch : word.toCharArray())
+        {
+            if(ch < 'a' || ch > 'z')
+            return false;
+        }
+        return true;
+    }
+}
