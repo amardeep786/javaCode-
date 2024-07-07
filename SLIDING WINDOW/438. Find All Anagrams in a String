@@ -50,3 +50,60 @@ class Solution {
     }
     
 }
+--------------------------------------------------------------------------------------------------------------------------------------------------
+Count Occurences of Anagrams :: https://www.geeksforgeeks.org/problems/count-occurences-of-anagrams5839/1
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+
+    int search(String pat, String txt) {
+       
+       // ek map bna leta hu pattern ki freq ka and txt k hrek pattern length tkk ki freq patt s match
+       // kra lenge agr sbb zero hua to ana hai else nai 
+       
+       int n = txt.length() , m = pat.length();
+       
+       int freq[] = new int[26];
+       
+       for(var ch : pat.toCharArray())  // go to every char of pattern and store freq
+       {
+           freq[ch-'a']++ ;
+       }
+       
+       int i = 0 , j = 0 ,ans = 0;
+       
+       while(j < n)
+       {
+           // freq ghtaado jo b char j p hai 
+           freq[txt.charAt(j)-'a']-- ;
+           
+           if((j-i+1) == m) // agr m length ka mil gya toh 
+           {
+               if(allZero(freq))
+               {
+                   ans++ ;
+               }
+               freq[txt.charAt(i)-'a']++;
+                i++;
+           }
+           
+           // window shift hoga aage to i p jo char h uski freq bdhaado frse se and i ko aage shift krdo
+           
+           j++;
+       }
+       
+       return ans;
+    }
+    
+    private boolean allZero(int[] freq)
+    {
+        for(var i : freq)
+        {
+            if(i != 0)
+            return false;
+        }
+        
+        return true;
+    }
+}
+
