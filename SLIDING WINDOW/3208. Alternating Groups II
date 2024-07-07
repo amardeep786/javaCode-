@@ -1,0 +1,34 @@
+3208. Alternating Groups II :: https://leetcode.com/problems/alternating-groups-ii/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+// just append the array twice taki visualization ez ho 
+// baaki hr baar ye dekhte jaao ki window k last element pichhle element s match naa ho 
+// to window size bdhaate jaao else window ko 1 s shuru kro fr se
+// window size k s bda hua tbb b ans m add kro qki wo window alternation ka toh hai hi 
+
+class Solution {
+    public int numberOfAlternatingGroups(int[] colors, int k) {
+        
+        int n = colors.length;
+        int ans = 0 , window = 1 ;
+
+        for(int i = 1;i<= n-1+k-1 ;i++)
+        {
+            if(colors[i%n] != colors[(i-1+n)%n])
+            {
+                window++;
+            }else
+            {
+                window = 1;
+            }
+
+            if(window >= k)
+            {
+                ans++ ;
+            }
+        }
+
+        return ans;
+        
+    }
+}
