@@ -1,0 +1,215 @@
+1444. Number of Ways of Cutting a Pizza :: https://leetcode.com/problems/number-of-ways-of-cutting-a-pizza/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+// try all possible cutting from horizontal // then vertical and see if we can assign 
+
+/*
+
+class Solution {
+
+    int m , n ;
+    int mod = (int)1e9+7;
+    int apples[][] = new int[51][51];   // max appless
+    public int ways(String[] pizza, int k) {
+
+         m = pizza.length;
+         n = pizza[0].length();
+
+/*       
+        make apples array or pizza array
+
+        (i,j) -> stores number of apples from i,j  to m-1,n-1
+
+        qki horizontally ya vertically cut krege to bottom righmost point same rhega to isliy i,j to m-1,n-1
+
+        ye isliy ki isse mujhe help milegi ki kitne apples hain agr ek section htadu tohh
+*/
+
+/*
+         for(int i = m-1;i>=0;i--)
+         {
+            for(int j = n-1;j>=0;j--)
+            {
+                apples[i][j] = apples[i][j+1];   // kisi cell k liy uske right side m kitne hai 
+            
+                //usse cell ki neeche kitne apples hain 
+
+                for(int l = i;l<m;l++)  // gives apples below it
+                {
+                    if(pizza[l].charAt(j) == 'A')
+                    apples[i][j]+=1;
+
+                }
+            }
+         }
+
+        return solve(0,0,k);   // (0,0) s start krna h orr k bndo m baatna h
+    }
+
+    public int solve(int i,int j,int k)
+    {
+        if(apples[i][j] < k)        // agar apples hi kamm hai or bnde jaada hain to 0 return krdo
+        {
+            return 0;
+        }
+
+        // agar ek bnda h to poora usey dedo bss ye dekh kar ki ek apple hai ki nai 
+        if(k==1)
+        {
+            return apples[i][j] >=1 ? 1 : 0 ;   // as it stores whole pizza 
+        }
+
+        int ans = 0;
+
+        // start horizontal cutting 
+        for(int h = i+1;h<m;h++)
+        {
+           // agr hth row p cut kia toh lower , upper m itne apples honge 
+
+            int lower_slice_apples = apples[h][j];
+            int upper_slice_apples = apples[i][j] - lower_slice_apples ;
+
+            // ab given hai ki upper part dena h or further cutting lower part m hogi 
+            // upper part greater than 1 hai to dedo and lower m jitne apples hai wo jitne bnde bche h km s km 
+            // utne to ho hi isliy 
+            if(upper_slice_apples >= 1 && lower_slice_apples >= k-1)
+            {
+                ans = (ans%mod  + solve(h,j,k-1)%mod)%mod;   //ab row h se baaki ka ans leaao
+            }
+        }
+
+
+        // start vertical cutting 
+        for(int v = j+1;v<n;v++)
+        {
+           // agr hth row p cut kia toh lower , upper m itne apples honge 
+
+            int right_slice_apples = apples[i][v];
+            int left_slice_apples = apples[i][j] - right_slice_apples ;
+
+            // ab given hai ki upper part dena h or further cutting lower part m hogi 
+            // upper part greater than 1 hai to dedo and lower m jitne apples hai wo jitne bnde bche h km s km 
+            // utne to ho hi isliy 
+            if(left_slice_apples >= 1 && right_slice_apples >= k-1)
+            {
+                ans = (ans%mod + solve(i,v,k-1)%mod)%mod;   //ab row h se baaki ka ans leaao
+            }
+        }
+
+        return ans;
+
+
+    }
+}
+
+*/
+// -------------------- MEMOIZATION ----------------------------------------------------------------------------------//
+
+class Solution {
+
+    int m , n ;
+    int mod = (int)1e9+7;
+    int apples[][] = new int[51][51];   // max appless
+
+    int [][][]dp = new int[51][51][11] ;  // as row-cols-k go upto 50,50,11
+
+    public int ways(String[] pizza, int k) {
+
+         m = pizza.length;
+         n = pizza[0].length();
+
+         for(var p : dp)
+         {
+            for(var q : p)
+            {
+                Arrays.fill(q,-1);
+            }
+         }
+
+/*       
+        make apples array or pizza array
+
+        (i,j) -> stores number of apples from i,j  to m-1,n-1
+
+        qki horizontally ya vertically cut krege to bottom righmost point same rhega to isliy i,j to m-1,n-1
+
+        ye isliy ki isse mujhe help milegi ki kitne apples hain agr ek section htadu tohh
+*/
+         for(int i = m-1;i>=0;i--)
+         {
+            for(int j = n-1;j>=0;j--)
+            {
+                apples[i][j] = apples[i][j+1];   // kisi cell k liy uske right side m kitne hai 
+            
+                //usse cell ki neeche kitne apples hain 
+
+                for(int l = i;l<m;l++)  // gives apples below it
+                {
+                    if(pizza[l].charAt(j) == 'A')
+                    apples[i][j]+=1;
+
+                }
+            }
+         }
+
+        return solve(0,0,k);   // (0,0) s start krna h orr k bndo m baatna h
+    }
+
+    public int solve(int i,int j,int k)
+    {
+        if(apples[i][j] < k)        // agar apples hi kamm hai or bnde jaada hain to 0 return krdo
+        {
+            return 0;
+        }
+
+        // agar ek bnda h to poora usey dedo bss ye dekh kar ki ek apple hai ki nai 
+        if(k==1)
+        {
+            return apples[i][j] >=1 ? 1 : 0 ;   // as it stores whole pizza 
+        }
+
+        if(dp[i][j][k] != -1)
+        return dp[i][j][k];
+
+        int ans = 0;
+
+        // start horizontal cutting 
+        for(int h = i+1;h<m;h++)
+        {
+           // agr hth row p cut kia toh lower , upper m itne apples honge 
+
+            int lower_slice_apples = apples[h][j];
+            int upper_slice_apples = apples[i][j] - lower_slice_apples ;
+
+            // ab given hai ki upper part dena h or further cutting lower part m hogi 
+            // upper part greater than 1 hai to dedo and lower m jitne apples hai wo jitne bnde bche h km s km 
+            // utne to ho hi isliy 
+            if(upper_slice_apples >= 1 && lower_slice_apples >= k-1)
+            {
+                ans = (ans%mod  + solve(h,j,k-1)%mod)%mod;   //ab row h se baaki ka ans leaao
+            }
+        }
+
+
+        // start vertical cutting 
+        for(int v = j+1;v<n;v++)
+        {
+           // agr hth row p cut kia toh lower , upper m itne apples honge 
+
+            int right_slice_apples = apples[i][v];
+            int left_slice_apples = apples[i][j] - right_slice_apples ;
+
+            // ab given hai ki upper part dena h or further cutting lower part m hogi 
+            // upper part greater than 1 hai to dedo and lower m jitne apples hai wo jitne bnde bche h km s km 
+            // utne to ho hi isliy 
+            if(left_slice_apples >= 1 && right_slice_apples >= k-1)
+            {
+                ans = (ans%mod + solve(i,v,k-1)%mod)%mod;   //ab row h se baaki ka ans leaao
+            }
+        }
+
+        return dp[i][j][k] = ans;
+
+
+    }
+}
