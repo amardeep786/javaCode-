@@ -1,0 +1,46 @@
+3169. Count Days Without Meetings :: https://leetcode.com/problems/count-days-without-meetings/
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+// since days 1e9 hoskte hain tohh hum itna bda array lekr solve nai krpaege MLE aajaega (ie prefix sum lekr or mark krte the)
+// ki kb start hua kb khtam 
+
+
+// so we can use SWEEP LINE METHOD ie ek line ko traverse kraate jaaege or store krege ki kaha kaha meeting hai 
+// then dekh lenge ki kitny meetng ek saath chl rhi h wahi ans 
+
+class Solution {
+    public int countDays(int days, int[][] meetings) {
+        
+        List<int[]> events = new ArrayList<>() ;   // store indexes kaha s kaha tkk meeting ho rhi h  
+
+        for(var t : meetings)
+        {
+            events.add(new int[]{t[0],1});
+            events.add(new int[]{t[1],-1});
+
+        }
+
+        // 2 dummy events add krdo first and last value handle krne k liye
+        events.add(new int[]{0,0});
+        events.add(new int[]{days+1,0});
+
+        Collections.sort(events,(a,b)->Integer.compare(a[0],b[0]));
+
+        // saare ascending order m aagye 
+
+        int current_running_meetings = 0;
+        int ans = 0;
+
+        for(int i = 0;i<events.size()-1;i++)
+        {
+            current_running_meetings += events.get(i)[1];           // agr 1 hai to add hoga and 0 hai to subtract
+
+            if(current_running_meetings == 0)
+            {
+                ans += Math.max(events.get(i+1)[0]-events.get(i)[0]-1 , 0);    // agle event ki start and curr event ki pehle value ko ghta k days nikaalo kb khaali h
+            }
+        }
+
+        return ans;
+    }
+}
