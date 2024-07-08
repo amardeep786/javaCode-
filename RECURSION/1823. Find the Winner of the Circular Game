@@ -1,0 +1,102 @@
+1823. Find the Winner of the Circular Game :: https://leetcode.com/problems/find-the-winner-of-the-circular-game/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+// ------------------------------ using Array -----------------------------------------------------------------------------------//
+
+/*
+class Solution {
+    public int findTheWinner(int n, int k) {
+        List<Integer> list = new ArrayList<>();
+        for(int i = 1;i<=n;i++)
+        {
+            list.add(i);
+        }
+
+        // jo bola h wo krdo ie 0 based indexing hai to every time i+k-1 elelemt delete hoga and new index bhi deleteed hoga qki next 
+        //element usi index p aagya hoga
+        int i = 0;  // start here
+        while(list.size()>1)
+        {
+            int size = list.size();   // for wrap around
+            int idx = (i+k-1)%size;
+
+            list.remove(idx);
+
+            i = idx ;
+        }
+
+        return list.get(0) ;  // ek element index 0 p hi hoga list k
+    }
+}
+
+*/
+
+// ------------------------------ using Queue -----------------------------------------------------------------------------------//
+
+/*
+
+
+// jis index ko delete krna h usey aage le aao front p and baaki k elemnts ko peeche ..jo last m bcha wo winner
+
+class Solution {
+    public int findTheWinner(int n, int k) {
+        Queue<Integer> que = new LinkedList<>();
+        for(int i = 1;i<=n;i++)
+        {
+            que.offer(i);
+        }
+
+        // jo bola h wo krdo ie 0 based indexing hai to every time i+k-1 elelemt delete hoga and new index bhi deleteed hoga qki next 
+        //element usi index p aagya hoga
+        
+        while(que.size()>1)
+        {
+            for(int i = 0;i<k-1;i++)   // inital k-1 elements ko peeche bhejdo 
+            {
+                que.offer(que.poll());
+            }
+
+            que.poll();     // rmove 1st element
+        }
+
+        return que.peek() ;  // ek element index 0 p hi hoga list k
+    }
+}
+
+*/
+
+// ------------------------------ using RECURSION -----------------------------------------------------------------------------------//
+class Solution {
+    public int findTheWinner(int n, int k) {
+        
+        int idx = findIndexOfWinner(n,k);
+
+        // since 1 - n tk elements store hoge in 0 based indexing to index me + 1 krege to winner element aajaega
+
+        return idx+1;
+    }
+
+    public int findIndexOfWinner(int n,int k)
+    {
+        // base case
+        if(n==1)
+        {
+            // jb ek bnda bchega to wo index 0 p hoga modifies array me 
+            return 0;   // return hoga to isme k add hoga for original index
+        }
+
+
+        // koi ek delete hoga to recursively call kro n-1 elements parr 
+        int futureAns = findIndexOfWinner(n-1,k);
+
+        // ye jo future ans h ye to array s kth element delete hone k baad aaya hoga 
+        // to original array m kya index hoga isk liy ans m k add krdo to original array m kya index hoga wo ans hoga
+
+        int actualIndexInOriginalArray = (futureAns+k)%n ;  // origianl ka size n tha to for wrap up
+
+        return actualIndexInOriginalArray;
+
+    }
+
+
+}
