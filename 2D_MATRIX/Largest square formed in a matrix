@@ -1,0 +1,36 @@
+Largest square formed in a matrix  :: https://www.geeksforgeeks.org/problems/largest-square-formed-in-a-matrix0806/1
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+class Solution {
+    static int maxSquare(int n, int m, int mat[][]) {
+        
+        int [][]copy = new int[n][m];       // (i,j) - > to store max square till (i,j)
+        int max = 0 ;
+        for(int j = 0;j<m;j++)      // copy first row as it is
+        {
+            copy[0][j] = mat[0][j];
+            max = Math.max(max,copy[0][j]);
+        }
+        
+        
+        for(int i = 1;i<n;i++)
+        {
+            for(int j = 0;j<m;j++)
+            {
+                int up = i-1 >= 0 ? copy[i-1][j] : 0;   
+                int left = j-1 >= 0 ? copy[i][j-1] : 0;
+                int diagonally = (i-1 >= 0) && (j-1 >= 0) ? copy[i-1][j-1] : 0;
+                
+                if(mat[i][j] == 1)
+                {
+                    copy[i][j] =1+ Math.min(up,Math.min(left,diagonally));  // teeno trf s jo minimum h usme ek add kro 
+                }
+                
+                max = Math.max(max,copy[i][j]);
+            }
+        }
+        
+        return max;
+    }
+}
