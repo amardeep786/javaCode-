@@ -1,0 +1,49 @@
+First negative in every window of size k :: https://www.geeksforgeeks.org/problems/first-negative-integer-in-every-window-of-size-k3345/1
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+// approach - > jese hi neg mile store krlo taaki future m pta lg jaae or window shift hoga to agr element neg hua to remove 
+// krdo
+class Compute {
+    
+    public long[] printFirstNegativeInteger(long A[], int N, int K)
+    {
+        int i = 0,j=0;
+        int n = N;
+        
+        Queue<Long>que = new LinkedList<>();
+        long res[] = new long[n-K+1];
+        int idx = 0;
+        
+        while(j<n)
+        {
+            if(A[j] < 0)
+                que.offer(A[j]);
+            
+            if(j-i+1 == K)
+            {
+                if(que.size() >=1)      // top element store neg 
+                {
+                    
+                    res[idx++]=que.peek();
+                }else
+                {
+                    res[idx++] = 0;
+                }
+                
+                
+                if(A[i] < 0)    // agr i ko move kr rhe h to dekh lo ki agr wo nega h to que s htaado qk wo window s baahr hojaega ab 
+                {
+                    que.poll();
+                }
+                i++;
+            }
+            
+            j++;
+            
+            
+        }
+        return res;
+        
+    }
+}
