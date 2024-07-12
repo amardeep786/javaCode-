@@ -1,0 +1,40 @@
+1003. Check If Word Is Valid After Substitutions :: https://leetcode.com/problems/check-if-word-is-valid-after-substitutions/description/
+--------------------------------------------------------------------------------------------------------------------------------------------------
+// isme abc remove krte krte check krskte hain ki empty bna ya nai agar bna to true else false
+class Solution {
+    public boolean isValid(String s) {
+        
+        int n = s.length();
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0;i<n;i++)
+        {
+            char ch = s.charAt(i);
+            if(ch == 'c' && sb.length() >=2 )
+            {
+                char pollTop = sb.charAt(sb.length()-1);
+                char pollSecondTop = sb.charAt(sb.length()-2);
+
+                int length = sb.length();
+
+                if(pollTop == 'b' && pollSecondTop == 'a')
+                {
+                    // sb.deleteCharAt(sb.length()-1);
+                    // sb.deleteCharAt(sb.length()-2);  // isme y error h ki upr wale deletion k baada length bdl jaegi to fr wo 1 length kam s 2 index peeche
+                                                        // dhundne chahega to wrong  to length store kraalo or length s acces kro 
+                        
+
+                    sb.deleteCharAt(length-1);
+                    sb.deleteCharAt(length-2);
+
+                    continue;                           // skip current char and dono char st s bhi hta dia
+                }
+            }
+                 sb.append(ch);
+            
+        }
+
+        return sb.isEmpty()?true:false;
+    }
+}
+
