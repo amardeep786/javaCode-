@@ -1,0 +1,123 @@
+1717. Maximum Score From Removing Substrings :: https://leetcode.com/problems/maximum-score-from-removing-substrings/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+// ------------------ WITH STACK ---------------------------------------------------------------//
+
+// stack provides facility to match with last seen characters
+/*
+class Solution {
+    public int maximumGain(String s, int x, int y) {
+        
+        int n = s.length();
+        int score = 0;
+        String maxString = x>y?"ab":"ba";
+        String minString = x<y?"ab":"ba";
+
+        // 1st pass remove maxString from string
+
+        String temp = removeStr(s,maxString);
+        //System.out.println("1st pass -> " + temp);
+        int len = temp.length();
+
+        int charRemoved = n - len ;
+        int pairsRemoved = (n-len)/2 ;
+
+        score += pairsRemoved*Math.max(x,y);  // abhi hmne max points wala string remove kia h
+
+       // System.out.println("1st pass -> " + score);
+        // 2nd paas remove min point string
+        String temp2 = removeStr(temp,minString);
+        int len2 = temp2.length();
+        //System.out.println("2st pass -> " + temp2);
+        charRemoved = len - len2;
+        pairsRemoved = (len - len2)/2 ;
+
+        score += pairsRemoved*Math.min(x,y);
+        //System.out.println("1st pass -> " + score);
+        return score;
+    }
+
+    public String removeStr(String s,String toRemove)
+    {
+        Stack<Character> st = new Stack<>();
+
+        for(var ch : s.toCharArray())
+        {
+            if(ch == toRemove.charAt(1) && !st.isEmpty() && st.peek() == toRemove.charAt(0)) // match found
+            {
+                st.pop();
+            }else
+            {
+                st.push(ch);
+            }
+        }
+
+        // stack m jo b string h return krdo
+        StringBuilder sb = new StringBuilder();
+        while(!st.isEmpty())
+        {
+            sb.append(st.pop());
+        }
+
+        return sb.reverse().toString();
+    }
+}
+
+*/
+// ------------------ WITHOUT STACK --------2 POINTER -------------------------------------------------------//
+
+// stack provides facility to match with last seen characters
+
+class Solution {
+    public int maximumGain(String s, int x, int y) {
+        
+        int n = s.length();
+        int score = 0;
+        String maxString = x>y?"ab":"ba";
+        String minString = x<y?"ab":"ba";
+
+        // 1st pass remove maxString from string
+
+        String temp = removeStr(s,maxString);
+        //System.out.println("1st pass -> " + temp);
+        int len = temp.length();
+
+        int charRemoved = n - len ;
+        int pairsRemoved = (n-len)/2 ;
+
+        score += pairsRemoved*Math.max(x,y);  // abhi hmne max points wala string remove kia h
+
+       // System.out.println("1st pass -> " + score);
+        // 2nd paas remove min point string
+        String temp2 = removeStr(temp,minString);
+        int len2 = temp2.length();
+        //System.out.println("2st pass -> " + temp2);
+        charRemoved = len - len2;
+        pairsRemoved = (len - len2)/2 ;
+
+        score += pairsRemoved*Math.min(x,y);
+        //System.out.println("1st pass -> " + score);
+        return score;
+    }
+
+    public String removeStr(String s,String toRemove)
+    {
+        
+        int i = 0 ;   // for writing purpose
+        StringBuilder sb = new StringBuilder();
+
+        for(int j = 0;j<s.length();j++)
+        {
+            sb.append(s.charAt(j));
+            i++;   // i++ hoke ab check krega ki kya isme ab ya ba jo b pass hua h main s wo dekh ah ya nai 
+
+            if(i>1 && sb.charAt(i-2) == toRemove.charAt(0) &&  sb.charAt(i-1) == toRemove.charAt(1))
+            {
+                sb.delete(i-2,i);
+                i-=2;
+            }
+        }
+
+        return sb.toString();
+    }
+}
