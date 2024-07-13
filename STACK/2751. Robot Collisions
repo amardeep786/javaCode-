@@ -1,0 +1,66 @@
+2751. Robot Collisions  :: https://leetcode.com/problems/robot-collisions/description/
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public List<Integer> survivedRobotsHealths(int[] positions, int[] healths, String directions) {
+        
+        int n = positions.length;
+        Integer actualIdx[] = new Integer[n];  // to store actual index
+
+        for(int i = 0;i<n;i++)
+        {
+            actualIdx[i] = i;   // this is index of array now we want to sort it accor to posiition on no line
+        }
+
+        Arrays.sort(actualIdx, (i,j)->{
+            return Integer.compare(positions[i], positions[j]);
+        });
+
+        List<Integer> res = new ArrayList<>();
+        Stack<Integer> st = new Stack<>() ;   // to store right directions so that whenever LEFT comes we can compare
+
+        for(var idx : actualIdx)
+        {
+            if(directions.charAt(idx) == 'R')
+            {
+                st.push(idx);
+            }else
+            {
+                // to ab stack k top s compare wegera kro 
+                while(!st.isEmpty() && healths[idx] > 0)
+                {
+                    int topIdx = st.pop();
+
+                    if(healths[topIdx] > healths[idx])
+                    {
+                        healths[topIdx] -=1;
+                        healths[idx] = 0;
+
+                        // stack m dubara daal do qki pop kia tha 
+                        st.push(topIdx);
+                    }else if(healths[topIdx] < healths[idx])
+                    {
+                        healths[topIdx] = 0;
+                        healths[idx] -= 1;
+                        
+                    }else
+                    {
+                        // dono ki health 0 krni h
+                        healths[topIdx] = 0;
+                        healths[idx] = 0 ;
+                    }
+                }
+            }
+        }
+
+        for(var t : healths)        // jinki health  +ve hai wahi ans m aaege
+        {
+            if(t>0)
+            {
+                res.add(t);
+            }
+        }
+
+        return res;
+    }
+}
