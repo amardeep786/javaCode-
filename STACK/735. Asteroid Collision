@@ -1,0 +1,48 @@
+735. Asteroid Collision :: https://leetcode.com/problems/asteroid-collision/
+--------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int[] asteroidCollision(int[] asteroids) {
+
+        Stack<Integer> st = new Stack<>();
+
+        for(var i : asteroids)
+        {
+            while(!st.isEmpty() && i < 0 && st.peek() > 0  )    // collision condition 
+            {
+                int sum = i + st.peek();
+                if(sum < 0)
+                {
+                    st.pop();
+                }else if(sum > 0)
+                {
+                    // just move to next element 
+                    i = 0;
+                    break;
+                }else
+                {
+                    // both equal so remove from stak
+                    i=0;   // loop s baahr aane ki condition + i = 0 tells ki ye i ko stack m nai dalna h
+                    st.pop();
+                }
+
+                
+            }
+            if(i!= 0)
+                {
+                    st.push(i);
+                }
+         
+        }
+
+      int[] res = new int[st.size()];
+      int idx = 0;
+
+      for(var t : st)
+      {
+        res[idx++] = t;
+      }
+
+        return res;
+
+    }
+}
