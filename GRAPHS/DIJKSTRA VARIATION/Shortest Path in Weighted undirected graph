@@ -1,0 +1,90 @@
+Shortest Path in Weighted undirected graph :: https://www.geeksforgeeks.org/problems/shortest-path-in-weighted-undirected-graph/1
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public List<Integer> shortestPath(int n, int m, int edges[][]) {
+        
+        List<Integer> res = new ArrayList<>();
+        
+        // make graph first
+        List<List<int[]>> graph = new ArrayList<>(n);
+        
+        for(int i = 0;i<n;i++)
+        {
+            graph.add(new ArrayList<>());
+        }
+        
+        int parent[] = new int[n];
+        parent[0] = -1 ;
+        
+        int cost[] = new int[n];
+        Arrays.fill(cost,Integer.MAX_VALUE);
+        cost[0] = 0;
+        
+        
+        
+        for(var edge : edges)
+        {
+            int u = edge[0];
+            int v = edge[1];
+            int w = edge[2];
+            
+            
+            graph.get(u-1).add(new int[]{v-1,w});
+            graph.get(v-1).add(new int[]{u-1,w});
+        
+        }
+        
+        // start from 0 for 0 based so put in priorityQueue
+        PriorityQueue<int[]>pq = new PriorityQueue<>((a,b)->a[1]-b[1]);  // sort based on cost
+        
+        pq.offer(new int[]{0,0}); // initially at 0 with 0 distance
+        
+        while(!pq.isEmpty())
+        {
+            int[]temp = pq.poll();
+            
+            int currNode = temp[0];
+            int currCost = temp[1];
+            
+            for(var nei : graph.get(currNode))
+            {
+                int nextNode = nei[0];
+                int dist = nei[1];
+                
+                if(currCost + dist < cost[nextNode])
+                {
+                    pq.offer(new int[]{nextNode,currCost + dist});
+                    cost[nextNode] = currCost + dist ;
+                    parent[nextNode] = currNode;
+                }
+            }
+        }
+        
+        // check ki cost[n-1] me kya h wo min cost hoga 
+        
+        if(cost[n-1] == Integer.MAX_VALUE)
+        {
+            res.add(-1);
+            return res;
+        }
+        
+        res.add(cost[n-1]);  // first add cost 
+        
+        int k = n-1;
+        Stack<Integer> st = new Stack<>();
+        while(k!= -1)           // add all parents to stack taaki reverse m shuru s parent aane lgege
+        {
+            st.add(k+1);
+            k = parent[k];
+        }
+        
+       
+        while(!st.isEmpty())
+        {
+            res.add(st.pop());   // adding paths 
+        }
+        return res;
+        
+    }
+}
