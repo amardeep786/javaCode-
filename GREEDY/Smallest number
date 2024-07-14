@@ -1,0 +1,50 @@
+Smallest number :: https://www.geeksforgeeks.org/problems/smallest-number5829/1
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public String smallestNumber(int s, int d) {
+        
+        
+        StringBuilder sb = new StringBuilder();
+
+        if(9*d < s)             // sbhi me 9 bhi fill kia tbb bhi sum nai bna paege 
+        {
+            return "-1";
+        }
+        
+        for(int i = d-1;i>=0;i--)
+        {
+            if(s>9)
+            {
+                sb.append('9');
+                s-=9;  // sum 9 s leess hogya 
+            }else
+            {
+                if(i==0) // kya ek hi place bchi h if yes to jo s bcha h wahi fill krdo 
+                    sb.insert(0,(char)(s+'0'));
+                else
+                {
+                    // mtlb places bchi hui h but sum ab 9 s kam hai to leftmost m 1 dal denge and current places 
+                    // pe sum -1 or baaki places pe 0 
+                    
+                    sb.insert(0,(char)((s-1) +'0')) ;
+                    i--;
+                    
+                    while(i>0)
+                    {
+                        sb.insert(0,'0');
+                        i--;
+                    }
+                    
+                    // ab leftmost p aagye hain tohh 1 fill krdo for smallest
+                    sb.insert(0,'1');
+                    break;
+                    
+                }
+            }
+        }
+        
+        return sb.toString();
+    }
+}
+
