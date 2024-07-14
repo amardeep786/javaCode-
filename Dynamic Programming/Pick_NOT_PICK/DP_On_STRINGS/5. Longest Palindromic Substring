@@ -1,0 +1,99 @@
+5. Longest Palindromic Substring :: https://leetcode.com/problems/longest-palindromic-substring/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// recursion + memo 
+
+/*
+class Solution {
+    public String longestPalindrome(String s) {
+        
+        int n = s.length();
+        int len = 0;
+        String res = new String();
+
+        boolean dp[][] = new boolean[s.length()+1][s.length()+1];
+        for(var t : dp)
+        Arrays.fill(t,false);
+
+        for(int i = 0;i<n;i++)
+        {
+            for(int j = i;j<n;j++)
+            {
+                if(isPalindrome(i,j,s,dp))
+                {
+                    if(j-i+1 > len)
+                    {
+                        len = j-i+1;
+                        res = s.substring(i,j+1);
+                    }
+                }
+            }
+        }
+
+        return res;
+        
+    }
+
+    public boolean isPalindrome(int i , int j , String s,boolean dp[][])
+    {
+        // we use recursive method so that we can memoize further
+
+        if(s.length() == 1)
+        return true;
+
+        if(i >= j)
+        return true;
+
+        if(dp[i][j] != false)
+        return dp[i][j];
+
+        if(s.charAt(i) == s.charAt(j))
+        {
+            return dp[i][j] = isPalindrome(i+1,j-1,s,dp);
+        }else
+        {
+            return false;
+        }
+    }
+}
+
+*/
+// ------------------------ BOTTOM UP ------------------------------------------------------------------------------------------------------------//
+class Solution {
+    public String longestPalindrome(String s) {
+
+        // hme 1 length then 2 length then 3 hrek p palindrome check kran ha to 
+        int n = s.length();
+        boolean dp[][] = new boolean[n][n];
+        String res = new String();
+        for(int length = 1 ; length <=n ;length++)
+        {
+            // ab i pehle 0 se ek length then 1 se ek length aise aise bdhega 
+            for(int i = 0;i + length - 1 < n ;i++)
+            {
+                int j = i + length - 1 ; // tbhi to last index from i to length is j and it should valid to loop m yehi condititon dalege 
+
+                if(i==j)        // 1 length hai to hmesa palindrom rhega 
+                {
+                    dp[i][j] = true;
+                }else if(i+1 == j)      // 2 hai to consecituibe check krlo 
+                {
+                    dp[i][j] = s.charAt(i) == s.charAt(j);
+                }
+                else
+                {
+                    dp[i][j] = (s.charAt(i) == s.charAt(j) && dp[i+1][j-1]);  // i and j should be equal and i+1 s j-1 ka check krlo 
+                }
+
+
+                if(dp[i][j])
+                {
+                    res = s.substring(i,j+1);
+                }
+            }
+        }
+
+
+        return res;
+
+    }
+}
