@@ -1,0 +1,85 @@
+307. Range Sum Query - Mutable :: https://leetcode.com/problems/range-sum-query-mutable/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+class NumArray {
+
+    int n ;
+    int segTree[];
+    public NumArray(int[] nums) {
+       n = nums.length; 
+       segTree = new int[4*n];
+       buildSegTree(nums,0,0,n-1);
+
+    }
+
+    public void buildSegTree(int[] nums,int idx , int l , int r)
+    {
+        if(l==r)
+        {
+            segTree[idx] = nums[l];
+            return ;
+        }
+
+        int mid = l + (r-l)/2;
+        buildSegTree(nums,2*idx+1,l,mid);
+        buildSegTree(nums,2*idx+2,mid+1,r);
+
+        segTree[idx] =  segTree[2*idx+1] +  segTree[2*idx+2] ;
+
+    }
+    
+    public void update(int index, int val) {
+        updateSegTree(0,0,n-1,index,val);
+    }
+
+    public void updateSegTree(int idxAtSegTree,int l,int r,int index,int val)
+    {
+        if(l==r)
+        {
+            segTree[idxAtSegTree] = val;
+            return;
+        }
+
+        int mid = l + (r-l)/2;
+
+        if(index <= mid)
+        {
+            // left side 
+            updateSegTree(2*idxAtSegTree+1,l,mid,index,val);
+        }else
+        {
+            updateSegTree(2*idxAtSegTree+2,mid+1,r,index,val);
+        }
+
+        segTree[idxAtSegTree] = segTree[2*idxAtSegTree+1] + segTree[2*idxAtSegTree+2]; 
+
+    }
+    
+    public int sumRange(int left, int right) {
+        
+        return querySum(0,0,n-1,left,right);
+    }
+
+    public int querySum(int idx,int l,int r,int left,int right)
+    {
+        // if node completely inside
+        if(l>= left && r<= right)
+        {
+            return segTree[idx];
+        }else if(r < left || l > right)
+        {
+            return 0;
+        }else
+        {
+            // parially overlap
+            int mid = l + (r-l)/2 ;
+            return querySum(2*idx+1,l,mid,left,right) + querySum(2*idx+2,mid+1,r,left,right);
+        }
+    }
+}
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * obj.update(index,val);
+ * int param_2 = obj.sumRange(left,right);
+ */
