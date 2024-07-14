@@ -1,0 +1,152 @@
+516. Longest Palindromic Subsequence :: https://leetcode.com/problems/longest-palindromic-subsequence/
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+// ---------- method 1 ---- ----------------RECUR + MEMO-------------------------------//
+
+/*
+reverse given string and find LCS of both  will be the longest palindromic subsequence
+
+*/
+
+/*
+class Solution {
+    public int longestPalindromeSubseq(String s) {
+        StringBuilder sb = new StringBuilder(s);
+        sb.reverse();
+        int n = s.length();
+        int dp[][] = new int[n+1][n+1];
+        for(var t : dp)
+        Arrays.fill(t,-1);
+
+        return LCS(s,sb.toString(),n,n,dp);
+    }
+
+    public int LCS(String s1,String s2,int n,int m,int dp[][])
+    {
+        if(n==0 || m == 0)  // further no common 
+        return 0 ; 
+
+        if(dp[n][m] != -1)
+        return dp[n][m];
+
+        if(s1.charAt(n-1) == s2.charAt(m-1))
+        {
+            return dp[n][m] = 1 + LCS(s1,s2,n-1,m-1,dp);
+        }
+
+        return dp[n][m] = Math.max(LCS(s1,s2,n,m-1,dp),LCS(s1,s2,n-1,m,dp));
+    }
+}
+
+*/
+
+// ---------- method 2 ---- ----------------BOTTOM UP-------------------------------//
+
+
+/*
+
+class Solution {
+    public int longestPalindromeSubseq(String s) {
+        StringBuilder sb = new StringBuilder(s);
+        sb.reverse();
+        int n = s.length();
+        int dp[][] = new int[n+1][n+1];
+
+        for(int i = 0;i<n;i++)
+        {
+            dp[i][0] = 0;
+            dp[0][i] = 0 ;
+        }
+
+        for(int i = 1;i<=n;i++)
+        {
+            for(int j = 1;j<=n;j++)
+            {
+                if(s.charAt(i-1) == sb.charAt(j-1))
+                {
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                }else
+                {
+                    dp[i][j] = Math.max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        }
+
+        return dp[n][n];
+
+    }
+}
+
+*/
+
+// ---------------- METHOD 3 ------- without LCS CODE --------------REC + MEMO ---------------------------------------------------------------------//
+
+/*
+class Solution {
+    public int longestPalindromeSubseq(String s) {
+        int n = s.length();
+        int dp[][] = new int[n+1][n+1];
+
+        for(var t : dp)
+        {
+            Arrays.fill(t,-1);
+        }
+        return help(s,0,n-1,dp);
+    }
+
+    public int help(String s,int i,int j, int dp[][])
+    {
+        if(i > j)
+        return 0;
+
+        if(i==j)
+        return 1;   // 1 length is always palindrome
+
+        if(dp[i][j] != -1)
+        return dp[i][j];
+
+        if(s.charAt(i) == s.charAt(j))   // equal hai to 2 length mil gya + aage dekhlo 
+        {
+            return dp[i][j] = 2 + help(s,i+1,j-1,dp);
+        }
+
+        return dp[i][j] =  Math.max(help(s,i+1,j,dp),help(s,i,j-1,dp));       // equal nai h to pick ya not pick cuurent chars
+    }
+}
+
+*/
+
+// ---------------- METHOD 4 ------- without LCS CODE --------------BOTTOM UP --- BLUE PRINT------------O(n^2)------------------------------------------------------//
+class Solution {
+    public int longestPalindromeSubseq(String s) {
+
+        int n = s.length();
+
+        int dp[][] = new int[n+1][n+1];  // dp[i][j] -> LPS from substring i to j
+
+        // ek length to hmesa hi palindrome hai 
+
+        for(int i = 0;i<=n;i++)
+        {
+            dp[i][i] = 1 ;    
+        }
+        int maxLen = Integer.MIN_VALUE ;
+        for(int len = 2 ;len <= n;len++)   // for every length
+        {
+            for(int i = 0;i+len-1<n;i++)
+            {
+                int j = i + len -1 ; // ending index starting from i to length len 
+                if( s.charAt(i) == s.charAt(j)  )
+                {
+                    dp[i][j] = 2 + dp[i+1][j-1] ;
+                }else
+                {
+                    dp[i][j] = Math.max(dp[i+1][j] , dp[i][j-1]);
+                }
+            }
+        }
+
+        return dp[0][n-1];
+
+    }
+}
