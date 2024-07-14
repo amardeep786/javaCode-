@@ -1,0 +1,75 @@
+3219. Minimum Cost for Cutting Cake II :: https://leetcode.com/problems/minimum-cost-for-cutting-cake-ii/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public long minimumCost(int m, int n, int[] horizontalCut, int[] verticalCut) {
+        int x = horizontalCut.length;
+        int y = verticalCut.length;
+        
+        int cost = 0;
+        
+        // we will get benefit when we choose max cost to cut first as after split there is no chance to get many max costs to cut
+
+        int horizontalPieces = 1 , verticalPieces = 1 ;   // initially 1 pices so 1 hori and 1 verti 
+
+        // to sort both arrays in reverse taaki max cost wale s processings start krde hum 
+
+        Arrays.sort(horizontalCut);
+        Arrays.sort(verticalCut);
+        
+        reverse(horizontalCut);
+        reverse(verticalCut);
+
+        int i = 0 , j = 0 ;  // dono array ka pointer ki kon bda h
+        
+        long res = 0;
+
+        while(i<x && j < y)
+        {
+
+            if(horizontalCut[i] >= verticalCut[j])
+            {
+                res += horizontalCut[i] * verticalPieces ;    // uss horizontal cut ko jitne b vertical pices hai sbsse cut lgegea to cost mu;tiply krdo
+                horizontalPieces++ ;
+                i++;
+            }else
+            {
+                 res += verticalCut[j] * horizontalPieces ;
+                 verticalPieces++;
+                 j++;
+            }
+        }
+
+        while(i<x)
+        {
+            res += horizontalCut[i] * verticalPieces ;
+                horizontalPieces++ ;
+                i++;
+        }
+
+        while(j<y)
+        {
+             res += verticalCut[j] * horizontalPieces ;
+                 verticalPieces++;
+                 j++;
+        }
+
+        return res;
+        
+    }
+    public void reverse(int []arr)
+    {
+        int i = 0;
+        int j = arr.length-1;
+
+        while(i<j)
+        {
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+
+            i++;
+            j--;
+        }
+    }
+    
+}
