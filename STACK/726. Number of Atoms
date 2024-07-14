@@ -1,0 +1,102 @@
+726. Number of Atoms :: https://leetcode.com/problems/number-of-atoms/description/
+--------------------------------------------------------------------------------------------------------------------------------------------------
+// we can store map in stack and jb bhi we get right bracket then usk baad k number ko map k sbhi element k size s multioly krdege
+class Solution {
+    public String countOfAtoms(String formula) {
+        int n = formula.length();
+
+        Stack<Map<String,Integer>> st = new Stack<>();
+
+        // intially put 1 map 
+        st.push(new HashMap<>());
+
+        int i = 0;
+        while(i<n)
+        {
+            // jb bhi left bracket aaya hme st m new entry daalni h or we can say ki nya formula aaya 
+
+            if(formula.charAt(i) == '(')
+            {
+                st.push(new HashMap<>());
+                i++;
+            }else if(formula.charAt(i) == ')')
+            {
+                // mtlb pehle to hme bracket k baaad knsa number h wo chahiye  then isko stack ki top entry 
+                // m jo bhi elements honge unk size s multiply krdege 
+
+                Map<String,Integer> top = st.pop();
+                i++;
+
+                StringBuilder sb = new StringBuilder();
+                // dekho ki kaha tkk number hai 
+                while(i<n && Character.isDigit(formula.charAt(i)))
+                {
+                    sb.append(formula.charAt(i));
+                    i++;
+                }
+
+                int multiplier = sb.length()>0 ? Integer.parseInt(sb.toString()):1;
+
+                //  ab jo map hmne pop kia tha usey elements k size ko multiply krna h
+                for(var key : top.keySet())
+                {
+                    int value = top.get(key);
+                    top.put(key , value * multiplier);
+                }
+
+                // ab jb iss entry ka kaam hogya h ti isko peeche jo formule pde the unk saath adjust krna h qki ab sb ek hai 
+                // to pichhle map m ye currrent map ki value dal do 
+
+                for(var key : top.keySet())
+                {
+                    st.peek().put(key,st.peek().getOrDefault(key,0)+top.get(key));  // peek stack m pichle map ko present kr rhi h or usme hum
+                    // add kr rhe hain or agr koi key pehle hi to uska count add krdo curr se 
+                }
+            }else
+            {
+                // mtlb ki koi element hoga 
+                StringBuilder element = new StringBuilder();
+                // pehle to definitely capital letter hoga to sko just append krdo
+
+                element.append(formula.charAt(i++));
+
+                // ye check krlo ki further koi small letter ho to wo isi ek element ka part h 
+
+                while(i<n && Character.isLowerCase(formula.charAt(i)))
+                {
+                    element.append(formula.charAt(i++));
+                }
+
+                // ab jo bhi number hai wo count hoga to usko pehle string m store krte hain fr int m convert kr lege
+                StringBuilder sb = new StringBuilder();
+                while(i<n && Character.isDigit(formula.charAt(i)))
+                {
+                    sb.append(formula.charAt(i++));
+                }
+
+                int count = sb.length() > 0 ? Integer.parseInt(sb.toString()):1;
+
+                // current map m insert krdo
+                st.peek().put(element.toString(),st.peek().getOrDefault(element.toString(),0)+count);
+            }
+        }
+
+        // sorted order m count chahiye to treeMap le lete hain 
+        Map<String,Integer> sorted = new TreeMap<>(st.peek()); // current map ko pass krne s wo map ab ordered n gya 
+
+        StringBuilder res = new StringBuilder();
+
+        for(var k : sorted.keySet())
+        {
+            res.append(k);
+
+            if(sorted.get(k)>1)
+            {
+                res.append(sorted.get(k));
+            }
+        }
+
+        return res.toString();
+
+    }
+}
