@@ -1,0 +1,61 @@
+219. Contains Duplicate II :: https://leetcode.com/problems/contains-duplicate-ii/description/
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// using sliding window 
+class Solution {
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+
+        Set<Integer> set = new HashSet<>(); // to check whetyher we have seen a number or not 
+
+        int i = 0,j=0,n=nums.length;
+
+        while(j<n)
+        {
+            if(Math.abs(j-i) > k)  //shrink
+            {
+                set.remove(nums[i]);
+                i++;
+            }
+
+
+            //1st check 
+            if(Math.abs(j-i) <= k  && set.contains(nums[j]))
+            {
+                return true;
+            }
+
+            
+
+            set.add(nums[j]);
+            j++;
+
+        }
+
+        return false;
+        
+    }
+}
+
+---------------------------------------------- using simple map -----------------------------------------------------------------------------------
+class Solution {
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        
+        Map<Integer,Integer> map = new HashMap<>();   //number or uska index
+        
+        for(int i = 0;i<nums.length;i++)
+        {
+            if(map.containsKey(nums[i]))
+            {
+                if(Math.abs(i - map.get(nums[i])) <= k)
+                    return true;
+                else
+                    map.put(nums[i],i);  //nya index update krdo kuki puraana hi less than k nahi tha to aage same element milega to wo bhi nai hoga tp iss element ka chance h
+            }
+            
+            //agr map m hai hi nai to isko simply map m daal do 
+            
+            map.put(nums[i],i);
+        }
+        
+        return false ;
+    }
+}
