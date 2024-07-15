@@ -1,0 +1,70 @@
+76. Minimum Window Substring :: https://leetcode.com/problems/minimum-window-substring/
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public String minWindow(String s, String t) {
+        
+        int n = s.length();
+        int m = t.length();
+
+        if(m>n)
+        return "";
+
+        Map<Character,Integer> map = new HashMap<>();
+
+        //store all characters of t in map
+
+        for(Character ch : t.toCharArray())
+        {
+            map.put(ch,map.getOrDefault(ch,0)+1);
+        }
+
+        int requiredCount = m ;
+
+        int windowSize = Integer.MAX_VALUE ;
+        int startIndex = 0;  // so that at end we can return string from this index
+
+        int i =0,j=0;
+
+        while(j<n)
+        {
+            if(map.containsKey(s.charAt(j)) && map.get(s.charAt(j))>0)
+            requiredCount-- ;
+
+            map.put(s.charAt(j),map.getOrDefault(s.charAt(j),0)-1);  // curr char chaahe map me hai ya nai we have to put in map 
+
+            while(requiredCount==0)
+            {
+                int currWindowSize = j-i+1 ;
+
+                if(currWindowSize < windowSize )
+                {
+                    windowSize = currWindowSize;
+
+                    startIndex = i ;
+                }
+
+                //now check u ccan shrink window or not
+
+                map.put(s.charAt(i),map.get(s.charAt(i))+1);  // jo bhi char ith position s htega to uski freq map m  increase hojaegi fr se 
+
+                if(map.get(s.charAt(i))>0)
+                {
+                    requiredCount++ ;
+                }
+
+                i++ ;
+
+
+            }
+            j++ ;
+
+        }
+
+        //int endIndex = Math.min(i + windowSize, s.length());
+
+        return windowSize == Integer.MAX_VALUE ? "":s.substring(startIndex,startIndex + windowSize);
+
+    }
+}
