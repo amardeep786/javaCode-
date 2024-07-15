@@ -1,0 +1,87 @@
+1071. Greatest Common Divisor of Strings :: https://leetcode.com/problems/greatest-common-divisor-of-strings/description/
+----------------------------------------------------------------------------------------------------------------------------------------------------
+// do what they say as it is  TC -> O(min(m+n))*(m+n)  
+// SC -> O(m+n)
+
+/*
+
+class Solution {
+    public String gcdOfStrings(String str1, String str2) {
+        
+        int n = str1.length();
+        int m = str2.length();
+
+        String smaller = new String();
+
+        if(n>m)
+        {
+            smaller = str2;
+        }else
+        {
+            smaller = str1;
+        }
+
+        for(int i = Math.min(m,n);i>0;i--) // traversing on lengths
+        {
+            if(m%i == 0 && n%i == 0)  // pehli condition yehi h ki jo b hmari len hogi wo dono ko divide kre
+            {
+                // ab check kro ki bna paa rhe ya nai
+
+                int timesToM = m/i;
+                int timesToN = n/i;
+
+                String temp = smaller.substring(0,i);
+
+                StringBuilder isM = new StringBuilder() ,isN = new StringBuilder();
+
+                for(int j = 0;j<timesToM;j++)
+                {
+                    isM.append(temp);
+                }
+
+                for(int j = 0;j<timesToN;j++)
+                {
+                    isN.append(temp);
+                }
+
+                if(isN.toString().equals(str1) && isM.toString().equals(str2))
+                {
+                    return temp;
+                }
+            }
+        }
+
+        return "";
+    }
+}
+
+*/
+
+// -------------------- better approach -------------------------------------------------------------------------------------------------------
+class Solution {
+    public String gcdOfStrings(String str1, String str2) {
+        int m = str1.length() , n = str2.length();
+
+        if((str1+str2).equals(str2+str1))  // why ?  [ supp x is ans then str1 is kx and str2 is px then on adding we get (k+p)x and (p+k)x ]
+        {                                            // so if both are same only then ans exists
+            // only then ans exists
+            int gcd = GCD(m,n);
+            return str1.substring(0,gcd);
+        }else
+        {
+            return "";
+        }
+    }
+
+    public int GCD(int a,int b)
+    {
+        while(b != 0)
+        {
+            int temp = b;
+            b = a%b;
+            a = temp;
+        }
+
+        return a;
+    }
+}
