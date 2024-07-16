@@ -1,0 +1,81 @@
+2096. Step-By-Step Directions From a Binary Tree Node to Another :: https://leetcode.com/problems/step-by-step-directions-from-a-binary-tree-node-to-another/description/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public String getDirections(TreeNode root, int startValue, int destValue) {
+        
+        // find LCA of start and dest
+        // then from LCA to start
+        //LCA to destination 
+        // and in path from LCAtoStart append U till path length 
+
+        TreeNode lca = LCA(root,startValue,destValue);
+        StringBuilder lcaToStart = new StringBuilder();
+        StringBuilder lcaToDest = new StringBuilder();
+
+        findPath(lca,startValue,lcaToStart);  // ek baar root s start tk ka path nikal lo ..baad m iss path ko up up krdena
+        findPath(lca,destValue,lcaToDest);      // root s dest tkk m add krdo  (root here is LCA)
+
+        StringBuilder res = new StringBuilder();
+
+        for(int i = 0;i<lcaToStart.length();i++)
+        {
+            res.append('U');
+        }
+
+        res.append(lcaToDest);
+        return res.toString();
+    }
+
+    public TreeNode LCA(TreeNode root, int p, int q) {
+
+        if(root == null)
+        return null;
+
+
+        if(root.val == p || root.val == q)   // root hi p ya q hai tohh to wahi LCA h
+        return root;
+
+        TreeNode leftL =  LCA(root.left,p,q);      // root k left s ans aaya 
+        TreeNode rightL =  LCA(root.right,p,q);    // root k right s ans aaya 
+
+        if(leftL!=null && rightL!= null)        // ab agr dono not null hai mtlb p,q root k left and right m the to mtlb root ho LCA hai 
+        return root;
+
+        return leftL==null?rightL:leftL;    // pr koi bhi ek null aaya to mtlb not null wala ans h qki dono node hi ek trf hai 
+        
+    }
+
+    public boolean findPath(TreeNode root,int target,StringBuilder sb)
+    {
+        if(root == null)
+        return false;
+
+        if(root.val == target)
+        {
+            return true;
+        }
+
+        // explore left 
+        sb.append('L');
+        if(findPath(root.left,target,sb) == true)
+        {
+            return true;
+        }
+        // agr left m nai mila tp pehle purane path ko delete kro and then nya add kro 
+        sb.deleteCharAt(sb.length()-1);
+
+        // explore right
+        sb.append('R');
+        if(findPath(root.right,target,sb) == true)
+        {
+            return true;
+        }
+        sb.deleteCharAt(sb.length()-1);
+
+        return false;
+    }
+}
+
+// ---- we can simply find path from root to start and root to dest then iss path ka common portion subtract krdo to upr wala hi ans aajaega
+// so we dont need to find LCA then 
