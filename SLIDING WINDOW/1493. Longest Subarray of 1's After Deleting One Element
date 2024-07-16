@@ -1,0 +1,121 @@
+1493. Longest Subarray of 1's After Deleting One Element :: https://leetcode.com/problems/longest-subarray-of-1s-after-deleting-one-element/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+// brute force - every time when u see 0 , skip it and find largest consecutive ones 
+
+class Solution {
+    public int longestSubarray(int[] nums) {
+        
+        int n = nums.length;
+
+        int totalOnes = 0;
+        int result = 0;
+
+        for(int i  = 0;i<n;i++)
+        {
+            if(nums[i] == 0)
+            {
+               result = Math.max(result , findMax(nums,i));
+            }else
+            {
+                totalOnes++;
+            }
+        }
+
+        if(totalOnes == n)
+        return n-1;
+
+        return result;
+}
+
+    public int findMax(int[] nums , int i)
+    {
+        int curr = 0 , maxWindow = 0 , n = nums.length;
+
+                for(int j = 0;j<n;j++)
+                {
+                    if(i==j)
+                    continue;
+
+                    if(nums[j] == 1)
+                    {
+                        curr++ ;
+                    }else
+                    {
+                        curr = 0;
+                    }
+
+                    maxWindow = Math.max(curr,maxWindow);
+                }
+
+            return maxWindow;
+
+    }
+}
+
+
+// --------------- using SLIDING WINDOW ---------------------------------------------------------------------------------------------//
+
+/*
+class Solution {
+    public int longestSubarray(int[] nums) {
+        
+        int n = nums.length;
+
+        // kisi bhi window m max 1 hi 0 allowd hai qki usey hum delete assume krege  age jada hua to window shrink
+
+        int i = 0 , j = 0;
+        int countZeroes = 0;
+        int ans = 0;
+        for(;j<n;j++)
+        {
+            if(nums[j] == 0)
+            countZeroes++;
+
+            // agr 1 s jada 0 hai to shrink
+            while(i<=j && countZeroes > 1)
+            {
+                if(nums[i] == 0)
+                countZeroes--;
+
+                i++;
+            }
+
+            // ab jo bhi y window hai isme max to max 1 zero hoga ya wo b nai to 
+            ans = Math.max(ans,j-i);   // j-i+1 isliy nai qki ek ko delete krna hi h to j-i 
+        }
+
+        return ans;
+    }
+}
+
+*/
+
+// --------------- BETTER  SLIDING WINDOW ---------------------------------------------------------------------------------------------//
+
+/*
+class Solution {
+    public int longestSubarray(int[] nums) {
+        
+        int n = nums.length;
+
+        // kisi bhi window m max 1 hi 0 allowd hai qki usey hum delete assume krege  age jada hua to window shrink
+
+        int i = 0 , j = 0,lastZeroIdx = -1;
+        int countZeroes = 0;
+        int ans = 0;
+        for(;j<n;j++)
+        {
+            if(nums[j] == 0)
+            {
+                i = lastZeroIdx +1;  // jb b 0 dikhe to i ko last m jb b zero dikha tha usk aage le jaao
+                lastZeroIdx = j; 
+            }
+
+            // ab jo bhi y window hai isme max to max 1 zero hoga ya wo b nai to 
+            ans = Math.max(ans,j-i);   // j-i+1 isliy nai qki ek ko delete krna hi h to j-i 
+        }
+
+        return ans;
+    }
+}
+*/
