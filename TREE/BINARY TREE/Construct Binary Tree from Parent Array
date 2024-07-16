@@ -1,0 +1,40 @@
+Construct Binary Tree from Parent Array :: https://www.geeksforgeeks.org/problems/construct-binary-tree-from-parent-array/1
+-------------------------------------------------------------------------------------------------------------------------------------------------=
+class Solution {
+    // Function to construct binary tree from parent array.
+    public Node createTree(int parent[]) {
+        
+        Map<Integer,Node> map = new HashMap<>();
+        Node root = null;
+        
+        for(int i = 0;i<parent.length;i++)
+        {
+           if(!map.containsKey(i))      // agar child nai h to child create kro 
+           {
+               map.put(i,new Node(i));
+           }
+           
+           if(!map.containsKey(parent[i]))      // agar parent nai h to parent create kro 
+           {
+               map.put(parent[i],new Node(parent[i]));
+           }
+           
+           if(parent[i] == -1)      // mtlb yehi root node h
+           {
+               root = map.get(i);
+           }
+           else
+           {
+               if(map.get(parent[i]).left == null)      // agar left null hai toh left m daalo 
+               {
+                   map.get(parent[i]).left = map.get(i);
+               }else
+               {
+                   map.get(parent[i]).right = map.get(i);
+               }
+           }
+        }
+        
+      return root;
+    }
+}
