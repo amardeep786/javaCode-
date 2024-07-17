@@ -1,0 +1,96 @@
+2090. K Radius Subarray Averages :: https://leetcode.com/problems/k-radius-subarray-averages/
+-----------------------------------------------------------------------------------------------------------------------------------------
+// using prefixSum method 1
+/*
+class Solution {
+    public int[] getAverages(int[] nums, int k) {
+        
+        int n = nums.length;
+        int res[] = new int[n];
+
+        long prefixSum []= new long[n];   // qki cumulatively integer overflow ho rha h
+        prefixSum[0] = nums[0];
+
+        for(int i = 1;i<n;i++)
+        {
+            prefixSum[i] = prefixSum[i-1]+nums[i];
+        }
+
+        int i = 0;
+        while(i<Math.min(k,n))              // pehle k-1 element tkk left m k element hi nai honge to -1 
+        {
+            res[i++] = -1 ;
+        }
+
+        for(int j = i;j< n-k;j++)  // uske aage n-k element tkk left-right dono honge to average fill krdo 
+        {
+            long sum = prefixSum[j+k]  ;
+            if(j-k-1>= 0)
+            sum -= prefixSum[j-k-1] ;       // age k index pehle tk valid h to usey prefixsum s waha tk ghtado to total sum aajaega 
+
+
+            int divisor = 2*k+1;        // no of elements from i=k to i+k
+
+            long avg = sum/divisor ;
+            res[j] = (int)avg;
+        }
+
+        for(int j = Math.max(0,n-k);j<n;j++)  // last k-1 element tkk right m k element hi nai honge to -1 
+        {
+            res[j] = -1 ;
+        }
+
+
+        return res;
+
+    }
+}
+*/
+// using Sliding window ---------------------------------------------------------------------------------------------------------------------------------//
+class Solution {
+    public int[] getAverages(int[] nums, int k) {
+        
+        int n = nums.length;
+        int res[] = new int[n];
+        Arrays.fill(res,-1);
+
+        if(k==0) return nums;
+
+        if(n < 2*k+1)
+        return res;
+
+        int left = 0 , right = 2*k , i = k ;
+
+        // find sum of inittial window
+        long windowSum = 0;
+
+        for(int j = left;j<=right;j++)
+        {
+            windowSum += nums[j];
+        }
+
+        long avg = windowSum/(2*k+1 );
+        res[i] = (int)avg ;
+
+        i++;
+        right++;
+
+        while(right < n)
+        {
+            int newS = nums[right];
+            int old = nums[left];
+
+            windowSum = windowSum - old + newS ;
+            avg = windowSum/(2*k+1) ;
+            res[i] = (int)avg ;
+
+            i++;
+            left++;
+            right++;
+
+    
+        }
+
+        return res;
+    }
+}
