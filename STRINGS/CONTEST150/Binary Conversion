@@ -1,0 +1,84 @@
+Binary Conversion :: https://www.codechef.com/problems/CONVERT?tab=statement
+----------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class Codechef
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+	Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		
+	    while(t-- > 0)
+	    {
+	        int n  = sc.nextInt();
+	        int k = sc.nextInt();
+	        
+	        sc.nextLine();
+	        
+	        String s = sc.nextLine();
+	        String p = sc.nextLine();
+	        
+	        
+	        int count1Str = 0 , count0Str = 0;
+	        for(int i = 0;i<n;i++)    // count 0 and 1 in s
+	        {
+	            if(s.charAt(i) == '1')
+	                count1Str++;
+	           else
+	            count0Str++;
+	        }
+	        
+	        
+	        int count1pStr = 0 , count0pStr = 0;
+	        for(int i = 0;i<n;i++)      // count 0 and 1 in p
+	        {
+	            if(p.charAt(i) == '1')
+	                count1pStr++;
+	           else
+	            count0pStr++;
+	        }
+	        
+	        
+	        if(count1Str != count1pStr || count0Str != count0pStr)  // if 0s and 1s not equal then no
+	        { 
+	            System.out.println("NO");
+	            continue;
+	        }
+	        
+            int count1 = 0 ;
+            for(int i = 0;i<n;i++)
+            {
+                int first = Character.getNumericValue(s.charAt(i));
+                int sec = Character.getNumericValue(p.charAt(i));
+
+                if((first^sec) == 1)   // change positions
+                {
+                    count1++;
+                }
+            }
+
+            int noOfSwapsRequired = count1/2 ;
+
+            if(noOfSwapsRequired > k)
+            {
+                System.out.println("NO");
+            }
+            else if(noOfSwapsRequired == k)
+            {
+                System.out.println("YES");
+            }
+            else
+            {
+
+                if((k - noOfSwapsRequired) % 2 == 0 || count1Str >= 2 || count0Str >=2)
+                System.out.println("YES");
+                else 
+                System.out.println("NO");
+            }
+	    }
+	}
+}
+
