@@ -1,0 +1,115 @@
+1838. Frequency of the Most Frequent Element :: https://leetcode.com/problems/frequency-of-the-most-frequent-element/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ hm kisi bhi element ko usi array m present array element k brabr bnana chahege taaki operation km lgega to freq bdha skte hain 
+*/
+
+/*
+class Solution {
+    public int maxFrequency(int[] nums, int k) {
+
+        int n = nums.length;
+
+        // sort kr lete hain taaki kisi elemnt ko kisi k brabr krege to wo element usk left m hi hoga 
+        // eg 5 8 10 to 5 or 8 hi 10 bn skte hain baaki k nai
+
+        Arrays.sort(nums);
+
+        int []prefixSum = new int[n];
+        prefixSum[0] = nums[0];
+        int ans = 0;
+        for(int i = 1;i<n;i++)
+        {
+            prefixSum[i] = prefixSum[i-1]+nums[i];
+        }
+
+
+
+        // ab hum ek ek element ko pick krege orr baaki elements ko isk brabr bnana chahege
+        for(int target_idx = 0;target_idx<n;target_idx++)
+        {
+            // hrek left element k pas nai jaege binsearch lga skte hain 
+            int count = binarySearch(nums,target_idx,prefixSum,k);
+            ans = Math.max(ans,count);
+        }
+        return ans;
+    }
+
+    public int binarySearch(int[] nums,int target_idx,int[]prefixSum,int k)
+    {
+        int target = nums[target_idx] ;   // hm baakio ko is target k brabr bnana chahte hain 
+
+        int l = 0 , r = target_idx;
+
+        int best_idx = target_idx;
+
+        while(l<=r)
+        {
+            int mid = l + (r-l)/2 ;
+
+            long count = (target_idx - mid + 1) ;  // hum mid s aage tkk ka abhi bna rhe h
+            long windowSum = count * target;  // agr sb bn gye to y sum hoga
+
+            long currSum = prefixSum[target_idx] - prefixSum[mid] + nums[mid];  // or abhi bina bne ye sum h
+
+            int operation = (int)(windowSum - currSum) ;
+
+            if(operation > k)
+            {
+                // shrink window
+                l = mid+1;
+            }else
+            {
+                // expand window to orr left jaao target s 
+                best_idx = mid;
+                r = mid-1;
+            }
+        }
+
+        return target_idx - best_idx + 1 ;  // itne window ko hm successfully bna lege same
+    }
+
+}
+
+*/
+// ------------ SLIDING WINDOW --------------------------------------------------------------------// 
+
+/*
+ye jo binary serch s hum window bna rhe the ya count kr rhe the isey hum window slide krk b kr skte hain 
+i = 0 , j = 0 orr jbtk hum j wale s condition satisfy kr rhe hain usey bdhaate jaaege 
+or nhi to i ko bdhaate jaaege
+*/
+
+class Solution {
+    public int maxFrequency(int[] nums, int k) {
+
+        int n = nums.length;
+
+        // sort kr lete hain taaki kisi elemnt ko kisi k brabr krege to wo element usk left m hi hoga 
+        // eg 5 8 10 to 5 or 8 hi 10 bn skte hain baaki k nai
+
+        Arrays.sort(nums);
+        int res = 0;
+        long currSum = 0;  // act as prefix sum 
+        int l = 0;
+        for(int r = 0;r<n;r++)
+        {
+            long target = nums[r];
+            currSum += nums[r];
+
+            int operations = (int)((target * (r-l+1)) - currSum);
+
+            while(((target * (r-l+1)) - currSum) > k)   // while ki jgeh if bhi chlega qki ek shift k baad hi ans chhota hojaega
+            {
+                //shrink window
+                currSum -= nums[l];
+                l++;
+            }
+
+            res = Math.max(res,r-l+1);
+        }
+
+          return res;
+
+    }
+}
