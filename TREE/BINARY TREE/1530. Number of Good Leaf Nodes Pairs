@@ -1,0 +1,80 @@
+1530. Number of Good Leaf Nodes Pairs :: https://leetcode.com/problems/number-of-good-leaf-nodes-pairs/description/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/**
+ 
+ jo bola h wo krdo 
+
+ 1) make graph so that traverse fromm 1 leaf to another
+ 2) store leaf Nodes 
+ 3) traverse from all leaf nodes and make BFS and find distance to other leaf nodes 
+
+ */
+
+
+class Solution {
+    public int countPairs(TreeNode root, int distance) {
+
+        // graph will store a node and to which it is connected like parent node etc.
+        Map<TreeNode , List<TreeNode>> map = new HashMap<>();
+        Set<TreeNode> set = new HashSet();      // to store leaf nodes 
+        // every node should know who its parent is so that it can put its parent entry too 
+        makeGraph(root,map,null,set);  
+
+        // to ab sbhi leaf p traverse krk BFS maaarte jaao
+        int count = 0;
+        for(var leaf : set)
+        {
+            Queue<TreeNode > que = new LinkedList<>();
+            Set<TreeNode> visited = new HashSet<>();
+
+            que.offer(leaf);
+            set.add(leaf);
+
+            // we will traverse only till our dist <= given dist
+            for(int level = 0;level<= distance;level++)
+            {
+                int size = que.size() ;  
+                while(size-- > 0)
+                {
+                    TreeNode temp = que.poll();
+
+                    if(temp != leaf && set.contains(temp))
+                    count++;  
+
+                    for(var neighbor : map.getOrDefault(temp,new ArrayList<>()))
+                    {
+                        if(!visited.contains(neighbor))
+                        {
+                            que.offer(neighbor);
+                            visited.add(neighbor);
+                        }
+                    }
+                }
+            }
+        }  
+
+        return count/2 ;   
+    }
+
+    public void makeGraph(TreeNode root,Map<TreeNode , List<TreeNode>> map,TreeNode parent,Set<TreeNode> set )
+    {
+        if(root == null )
+        return ;
+
+        if(root.left == null && root.right == null)     // leaf node
+        {
+            set.add(root);
+        }
+
+        if(parent != null)
+        {
+            // parent exists so do entry in map
+            map.computeIfAbsent(root,k->new ArrayList<>()).add(parent);
+            map.computeIfAbsent(parent,k->new ArrayList<>()).add(root);
+        }
+
+        makeGraph(root.left,map,root,set);   // now root will be parent for next nodes
+        makeGraph(root.right,map,root,set);
+
+    }
+}
