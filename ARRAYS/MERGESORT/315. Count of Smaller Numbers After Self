@@ -1,0 +1,110 @@
+315. Count of Smaller Numbers After Self :: https://leetcode.com/problems/count-of-smaller-numbers-after-self/
+----------------------------------------------------------------------------------------------------------------------------------------------
+// using merge sort
+
+class Solution {
+    public List<Integer> countSmaller(int[] arr) {
+
+        int n = arr.length;
+        
+        // store index and element in array 
+        int[][] nums = new int[n][2];
+        
+        for(int i = 0;i<n;i++)
+        {
+            nums[i][0] = arr[i];
+            nums[i][1] = i ;     // so that we can fill ans in this index 
+        }
+        
+        int []ans = new int[n];
+        
+        mergeSort(nums,0,n-1,ans);
+
+
+        List<Integer> list = new ArrayList<>();
+
+        for(int i = 0;i<n;i++)
+        {
+            list.add(ans[i]);
+        }
+        
+        return list;
+    }
+    
+    public void mergeSort(int [][] nums , int i , int j , int[]ans)
+    {
+        if(i<j)
+        {
+            int mid = i + (j-i)/2 ;
+            
+            mergeSort(nums,i,mid,ans);
+            mergeSort(nums,mid+1,j,ans);
+            
+            merge(nums,i,mid,j,ans);
+        }
+    }
+    
+    public void merge(int[][] nums , int l , int mid,int r, int[] ans)
+    {
+        int i = l , j = mid+1 ;
+        
+        // nums m bhi swap krna pdega future k liy to abhi temp m store kralete hain baad m krdege 
+        
+        int[][] temp = new int[r-l+1][2];
+        int k = 0;
+        
+        while(i<mid+1 && j <= r)
+        {
+            if(nums[i][0] > nums[j][0]) // it means ki nums[i][0]  dusre array k baak elements s bhi bda h
+            {
+                // update krdo ans 
+                ans[nums[i][1]] += (r-j+1);
+                
+                temp[k][0] = nums[i][0];
+                temp[k][1] = nums[i][1];
+                
+                i++ ;   // ith ka ans aagya to ab i ko aage bdha do 
+            }else
+            {
+                // ith element ka ans update nai hoga wki wo dusre array k elemnt s chhota h to j ko bdha do 
+                // ki kya pta i kisi dusre j s chhota ho 
+                temp[k][0] = nums[j][0];
+                temp[k][1] = nums[j][1];
+                j++ ;
+                
+            }
+            k++ ;
+        }
+        
+        // agr koi pehle khtm hogya to baki k elemnt copy paste krdo 
+        
+        while(i<mid+1)
+        {
+                temp[k][0] = nums[i][0];
+                temp[k][1] = nums[i][1];
+                
+                i++ ;   // ith ka ans aagya to ab i ko aage bdha do
+                k++;
+        }
+        
+        while(j<=r)
+        {
+                temp[k][0] = nums[j][0];
+                temp[k][1] = nums[j][1];
+                
+                j++ ;   // ith ka ans aagya to ab i ko aage bdha do
+                k++;
+        }
+        
+        
+        // ab mains nums array m copy krdo temp k values 
+        k=0;
+        for(int t = l;t<=r;t++)
+        {
+            nums[t][0] = temp[k][0];
+            nums[t][1] = temp[k][1];
+            k++;
+        }
+
+    }
+}
