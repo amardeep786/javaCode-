@@ -78,3 +78,75 @@ class Solution {
 
     }
 }
+
+//----------------- METHOD 2 ---------------------------------------------------------------------------------------------------------//
+// method 1 - check in submission 
+// METHOD 2 : grek node apne papa ko information bhejege ki usssey leaf nodes ki kitny doori h
+//          : fr node apne left leaf k information se right left tkk dis nikal k update krta rhega good nodes 
+
+
+class Solution {
+    public int countPairs(TreeNode root, int distance) {
+        
+        int goodLeaf[] = new int[1];
+
+        DFS(root,distance,goodLeaf);
+
+        return goodLeaf[0];
+    }
+
+    public List<Integer> DFS(TreeNode root, int distance,int[]goodLeaf)
+    {
+        if(root == null)
+        {
+            List<Integer> emptyList = new ArrayList<>();
+            emptyList.add(0);
+            return emptyList;
+        }
+
+        // agr leaf nodes p haina tohh
+        if(root.left == null && root.right == null)
+        {
+            List<Integer> leafNodes = new ArrayList<>();
+            leafNodes.add(1);           // it will tell apne parent ko ki mai aapse ek distance p hu
+            return leafNodes;
+        }
+
+        List<Integer> leftDistances = DFS( root.left,  distance, goodLeaf);
+        List<Integer> rightDistances = DFS( root.right,  distance, goodLeaf);
+
+        // ab hreak leaf s hreak right ka ek baar distance dekhlo ki kya koi distance s kam h 
+        for(var l : leftDistances)
+        {
+            for(var r : rightDistances)
+            {
+                if( (l != 0 && r!= 0) && l+r <= distance)
+                {
+                    goodLeaf[0]++;
+                }
+            }
+        }
+
+        // ab ye currrent node bhi apne parent ko information bhejega toh
+        List<Integer> currNodes = new ArrayList<>();
+
+        for(var l : leftDistances)
+        {
+            if(l!= 0 && l+1<=distance)
+            {
+                currNodes.add(l+1);   // ab ye apne parent ko ek add krk btaega ki mere s dist l hai to aapse l+1 hogi 
+            }
+        }
+
+        for(var r : rightDistances)
+        {
+            if(r!= 0 && r+1<=distance)      // r!= 0 isliy ki hme leaf nodes s mtlb hai null nodes s nai and only dist s kam wale nodes s mtlb h
+            {
+                currNodes.add(r+1);   // ab ye apne parent ko ek add krk btaega ki mere s dist l hai to aapse l+1 hogi 
+            }
+        }
+
+        return currNodes;
+
+    }
+}
