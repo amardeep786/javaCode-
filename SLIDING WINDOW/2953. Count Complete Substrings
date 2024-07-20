@@ -1,0 +1,89 @@
+2953. Count Complete Substrings :: https://leetcode.com/problems/count-complete-substrings/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// so we will pehle tohh pass the substring to a function which tells no of good substrings and substring doesnot contain diff > k
+//O(n2)
+class Solution {
+    public int countCompleteSubstrings(String word, int k) {
+
+        int n = word.length();
+        int start = 0 , res = 0;
+        // divide condition 
+        for(int i = 1;i<=n;i++)  // i agr n k brabr hua tb bhi ek call krna hoga jo last wala substring bha re jaega   // O(n)
+        {
+            if(i==n || Math.abs(word.charAt(i) - word.charAt(i-1)) > 2)
+            {
+                // i-1 tkk valid string hai 
+
+                res += help(start,i-1,word,k);
+                start = i ;
+
+            }
+        }
+
+        return res;
+    }
+
+    public int help(int start , int end , String word,int k)
+    {
+        int res = 0;
+
+        // pehle dekhege ki 1 uniq character wale kitne hain jinki freq k hai then 2 unique freq wale and so on
+
+        // supp 1 uniq char to uski k freq hai to 1*k itny length  to honi chahiye string ki jisp check kr rhe h 
+        // to uniq*k <= length of string hogi condidition to exit from loop 
+
+        for(int uniqChar = 1 ; uniqChar<=26 && uniqChar*k <= (end-start+1);uniqChar++)  // O(1) worst case m 26 chars a-z
+        {
+            int freq[] = new int[26];    // to store freq 
+            int goodBoy = 0 ;  // when we found k freq uniq character it will increase
+
+            // now start sliding window 
+            int i = start ;
+            int windowLength = uniqChar * k ;
+
+            for(int j = start ;j<=end;j++)    // O(n)
+            {
+                char ch = word.charAt(j);
+
+                freq[ch-'a']++ ;
+
+                if(freq[ch-'a'] == k)
+                {
+                    goodBoy++ ;  // ek to charcter mila jiski freq k hai 
+                }else if(freq[ch-'a'] == k+1)
+                {
+                    goodBoy-- ;  // hum window bdha rhe the orr iski freq bdh gyi to ab y good nai rha 
+                }
+
+                // agr window bdi hai to shrink 
+
+                if(j-i+1 > windowLength)
+                {
+                    // shift i to right and jo char htne wala h uski freq dekhlo 
+                    // curr window m iski freq k hai but hme shrink krna h to ye pehle goddboy rha hoga lekin ab nau h to 
+                    char chAti = word.charAt(i);
+                    if(freq[chAti-'a'] == k)
+                    {
+                        goodBoy-- ;
+                    }else if(freq[chAti-'a'] == k+1)
+                    {
+                         goodBoy++;         // cirrent window m iski freq k+1 thi lekin ab ith char htne wala h mtlb iski freq k hojaegi to 
+                    }
+
+                    // ab htaado isko
+                    freq[chAti-'a']--;
+                    i++; 
+
+                }
+
+                if(goodBoy == uniqChar)        // goodboy tell no of uniq chars jiski freq k hai 
+                {
+                    res++ ;
+                }
+            }
+        }
+
+        return res;
+
+    }
+}
