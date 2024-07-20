@@ -1,0 +1,33 @@
+1605. Find Valid Matrix Given Row and Column Sums :: https://leetcode.com/problems/find-valid-matrix-given-row-and-column-sums/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// mat[i][j] me minimum of rowSum i ya colsum j daaleege taaki dono trf ki condition satisfy rhe 
+
+class Solution {
+    public int[][] restoreMatrix(int[] rowSum, int[] colSum) {
+        
+        int rows = rowSum.length;
+        int cols = colSum.length;
+        int[][] res = new int[rows][cols];
+
+        int i = 0 , j = 0 ; 
+
+        while(i<rows && j < cols)
+        {
+            res[i][j] = Math.min(rowSum[i],colSum[j]);
+
+            // ab yehi value rowSum and colSUm s bhi ght jaegi 
+            rowSum[i] -= res[i][j];
+            colSum[j] -= res[i][j];
+
+            // ab agr koi bhi value zero hui hogi to uska kaam khtm aage move kro 
+            if(rowSum[i] == 0)
+            i++;
+
+            if(colSum[j] == 0)
+            j++;
+        } 
+
+        return res;
+
+    }
+}
