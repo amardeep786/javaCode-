@@ -1,0 +1,53 @@
+Maximum product subset of an array :: https://www.geeksforgeeks.org/problems/maximum-product-subset-of-an-array/1
+---------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public long findMaxProduct(List<Integer> list) {
+        
+        long prod = 1;
+        int mod = (int)(1e9)+7 ;
+        int n = list.size();
+        int maxNeg = Integer.MIN_VALUE ;
+        int countNeg = 0 , count0 = 0 ;
+        
+        for(int i = 0;i<n;i++)
+        {
+            // agr koi 0 hai to skip krdo 
+            if(list.get(i) == 0)
+            {
+                count0++ ;
+                continue;
+            }
+            
+            // neg number to abhi filhaal prod m add krdo lekin dekhlo ki sbsbse bda neg knsa h wahi 
+            // abs value usi ki kam hogi to baad m ans ko ussi s divide kr denge 
+            
+            if(list.get(i) < 0)
+            {
+                countNeg++;
+                maxNeg = Math.max(maxNeg,list.get(i));  // baad m ans ko isi s divide kr dege
+               
+            }
+            
+            prod = (prod *  list.get(i))%mod;
+        }
+        
+        // ab dekhlo ki kitne kya the agr saare hi zero the to ans 0 
+        // agr sirf ek neg tha or baaki zero tobhi ans 0 
+        if(count0 == n)
+        return 0;
+        
+        
+        if(countNeg == 1 && count0 == n-1)
+        return 0;
+        
+        // agr neg number even times tha to return krdo 
+        if(countNeg %2 == 0)
+        {
+            return prod;
+        }else
+        {
+            return prod/maxNeg;
+        }
+       
+    }
+}
