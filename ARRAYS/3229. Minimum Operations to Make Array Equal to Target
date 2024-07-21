@@ -1,0 +1,47 @@
+3229. Minimum Operations to Make Array Equal to Target :: https://leetcode.com/problems/minimum-operations-to-make-array-equal-to-target/description/
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+// pehle hum original me s target subtract krdege taaki diff aajaye orr y pta lg jaae ki hrek element ko kitne s bdhana ghtana h 
+// finally hme diff hi 0 krna h sbhi ka 
+// to our ques becomes ki all 0 s diff array kese bnaaye ya fr diff s all 0 same hi baat h 
+
+class Solution {
+    public long minimumOperations(int[] nums, int[] target) {
+        int n = nums.length;
+        int diff[] = new int[n];
+
+        for(int i = 0;i<n;i++)
+        {
+            diff[i] = target[i] - nums[i] ;
+        }
+
+        // so hme diff ki hrek value 0 krni h to indirectly all elements equal to target 
+        int prev = 0;
+        long opr = 0;
+        for(int i = 0;i<n;i++)
+        {
+            int curr = diff[i];
+            // agar sign change hai diff array me from prev to curr 
+            if((curr > 0 && prev < 0) || (curr < 0 && prev > 0))
+            {
+                opr += Math.abs(curr);
+            }
+
+            // agar curr and prev dono +ve hain tohh mtlb hmne pehle prev wale m bdhaya hoga hoga to saath  m isko bhi bdha dete qki dono 0 k closer aaege
+            else if(Math.abs(curr) >  Math.abs(prev))
+            {
+                // mtlb abhi bhi hme or changes krne h curr me ..pichhle changes s jaada 
+                opr += Math.abs(curr - prev);
+            }
+            
+                // abhi diff m maanlo 1 hai lekin prev m 2 tha to mtlb hme jb picjle m change kia tha usi smy isko b lelia hoga 
+                // to yaha kuj nai krna h
+
+                // do nothing
+            
+
+            prev = curr;
+        }
+
+        return opr;
+    }
+}
