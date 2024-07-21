@@ -1,0 +1,28 @@
+1526. Minimum Number of Increments on Subarrays to Form a Target Array :: https://leetcode.com/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int minNumberOperations(int[] target) {
+        int n = target.length;       
+
+        // so hme diff ki hrek value 0 krni h to indirectly all elements equal to target 
+        int prev = 0;
+        int opr = 0;
+        for(int i = 0;i<n;i++)
+        {
+            int curr = target[i];  // bnana h target i hme  
+            
+            if(Math.abs(curr) >  Math.abs(prev))
+            {
+                // mtlb abhi bhi hme or changes krne h curr me ..pichhle changes s jaada 
+                opr += Math.abs(curr - prev);
+            }
+            
+                // abhi diff m maanlo 1 hai lekin prev m 2 tha to mtlb hme jb picjle m change kia tha usi smy isko b lelia hoga 
+                // to yaha kuj nai krna h
+                // do nothing
+            prev = curr;
+        }
+
+        return opr;
+    }
+}
