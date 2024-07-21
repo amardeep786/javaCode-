@@ -1,0 +1,23 @@
+3228. Maximum Number of Operations to Move Ones to the End :: https://leetcode.com/problems/maximum-number-of-operations-to-move-ones-to-the-end/description/
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int maxOperations(String s) {
+        
+        // hme left to right jaate jaate 1 ka count rkhna h and jb b 0 aaega to jitne 1 the sbko 0 k baad move krne m 1 opr 
+        // redundant 0s s ans m koi frk nai pdega to skip 
+
+        int res = 0;
+        int count1 = 0;
+        for(int i = 0;i<s.length();i++)
+        {
+            if(s.charAt(i) == '1')
+            {
+                count1++;
+            }else if(i>0 && s.charAt(i-1)=='1')   // bss pehla 0 mila tbbhi ans update krdia baaki 0s skip hote jaege
+            {
+                res += count1;
+            }
+        }
+        return res;
+    }
+}
