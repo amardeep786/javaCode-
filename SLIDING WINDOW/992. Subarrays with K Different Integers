@@ -1,0 +1,77 @@
+992. Subarrays with K Different Integers :: https://leetcode.com/problems/subarrays-with-k-different-integers/description/
+---------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int subarraysWithKDistinct(int[] nums, int k) {
+        
+        //similar pattern for sliding window
+
+        // hme ye pta h ki  [j-i+1] krte h to number of subaray ending at j from i aata h 
+
+        //hm hrek element ko map m daalege and baar bar map ka size dekhege 
+        //agr map ka size  = k hua tohh mtlb abhi k distinct number h apne paas and ye possible solution hoga 
+
+        Map<Integer,Integer> map = new HashMap<>(); //to store frequency
+        int n  = nums.length;
+        int i = 0 , j = 0 , countLessThanEqualToK = 0;
+
+        while(j<n)
+        {
+            map.put(nums[j],map.getOrDefault(nums[j],0)+1);
+
+            if(map.size() <= k)
+            {
+                countLessThanEqualToK += j-i+1 ;
+            }
+            else 
+            {
+                while(map.size()>k)
+                {
+                    map.put(nums[i],map.get(nums[i])-1);  // i ko shrink kroo jbtk ki map ka size less than equal to k 
+                                                            // naa ho jaaye 
+                    if(map.get(nums[i])!= null && map.get(nums[i])==0)
+                    map.remove(nums[i]);
+                    i++ ;
+                }
+
+                countLessThanEqualToK += j-i+1 ;
+            }
+            j++ ;
+        }
+
+
+        // yaha tkk hmaare paas less than equal to K ka number of subaray aagya 
+
+        // ek kaam krte hai ab less than equal to (k-1) walo ka count nikaal lete hain 
+
+        //baad me <= K wale me s <= k-1 kp subtract krdege to equal to K wale aajaege
+
+        i = 0 ; j = 0 ; int countLessThanEqualToKMinusOne = 0;
+        map.clear();
+        while(j<n)
+        {
+            map.put(nums[j],map.getOrDefault(nums[j],0)+1);
+
+            if(map.size() <= k-1)
+            {
+                countLessThanEqualToKMinusOne += j-i+1 ;
+            }
+            else if(map.size()>k-1)
+            {
+                while(map.size()>k-1)
+                {
+                    if(map.get(nums[i])!= null)
+                    map.put(nums[i],map.get(nums[i])-1);  // i ko shrink kroo jbtk ki map ka size less than equal to k 
+                                                            // naa ho jaaye 
+                    if(map.get(nums[i])!= null && map.get(nums[i])==0)
+                    map.remove(nums[i]);
+                    i++ ;
+                }
+                countLessThanEqualToKMinusOne += j-i+1 ;
+            }
+            j++ ;
+        }
+
+        return countLessThanEqualToK-countLessThanEqualToKMinusOne ;
+
+    }
+}
