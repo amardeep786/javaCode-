@@ -1,0 +1,55 @@
+Largest BST :: https://www.geeksforgeeks.org/problems/largest-bst/1
+------------------------------------------------------------------------------------------------------------------------------------------
+class NodeValue
+{
+    int size;
+    int maxNode ;
+    int minNode;
+    
+    NodeValue(int size , int maxNode , int minNode)
+    {
+        this.size = size ;
+        this.maxNode = maxNode;
+        this.minNode = minNode;
+    }
+}
+
+class Solution{
+    
+    // Return the size of the largest sub-tree which is also a BST
+    static int largestBst(Node root)
+    {
+        
+        return help(root).size ;
+        
+        
+    }
+    
+    static public NodeValue help(Node root )
+    {
+        if(root == null)
+        {
+            return new NodeValue(0,Integer.MIN_VALUE , Integer.MAX_VALUE); // null node ka size 0 , 2nd param 
+                                                                            // max value thi to hmne min value pass krdi taki hmesa 
+                                                                            // true rhe ans 
+                                                                            
+        }
+        
+        var ansFromLeft = help(root.left);
+        var ansFromRight = help(root.right);
+        
+        // ab current ki value left k max s bdi h or right k min s chhoti h to valid h bst 
+        if(ansFromLeft.maxNode < root.data && root.data < ansFromRight.minNode)
+        {
+            return new NodeValue(ansFromLeft.size + ansFromRight.size + 1 , Math.max(ansFromRight.maxNode,root.data) , Math.min((root.data),ansFromLeft.minNode));
+
+        }
+        
+        // if not BST THEN size to max jo aaya h abtk wahi bhejo but mini k liy INt_MIN ot max k liy INT MAX bhejdo taaki aage comparison 
+        // m yehi hmesa chhota ans aaye 
+        
+        return new NodeValue(Math.max(ansFromLeft.size , ansFromRight.size), Integer.MAX_VALUE , Integer.MIN_VALUE);
+    }
+
+}
+ 
