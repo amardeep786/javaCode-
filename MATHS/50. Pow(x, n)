@@ -1,0 +1,67 @@
+50. Pow(x, n) :: https://leetcode.com/problems/powx-n/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+class Solution {
+    public double myPow(double x, int n) {
+        
+        long nn = n;        // -2^31 s 2^31-1 tkk range but agr -2^31 dedia tohh isliy long lelo 
+        double ans  = 1.0;
+        if(nn < 0)
+        {
+            // make it +ve
+            nn = (-1)*nn;
+        }
+
+        while(nn > 0)
+        {
+            if(nn%2 == 1)
+            {
+                // agr odd hai to ans ko ek bar x s multipply kro 
+                ans = ans * x ;
+                nn = nn - 1 ;  // ek power ab km hogyi 
+            }else
+            {
+                x = x*x;    // x^8 == (x^2)^4
+                nn = nn/2 ;
+            }
+        }
+
+        if(n<0)
+        {
+            return (1.0)/ans ;
+        }
+
+        return ans;
+
+    }
+}
+*/
+// ------------------------ USING RECURSION ------------------------------------------------------------------------------------------------------//
+class Solution {
+    public double myPow(double x, int n) {
+        return help(x,(long)n);
+    }
+
+    public double help(double x,long n)
+    {
+        if(n==0)
+        return 1.0 ;
+
+        // case 1 : if (n<0) to x == 1/x and power is +ve ie 2^-3 == 1/2^3
+
+        if(n<0)
+        {
+            return help(1/x , -n);  // n is neg so -n is +ve
+        }
+
+        // case 2 : if n is even 
+
+        if(n%2 == 0)
+        {
+            return help(x*x,n/2);
+        }else
+        {
+            return x*help(x*x,(n-1)/2);
+        }
+    }
+}
