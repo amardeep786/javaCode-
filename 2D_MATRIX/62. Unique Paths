@@ -1,0 +1,64 @@
+62. Unique Paths :: https://leetcode.com/problems/unique-paths/description/?source=submission-ac
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// recur + MEMO 
+
+/*
+class Solution {
+    public int uniquePaths(int m, int n) {
+
+        int[][] output = new int[m][n];
+
+        for(int row[]:output)
+        {
+            Arrays.fill(row,-1);
+        }
+        output[0][0] = 1;
+        
+       return helper(m-1,n-1,output);
+    }
+
+    public int helper(int m,int n,int[][] output)   //Method 1
+     {
+        if(m==0 && n == 0)
+        {
+            return 1;
+        }
+
+        if(m<0 || n<0)
+        {return 0;}
+
+       if( output[m][n] != -1)
+       return output[m][n];
+
+        int up = helper(m-1,n,output);
+        int left = helper(m,n-1,output);
+
+        return output[m][n]=up+left;
+        }
+}
+
+*/
+
+// -------- method 2 OBSERVATION ----------------------------------------------------------------------------//
+
+/*
+from 0,0 to m-1,n-1 we need n-1 RIGHT and m-1 DOWN so total DIRECTIONS = (m-1)+(n-1) == m+n-2
+
+so if we can select m-1 out of m+n-2 or n-1 from m+n-2 then this is our ans  
+*/
+class Solution {
+    public int uniquePaths(int m, int n) {
+
+        int total = m+n-2;
+        int pick = m-1;
+
+        double ans = 1.0;
+
+        for(int i = 1;i<=pick;i++)
+        {
+            ans = ans *  (total-pick+i)/i ;
+        }
+
+        return (int)ans;
+    }
+}
