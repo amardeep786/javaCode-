@@ -1,0 +1,65 @@
+229. Majority Element II :: https://leetcode.com/problems/majority-element-ii/
+----------------------------------------------------------------------------------------------------------------------------------------------------
+// assume ki majority element first wala h abhi its like voting ki knsa majority hoskta h 
+// if array size = n then we have to find [n/k] so k-1 elements at max can be there
+// n/3 bola h to maximum 2 elements hi aise hoskte hain 
+
+// maanlo pehla majority h to agla bhi wahi number h to freq bdha doo ie votes bdhe else koi dusra number h to iski voting ghtaado
+// jb bhi kisi ki voting 0 hogyi tb uss smy jaha pointer h wo majority ka candidate ho jaega 
+
+class Solution {
+    public List<Integer> majorityElement(int[] nums) {
+     int n = nums.length;
+        int maj1 = nums[0];
+        int count1 = 1;
+        
+        int maj2 = 0;
+        int count2 = 0;
+        
+        for(int i = 1;i<nums.length;i++)
+        {
+            
+            if(nums[i]==maj1)  // if next element bhi majority 1 k brabr h to vote ++ 
+            {
+                count1++;
+            }else if(nums[i] == maj2)  // agr agla majority 2 k brabr h to 2nd k votes ++ 
+            {
+                count2++;
+            }else if(count1==0)     // agr majority ka count ght ght k 0 hogya to curr eleement majority 1 ka candidate bnega 
+            {
+                maj1 = nums[i];
+                count1++;
+            }else if(count2 == 0)   // agr majority2 ka count ght ght k 0 hogya to curr eleement majority 2 ka candidate bnega 
+            {
+                maj2 = nums[i];
+                count2++;
+            }
+            else        // aise nai h to dono k votes ghtaado ie koi orr aa rha h majoriy bnne 
+            {
+                count1--;
+                count2--;
+            }
+        }
+        
+        List<Integer> res = new ArrayList<>();
+        int freq1=0,freq2 = 0;
+        
+        for(int num:nums)
+        {
+            if(num == maj1)  // ab bss majority 1 and 2 ka count store krlia 
+                freq1++;
+            else if( num == maj2)
+            {freq2++ ;}
+        }
+        
+        
+        if(freq1>Math.floor(n/3))   // agr y n/3 s bde hain to ans m aaege nai to nai 
+            res.add(maj1);
+        
+        if(freq2>Math.floor(n/3))
+            res.add(maj2);
+        
+        return res;
+        
+    }
+}
