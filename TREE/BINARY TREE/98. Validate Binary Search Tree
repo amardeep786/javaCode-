@@ -1,0 +1,26 @@
+98. Validate Binary Search Tree :: https://leetcode.com/problems/validate-binary-search-tree/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        
+        return helper(root,null,null);
+    }
+
+    public boolean helper(TreeNode node,Integer low,Integer high)
+    {
+        if(node == null)
+        return true;
+
+        if(low!= null && node.val<= low )  // agr low null nai hai and node ki value chhoti h low s to return false
+        {return false;}
+
+        if(high!= null && node.val>= high )     // agr high null nai hai and node ki value bdi h low s to return false
+        {return false;}
+
+        boolean leftL = helper(node.left,low,node.val);  // else go left and right 
+        boolean rightL = helper(node.right,node.val,high);
+
+        return leftL && rightL ;  
+    }  
+}
