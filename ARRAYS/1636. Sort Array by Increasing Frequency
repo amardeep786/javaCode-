@@ -1,0 +1,86 @@
+1636. Sort Array by Increasing Frequency :: https://leetcode.com/problems/sort-array-by-increasing-frequency/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int[] frequencySort(int[] nums) {
+
+        class myCmp implements Comparator<List<Integer>>
+        {
+            public int compare(List<Integer> list1, List<Integer> list2)
+            {
+                int ans = Integer.compare(list1.get(1),list2.get(1));// first compare based on freq 
+
+                if(ans == 0)
+                return Integer.compare(list2.get(0),list1.get(0));  // if equal freq then value 
+
+                return ans;
+            }
+        }
+        
+        Map<Integer,Integer> map = new HashMap<>();
+
+        for(var i : nums)
+        {
+            map.put(i,map.getOrDefault(i,0)+1);    // stored frequency 
+        }
+
+        List<List<Integer>> list = new ArrayList<>();   // convert to list 
+        for(var e : map.entrySet())
+        {
+            List<Integer> sub = new ArrayList<>();
+            sub.add(e.getKey());
+            sub.add(e.getValue());
+            list.add(sub);
+        }
+
+        Collections.sort(list, new myCmp());   //sort using custom, comparator 
+
+        int res[] = new int[nums.length];
+        int idx = 0;
+        for(var e : list)
+        {
+            int i = 0;
+            while(i<e.get(1))
+            {
+                res[idx++] = e.get(0);
+                i++;
+            }
+        }
+
+        return res;
+    }
+}
+
+// ---------------------- METHOD 2 ----------------------------------------------------------------------------------------------//
+class Solution {
+
+    public int[] frequencySort(int[] nums) {
+        Map<Integer, Integer> freq = new HashMap<>();
+        for (int num : nums) {
+            freq.put(num, freq.getOrDefault(num, 0) + 1);
+        }
+
+        // Java's Arrays.sort method doesn't directly support
+        // sorting primitive arrays (int[]) with a lambda comparator.
+        // We can convert the primitive int into Integer objects
+        // to get around this limitation.
+        Integer[] numsObj = new Integer[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            numsObj[i] = nums[i];
+        }
+
+        Arrays.sort(numsObj, (a, b) -> {
+            if (freq.get(a).equals(freq.get(b))) {
+                return Integer.compare(b, a);
+            }
+            return Integer.compare(freq.get(a), freq.get(b));
+        });
+
+        // Convert numsObj back to a primitive array to match
+        // return type.
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = numsObj[i];
+        }
+
+        return nums;
+    }
+}
