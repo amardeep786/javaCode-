@@ -1,0 +1,63 @@
+859. Buddy Strings :: https://leetcode.com/problems/buddy-strings/
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public boolean buddyStrings(String s, String goal) {
+        
+        if(s.length()!= goal.length())
+        {
+            return false;
+        }
+
+        boolean isFreqGraterThanEqualTo2 = false;  // agr dono string equal hai tohh agr kisi  ki 2 freq hai to usey hi swap krke true else false
+
+        Map<Character,Integer> map = new HashMap<>();
+
+        for(var ch : s.toCharArray())
+        {
+            map.put(ch,map.getOrDefault(ch,0)+1);
+
+            if(map.get(ch) >= 2)
+            {
+                isFreqGraterThanEqualTo2 = true;
+            }
+        }
+
+        if(s.equals(goal))
+        {
+            if(isFreqGraterThanEqualTo2)
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+        }
+
+        // ab dono m sirf 2 hi position p diff hona chahiye tbhi ek swap krk check kr skte hain
+        List<Integer> diffPositions = new ArrayList<>();
+        for(int i = 0;i<s.length();i++)
+        {
+            if(s.charAt(i) != goal.charAt(i))
+            {
+                diffPositions.add(i);
+            }
+        }
+
+        // agr 2 s jad apos p diff h to false
+        if(diffPositions.size() != 2)
+        return false;
+
+        // mahi h to swap krk check kro ki same bna ya nai 
+        int index1 = diffPositions.get(0);
+        int index2 = diffPositions.get(1);
+
+        char ch1 = s.charAt(index1);
+        char ch2 = s.charAt(index2);
+
+        StringBuilder sb = new StringBuilder(s);
+        sb.setCharAt(index1,ch2);
+        sb.setCharAt(index2,ch1);
+
+        return sb.toString().equals(goal);
+    }
+}
