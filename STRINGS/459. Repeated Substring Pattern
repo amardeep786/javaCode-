@@ -1,0 +1,33 @@
+459. Repeated Substring Pattern :: https://leetcode.com/problems/repeated-substring-pattern/description/
+--------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public boolean repeatedSubstringPattern(String s) {
+        int n = s.length() ;
+        
+        // substring ki length n k divisors ho hoskte hain bss
+        // max divisore is n/2
+        
+        for(int l = 1 ; l<= n/2;l++)
+        {
+            if(n%l == 0)
+            {
+                int times = n/l ;
+                
+                String pattern = s.substring(0,l);
+                StringBuilder sb = new StringBuilder();
+                
+                while(times-- > 0)
+                {
+                    sb.append(pattern);
+                }
+                
+                if(sb.toString().equals(s))
+                {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+}
