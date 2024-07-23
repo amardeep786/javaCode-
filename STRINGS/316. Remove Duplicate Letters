@@ -1,0 +1,44 @@
+316. Remove Duplicate Letters :: https://leetcode.com/problems/remove-duplicate-letters/
+----------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public String removeDuplicateLetters(String s) {
+
+      // ek to hme index store krna hoga ki hrek char last m kb aaya h takai agr smallest bnane k liy 
+      // kisi char ko pop krna hua to usko tbhi pop krege jb wo curr k baad bhi aa rha ho
+      StringBuilder sb = new StringBuilder();
+      int last[] = new int[26];
+      for(int i = 0;i<s.length();i++)
+      {
+        char ch = s.charAt(i);
+        last[ch-'a'] = i ;
+      }  
+
+      // ek array bna lete h jo bataega ki koi char hmene pehle lia h ya nai 
+      boolean isTaken[] = new boolean[26];
+
+      for(int i = 0;i<s.length();i++)
+      {
+        char ch = s.charAt(i);
+        if( isTaken[ch-'a'])
+        {
+            // agr  lia h toh kuj nai krna h 
+            continue;
+        }else
+        {
+            // agr pehle le chuke ho to check kro ki curr char kya chhota h last chars s
+            while(sb.length()>0 && ch < sb.charAt(sb.length()-1) && last[sb.charAt(sb.length()-1)-'a'] > i)
+            {
+                char temp = sb.charAt(sb.length()-1);
+                isTaken[temp-'a'] = false ;
+                sb.deleteCharAt(sb.length()-1); // lst ko delete kro kiuki y baad m aajaega 
+                
+            }
+
+            sb.append(ch);  // ab curr char ko append krdo 
+            isTaken[ch-'a'] = true ;
+        }
+      }
+
+      return sb.toString();
+    }
+}
