@@ -1,0 +1,69 @@
+792. Number of Matching Subsequences :: https://leetcode.com/problems/number-of-matching-subsequences/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int numMatchingSubseq(String s, String[] words) {
+
+        Map<Character,List<Integer>> map = new HashMap<>();
+        int count = 0;
+        for(int i = 0;i<s.length() ;i++)  // put s chars into map 
+        {
+            char ch = s.charAt(i);
+            map.computeIfAbsent(ch,k->new ArrayList<>()).add(i);
+        }
+
+        // ab hme sbhi string  p ek ek krk traverse krte hue bss dekhna h ki s ka subseq hai ki nai 
+        for(int i = 0;i<words.length;i++)
+        {
+            if(isSubSeq(words[i],map))
+            {
+                count++ ;
+            }
+        }  
+        return count;  
+    }
+
+    public boolean isSubSeq(String str , Map<Character,List<Integer>> map)
+    {
+        int prev = -1;
+        for(int i = 0;i<str.length();i++)
+        {
+            char ch = str.charAt(i);
+
+            if(!map.containsKey(ch))
+            return false;
+
+            // if exist to hme jo list of indices hain usme s curr index s greater dhundna h 
+            int index = binarySearch(map.get(ch),prev);   // gives upper bound ie first element greater then prev
+
+            if(index == map.get(ch).size())
+            return false;
+
+            prev = map.get(ch).get(index);
+        }
+
+        return true; //a gr kbhi false nai hua to true return krdo 
+    }
+
+    public int binarySearch(List<Integer> list , int target)
+    {
+        int ans = -1;
+        int l = 0 , r = list.size()-1;
+
+        while(l<=r)
+        {
+            int mid = l + (r-l)/2;
+
+            if(list.get(mid) <= target)
+            {
+                
+                l = mid+1;
+            }else
+            {
+                ans = mid;
+                r = mid - 1;
+            }
+        }
+
+        return ans == -1 ? list.size():ans ;
+    }
+}
