@@ -1,0 +1,65 @@
+2272. Substring With Largest Variance :: https://leetcode.com/problems/substring-with-largest-variance/description/
+-------------------------------------------------------------------------------------------------------------------
+// for every 2 char which are present in string we will take substring which conatains these 2 chars and we will store freq and get our ans 
+class Solution {
+    public int largestVariance(String s) {
+
+        // make a list st we can knw whether some char is present or not 
+        int[] present = new int[26];
+        int n = s.length();
+        int res = 0;
+        
+
+        for(var ch : s.toCharArray())
+        {
+            present[ch-'a'] = 1;  // we just have to check wherther it is present or not 
+        }
+        
+        for(char first = 'a' ; first <= 'z'; first++)
+        {
+            for(char second = 'a' ; second <= 'z'; second++)
+            {
+                if(present[first-'a'] == 0 || present[second-'a']==0)
+                {
+                    continue;       // agr do chr nai h to continue krdo 
+                }
+
+                // ab dono hain toh -> freq1 is for 1st character and freq2 is for 2nd char
+                
+                int freq1 = 0 , freq2 = 0;
+                boolean pastSeen = false;   // cases like baa
+                for(int i = 0;i<n;i++)
+                {
+                    if(s.charAt(i) == first)
+                    {
+                        freq1++;
+                    }else if( s.charAt(i) == second)
+                    {
+                        freq2++ ;
+                    }
+
+                    if(freq2>0 )
+                    {
+                        res = Math.max(res,freq1-freq2);
+                    }else 
+                    {
+                        // agar past m dekha hai toh uska 1 count s abtk ka jo bhi array h 
+                        if(pastSeen)
+                        res = Math.max(res,freq1-1);
+                        
+                    }
+
+                    if(freq2 > freq1)
+                    {
+                        // reset 
+                        freq1 = 0 ;
+                        freq2 = 0 ;
+                        pastSeen = true;
+                    }
+                }
+            }
+        }
+
+        return res;
+    }
+}
