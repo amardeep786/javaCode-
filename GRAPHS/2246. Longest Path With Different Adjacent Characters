@@ -1,0 +1,79 @@
+2246. Longest Path With Different Adjacent Characters :: https://leetcode.com/problems/longest-path-with-different-adjacent-characters/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// we need path to path yaa to node k neeche hoga 
+// yaa phit left se node s hote hue upr jaega 
+// ya right s node s upr ki trf 
+
+// path -> nodes doesnot repeat
+// it is a graph so multipe childs possiblt so we will keep tracck of 2 childs whild hold max path till now 
+
+class Solution {
+    int result ;
+    public int longestPath(int[] parent, String s) {
+        
+    result = 0;
+
+    // make graph first
+    Map<Integer,List<Integer>> map = new HashMap<>();
+    
+    for(int i = 0;i<parent.length;i++)
+    {
+        int u = i;
+        int v = parent[i];
+
+        map.computeIfAbsent(u,k->new ArrayList<>()).add(v);
+        map.computeIfAbsent(v,k->new ArrayList<>()).add(u);
+
+    }
+
+    DFS(map,s,0,-1);
+
+    return result;
+    }
+
+    public int DFS(Map<Integer,List<Integer>> map , String s,int node , int parent)
+    {
+        // we need longest and second longest path 
+        int longest = 0 , second_longest = 0 ;
+
+        for(var child : map.getOrDefault(node,new ArrayList<>()))
+        {
+            if(child == parent)
+            continue;
+
+            int child_longest_path = DFS(map,s,child,node);
+
+            if(s.charAt(child) == s.charAt(node))
+            {
+                //skip this child and check for other child
+                continue;
+            }
+
+            // multiple child s ans aarha hoga but hum max 2 hi lege for path wrna path hi nai bneaga
+            if(child_longest_path > longest)
+            {
+                second_longest = longest ;
+                longest = child_longest_path ;
+            }else if(child_longest_path > second_longest)
+            {
+                second_longest = child_longest_path ;
+            }
+
+        }
+        // possible answer
+
+            // 1) onlu node is good and its child char is same as its char so in this case it should return 1
+            int sendOnlyNode = 1 ;
+
+            // 2) left and right me se koi ek path lelia orr upr k nodes k saath path bna lia 
+            int onlyOneChild = Math.max(longest,second_longest) + 1 ;  // +1 is it include iyself too 
+
+            // 3) longest path is left child ----> root -----> right child so 
+            int ansBelowThisNode = longest + second_longest + 1 ;
+
+            result = Math.max(result,Math.max(ansBelowThisNode,Math.max(onlyOneChild,sendOnlyNode)));
+            // ab agr longest path curr node or usk left right s hi bn gya to return thodi krege kuj 
+            // lekin agr ek trf s ans aaya h ya khud root node tb upr bhejna pdega
+            return Math.max(sendOnlyNode , onlyOneChild) ;
+    }
+}
