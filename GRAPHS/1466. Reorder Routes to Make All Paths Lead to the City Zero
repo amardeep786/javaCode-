@@ -1,0 +1,52 @@
+1466. Reorder Routes to Make All Paths Lead to the City Zero :: https://leetcode.com/problems/reorder-routes-to-make-all-paths-lead-to-the-city-zero/description/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// treat  graph as undirected and do dfs and we have knowledge of forward edges 
+// so as soon as we encounter forward edge we need to keep count of forward edges coz those edges need to be reversed
+// we need to keep track of directions also 
+class Solution {
+    public int minReorder(int n, int[][] connections) {
+
+        // make undirected graph
+        
+        List<List<int[]>> graph = new ArrayList<>();
+
+        for(int i = 0;i<n;i++)
+        {
+            graph.add(new ArrayList<>()) ; // initailaise first
+        }
+
+        for(var edge : connections)
+        {
+            graph.get(edge[0]).add(new int[]{edge[1], 1});  // 1 -> original direction  (forward)
+            graph.get(edge[1]).add(new int[]{edge[0], 0});   // 0 -> reverse direction  (backward)
+        }
+
+        int count[] = new int[1] ; // store count
+        boolean visited[] = new boolean[n];
+        dfs(graph,0,count,visited);
+
+        return count[0];
+        
+    }
+
+    public void dfs(List<List<int[]>> graph , int root , int[] count,boolean visited[])
+    {
+        visited[root] = true ;
+
+        for(var nei : graph.get(root))
+        {
+            //count[0]++ ;
+            int nextNode = nei[0];
+            int dir = nei[1];
+
+            if(!visited[nextNode])
+            {
+                if(dir == 1)  // root s nei ki trf edge hai 
+                {
+                    count[0]++ ;  // to isko reverse krna pdega 
+                }
+                dfs(graph,nextNode,count,visited);
+            }
+        }
+    }
+}
