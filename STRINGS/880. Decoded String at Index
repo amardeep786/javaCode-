@@ -1,0 +1,59 @@
+880. Decoded String at Index :: https://leetcode.com/problems/decoded-string-at-index/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// one way is ki string bnaalo append kr kr k and baad m jo index pucha  h uska ans likhdo
+
+/*
+ other way is : use maths to solve maths
+
+ we can get desired char by  k % size of string 
+ lekin if k % len == 0 mtlb ki last char hi ans hoga wahi repeat ho hokr multiple bnega 
+
+ eg abc3 == abcabcabc and k= 18 to 18%9 == 0  toh last char hi ans hoga ie c 
+
+ ------------O(n)--------------------------------------------------------------------------------------------------
+*/
+class Solution {
+    public String decodeAtIndex(String s, int k) {
+        
+        // first size nikaalo ki kitny length ki hogi string 
+        long len = 0 ;
+        int n = s.length();
+
+        for(int i = 0;i<n;i++)
+        {
+            if(Character.isDigit(s.charAt(i)))
+            {
+                len = len * (Character.getNumericValue(s.charAt(i)));
+            }else
+            {
+                // char hai to sze 1 s bdhega 
+                len++  ;
+            }
+        }
+
+        // ab hum last s backward traverse krte hain orr agr wo number hai to size ko uss nuber s divide krege tbhi 
+        // qki hmne uss nu ko multiply kia hoga tbhi len bdhi hogi 
+        // jb bhi k = 0 hogya or wo char rha towahi ans hoga 
+
+        for(int i = n-1;i>=0;i--)
+        {
+            k = (int)(k%len) ;
+
+            if(k==0 && Character.isAlphabetic(s.charAt(i)))
+            {
+                return String.valueOf(s.charAt(i));
+            }
+
+            // agr hum digit p hain toh reduce kro size se 
+            if(Character.isDigit(s.charAt(i)))
+            {
+                len = len/Character.getNumericValue(s.charAt(i)) ;
+            }else
+            {
+                len-- ;
+            }
+        }
+
+        return "";
+    }
+}
