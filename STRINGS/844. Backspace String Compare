@@ -1,0 +1,67 @@
+844. Backspace String Compare ::: https://leetcode.com/problems/backspace-string-compare/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public boolean backspaceCompare(String s, String t) {
+        
+        int n = s.length();
+        int m = t.length();
+
+        // traverse both from last
+        int skip = 0 ;
+
+        int i = n-1;
+        int j = m-1;
+
+        int skip_s = 0 , skip_t = 0 ;
+
+        while( i >= 0 || j >= 0)
+        {
+            while(i>=0)
+            {
+                if(s.charAt(i) == '#')      // agr # hai to isko count krlo baaad m skip krlo char ko 
+                {
+                    skip_s++ ;
+                    i--;
+                }
+                else if(skip_s > 0)  // character hai to skip krdo 
+                {
+                    i-- ;
+                    skip_s-- ;
+                }else
+                {
+                    // character mila to break krk iss character ko dusre  char s milaao 
+                    break;
+                }
+            }
+
+            while(j>=0)
+            {
+                if(t.charAt(j) == '#')
+                {
+                    skip_t++ ;
+                    j--;
+                }
+                else if(skip_t > 0)  // character hai to skip krdo 
+                {
+                    j-- ;
+                    skip_t-- ;
+                }else
+                {
+                    // character mila to break krk iss character ko dusre  char s milaao 
+                    break;
+                }
+            }
+
+            // ab yaha tkk dono ka char same hona chahiye 
+            char ch1 = (i>=0)?s.charAt(i):'$';
+            char ch2 = (j>=0)?t.charAt(j):'$';
+
+            if(ch1 != ch2)
+            return false;
+
+            i--;
+            j--;
+        }
+        return true ;
+    }
+}
