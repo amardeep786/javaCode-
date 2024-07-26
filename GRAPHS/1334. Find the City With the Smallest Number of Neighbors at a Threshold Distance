@@ -1,0 +1,184 @@
+1334. Find the City With the Smallest Number of Neighbors at a Threshold Distance :: https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/description/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// make a 2d matrix of shortest path where mat[i][j]->shortest path from i to j
+
+// ------------------------- APPROACH 1 --------------------DIJKSTRA ALGORITHM---------------------------------------------------------------------------------//
+
+/*
+ for every node apply dijkstra algorithm and store result and then iterate on 2D matrix and find result
+*/
+
+/*
+
+class Solution {
+    public int findTheCity(int n, int[][] edges, int distanceThreshold) {
+        
+        // make graph
+        int [][]SPM = new int[n][n];  // SPM -> shortest path matrix
+
+        Map<Integer,List<int[]>> map = new HashMap<>();
+
+        for(var edge : edges)
+        {
+            int u = edge[0];
+            int v = edge[1];
+            int wt = edge[2];
+
+            map.computeIfAbsent(u,k->new ArrayList<>()).add(new int[]{v,wt});
+            map.computeIfAbsent(v,k->new ArrayList<>()).add(new int[]{u,wt});
+        }
+
+        // ab bs Dijkstra call krdo hrek node p
+
+        for(int i = 0;i<n;i++)
+        {
+            Dijkstra(map,SPM[i],i);
+        }
+
+        return findMinReachCity(SPM , distanceThreshold);
+    }
+
+    public void Dijkstra(Map<Integer,List<int[]>> map ,int []minCost,int src)
+    {
+        Arrays.fill(minCost,Integer.MAX_VALUE);  // abhi infint dist hai sbka 
+        minCost[src] = 0 ;    // src ka khud s cost 0
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->a[1]-b[1]) ;   // min heap based on min cost 
+        pq.offer(new int[]{src,0});
+
+        while(!pq.isEmpty())
+        {
+            int currNode = pq.peek()[0];
+            int currDist = pq.peek()[1];
+            pq.poll();
+
+            if(map.containsKey(currNode))
+            {
+                for(var nei : map.get(currNode))    // for every neighbour update min dist
+                {
+
+                    int nextNode = nei[0];
+                    int neiCost = nei[1];
+
+                    if(currDist + neiCost < minCost[nextNode])
+                    {
+                        minCost[nextNode] = currDist + neiCost ;
+                        pq.offer(new int[]{nextNode , minCost[nextNode]});
+                    }
+
+                }
+            }
+            
+        }
+
+        
+    }
+
+    int findMinReachCity(int [][]SPM , int distanceThreshold)
+    {
+        int minCount  = (int)(1e9)+7 ; 
+        int minCity = -1 ;
+        for(int i = 0;i<SPM.length;i++)
+        {
+            int count = 0;
+            for(int j = 0;j<SPM.length;j++)
+            {
+                if(SPM[i][j] != 0 && SPM[i][j] <= distanceThreshold)
+                {
+                    count++ ;
+                }
+            }
+
+            if(count <= minCount)
+            {
+                minCount = count ;
+                minCity = i ;
+
+            }
+        }
+
+        return minCity;
+    }
+}
+
+*/
+
+// ------------------------- APPROACH 2--------------------FLOYD WARSHALL ALGORITHM---------------------------------------------------------------------------------//
+
+/*
+ it gives us diectly shoretst path matrix we dont need to call for every city
+*/
+class Solution {
+    public int findTheCity(int n, int[][] edges, int distanceThreshold) {
+        
+        // make graph
+        int [][]SPM = new int[n][n];  // SPM -> shortest path matrix
+
+        // Initialize SPM with high values except the diagonal
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(SPM[i], Integer.MAX_VALUE);
+            SPM[i][i] = 0;
+        }
+
+        Map<Integer,List<Integer>> map = new HashMap<>();
+
+        for(var edge : edges)
+        {
+            int u = edge[0];
+            int v = edge[1];
+            int wt = edge[2];
+
+            SPM[u][v] = wt;
+            SPM[v][u] = wt;
+        }
+
+        // ab bs floyd warshall ek baar call kro
+
+        floydWarshall(SPM);
+
+        return findMinReachCity(SPM , distanceThreshold);
+    }
+
+    public void floydWarshall(int[][] SPM)
+    {
+        int n  = SPM.length;
+
+        for(int via = 0;via < n;via++)
+        {
+            for(int i = 0;i < n;i++)
+            {
+                for(int j = 0; j < n;j++)
+                {
+                    if (SPM[i][via] != Integer.MAX_VALUE && SPM[via][j] != Integer.MAX_VALUE)
+                    SPM[i][j] = Math.min(SPM[i][j] , SPM[i][via] + SPM[via][j]);
+                }
+            }
+        }      
+    }
+
+    int findMinReachCity(int [][]SPM , int distanceThreshold)
+    {
+        int minCount  = (int)(1e9)+7 ; 
+        int minCity = -1 ;
+        for(int i = 0;i<SPM.length;i++)
+        {
+            int count = 0;
+            for(int j = 0;j<SPM.length;j++)
+            {
+                if(i!=j && SPM[i][j] != 0 && SPM[i][j] <= distanceThreshold)
+                {
+                    count++ ;
+                }
+            }
+
+            if(count <= minCount)
+            {
+                minCount = count ;
+                minCity = i ;
+
+            }
+        }
+
+        return minCity;
+    }
+}
