@@ -1,0 +1,127 @@
+2045. Second Minimum Time to Reach Destination :: https://leetcode.com/problems/second-minimum-time-to-reach-destination/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// jese hum array me min and sec min nikalte hain wese hi isme bhi 2 cost ki array bnaege jisme min or sec min store krege
+// class Solution {
+//     public int secondMinimum(int n, int[][] edges, int time, int change) {
+
+//         Map<Integer,List<Integer>> map = new HashMap<>();
+
+//         // make grpah first 
+//         for(var edge : edges)
+//         {
+//             int u = edge[0];
+//             int v = edge[1];
+
+//             map.computeIfAbsent(u,k->new ArrayList<>()).add(v);
+//             map.computeIfAbsent(v,k->new ArrayList<>()).add(u);
+//         }
+
+//         // take 2 array for minCost and secMinCost
+//         int minCost[] = new int[n+1];
+//         int secMinCost[] = new int[n+1];
+
+//         Arrays.fill(minCost,Integer.MAX_VALUE);
+//         Arrays.fill(secMinCost,Integer.MAX_VALUE);
+
+//         minCost[1] = 0 ;
+
+//         PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)-> a[0]-b[0]);   // int [] = cost , node
+
+//         pq.offer(new int[]{0,1}) ; // initially cost = 0 and node is 1
+
+//         while(!pq.isEmpty())
+//         {
+//             int []temp = pq.poll();
+//             int currTime = temp[0];
+//             int currNode = temp[1];
+
+//             if(currNode == n && secMinCost[n] != Integer.MAX_VALUE)
+//             {
+//                 return secMinCost[n] ;
+//             }
+
+//             // current status red or green ie green = even , red = odd
+//             int currStatus = (currTime / change) ;
+
+//             boolean redLight = (currStatus%2 == 1) ;
+
+//             for(var nei : map.getOrDefault(currNode,new ArrayList<>()))
+//             {
+//                 int timeToVisitNextNeigh = currTime + time ;
+
+//                 if(redLight )
+//                 {
+//                     timeToVisitNextNeigh = (currStatus+1)*change + time ;
+//                 }
+                    
+//                 if(timeToVisitNextNeigh < minCost[nei])
+//                     {
+//                         secMinCost[nei] = minCost[nei] ;
+//                         minCost[nei] = timeToVisitNextNeigh ;
+//                         pq.offer(new int[]{timeToVisitNextNeigh , nei}) ;
+//                     }else if(timeToVisitNextNeigh < secMinCost[nei] && minCost[nei] != timeToVisitNextNeigh)
+//                     {
+//                         secMinCost[nei] = timeToVisitNextNeigh ;
+//                         pq.offer(new int[]{timeToVisitNextNeigh , nei}) ;
+//                     }
+                                   
+//                 }
+//             }
+//             return -1;       
+        
+//     }
+// }
+
+//Approach-2 (Using BFS)
+//T.C : O(V + E) - where E = number of edges and V = number of vertices
+//S.C : O(V+E)
+class Solution {
+    public int secondMinimum(int n, int[][] edges, int time, int change) {
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i <= n; i++) {
+            adj.add(new ArrayList<>());
+        }
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        int[] d1 = new int[n + 1];
+        int[] d2 = new int[n + 1];
+        Arrays.fill(d1, Integer.MAX_VALUE);
+        Arrays.fill(d2, Integer.MAX_VALUE);
+
+        Queue<int[]> que = new LinkedList<>();
+        que.offer(new int[]{1, 1}); // Visited node 1 once
+        d1[1] = 0;
+
+        while (!que.isEmpty()) {
+            int[] curr = que.poll();
+            int node = curr[0];
+            int freq = curr[1];
+
+            int timePassed = (freq == 1) ? d1[node] : d2[node];
+            if (d2[n] != Integer.MAX_VALUE && node == n) { // We reached n 2nd time means it's the second minimum
+                return d2[n];
+            }
+
+            int mult = timePassed / change;
+            if (mult % 2 == 1) { // Red light
+                timePassed = change * (mult + 1); // to set green
+            }
+
+            for (int nbr : adj.get(node)) {
+                if (d1[nbr] == Integer.MAX_VALUE) {
+                    d1[nbr] = timePassed + time;
+                    que.offer(new int[]{nbr, 1});
+                } else if (d2[nbr] == Integer.MAX_VALUE && d1[nbr] != timePassed + time) {
+                    d2[nbr] = timePassed + time;
+                    que.offer(new int[]{nbr, 2});
+                }
+            }
+        }
+        return -1;
+    }
+}
