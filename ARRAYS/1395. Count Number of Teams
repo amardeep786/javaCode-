@@ -1,0 +1,46 @@
+1395. Count Number of Teams :: https://leetcode.com/problems/count-number-of-teams/description/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// method 1 -> for every elemet count its smaller left element and larger right element then product will be added to answer .
+// decreasing k liy left larger and right smaller add krdo 
+
+// constraint small -> O(n^2) works
+class Solution {
+    public int numTeams(int[] rating) {
+        
+        int n = rating.length;
+
+        int count = 0;
+
+        for(int j = 1;j<n-1;j++)
+        {
+            int countLeftSmaller = 0 , countLeftLarger = 0 ;   // for increasing decreasing case
+
+            for(int i = 0;i<j;i++)
+            {
+                if(rating[i] < rating[j])
+                {
+                    countLeftSmaller++ ;
+                }else if(rating[i] > rating[j])
+                {
+                    countLeftLarger++;
+                }
+            }
+
+            int countRightLarger = 0 , countRightSmaller = 0 ;
+            for(int k = j+1;k<n;k++)
+            {
+                if(rating[k] < rating[j])
+                {
+                    countRightSmaller++ ;
+                }else if(rating[k] > rating[j])
+                {
+                    countRightLarger++;
+                }
+            }
+
+            count += countLeftSmaller*countRightLarger ;
+            count += countLeftLarger*countRightSmaller ;
+        }
+        return count;
+    }
+}
