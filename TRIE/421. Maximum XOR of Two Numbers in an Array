@@ -1,0 +1,117 @@
+421. Maximum XOR of Two Numbers in an Array :: https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+ brute force : for every subarray find max XOR
+
+ efficient -> 
+            use TRIE to store bits of all numbers 
+            then since we want to find maximum ans so for every bit represent of number we try to find 
+            its opposite bits taaki ans max aa ske
+*/
+
+// T.C -> O(n*log(max(num))) -> kisi no ki represent krne k liy log2num bits lgege
+// so height of bit Trie ->O(log(num))
+
+// max bits = 32 to keh skt hain ki O(n*32) == approx O(n)
+
+class TrieNode {
+
+    // pehle node bna lete hain 
+
+    TrieNode left ; // for 0
+    TrieNode right ;  // for 1
+
+    void insert(TrieNode root,int num)
+    {
+        TrieNode pCrawl = root ;
+        for(int i = 31;i>=0;i--)
+        {
+            int ith_Bit =  (num>>i)&1 ;
+            if( ith_Bit == 0)
+            {
+                // to left me jana h 
+                if(pCrawl.left == null)
+                {
+                    pCrawl.left = new TrieNode();
+                }
+
+                pCrawl = pCrawl.left ;
+
+            }else
+            {   // agr ith bit 1 hai toh
+                if(pCrawl.right == null)
+                {
+                    pCrawl.right = new TrieNode();
+                }
+                pCrawl = pCrawl.right ;
+            }
+        }
+    }
+
+}
+
+class Solution {
+    public int findMaximumXOR(int[] nums) {
+        
+        TrieNode root = new TrieNode();
+
+        for(var num : nums)
+        {
+            root.insert(root,num);
+        }
+        int maxResult = 0;
+
+        for(int i = 0;i<nums.length ;i++)
+        {
+            int temp = findBestXor(root,nums[i]);
+            maxResult = Math.max(maxResult,temp);
+        }
+        return maxResult;
+    }
+
+    public int findBestXor(TrieNode root,int num)
+    {
+        int xor = 0;
+
+        TrieNode pCrawl = root ;
+
+        for(int i = 31;i>= 0;i--)
+        {
+            int ith_bit = (num>>i)&1 ;
+
+            if(ith_bit == 0)
+            {
+                // agr no ka ith bit zero hai to wo 1 se xor hona chahega 
+                // to wo pCrawl s puchega ki kya 1 hai ie kya right child hai agr hai to right chle
+                // jao agr nai h to majburi h left hi jaao 
+                if(pCrawl.right != null)        // 0^1 ho rha indirectly
+                {
+                    // mtlb 1 mila to xor krdo 
+                    xor += (int)Math.pow(2,i);
+                    pCrawl = pCrawl.right ;
+                }else
+                {
+                    // agr right nai hota to left jana hota (0^0 = 0 to kuj nai kia )
+                    pCrawl = pCrawl.left ;
+                }
+
+            }else
+            {
+                // agr ith value 1 hai to 0 dhunddo mtlb left hai ya nai 
+                if(pCrawl.left != null)
+                {
+                    // mtlb 1 mila to xor krdo or left jao 
+                    xor += (int)Math.pow(2,i);
+                    pCrawl = pCrawl.left ;
+                }else
+                {
+                    // agr right nai hota to right jana hota 
+                    pCrawl = pCrawl.right ;
+                }
+            }
+        }
+
+        return xor;
+    }
+}
