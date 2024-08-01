@@ -1,0 +1,128 @@
+212. Word Search II :: https://leetcode.com/problems/word-search-ii/
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ek to hm hrek string k 0th char in grid s dfs maar k check krte rhege si it will be (m*n*(m+n)) for grid traverse + DFS 
+
+Better APPROACH -> use TRIE 
+
+for every char of words we ask from node ki kya iss char ka children h curr Node k paas agr hai to aage bdho or nai h to 
+current string nai hogi grid me  . isme sirf ek baar hi grid ko traverse krna h 
+
+*/
+
+// PEHLE TRIE ka NODE BNA LETE HAIN 
+class TrieNode
+{
+    boolean endOfWord ;
+    String word ;
+    TrieNode []children = new TrieNode[26] ;
+
+    TrieNode getNode()      // return new TrieNode with initialised values
+    {
+        TrieNode temp = new TrieNode();
+        temp.endOfWord = false;
+        temp.word = "";
+
+        for(int i = 0;i<26;i++)
+        {
+            temp.children[i] = null ;
+        }
+
+        return temp;
+    }
+
+    void insert(TrieNode root , String str)
+    {
+        // is word ko iss root m populate krna h 
+        TrieNode crawl = root;
+
+        // ab hum hrek charcter ko root m daaalege 
+        for(int i = 0 ; i < str.length();i++)
+        {
+            char ch = str.charAt(i) ; 
+
+            // ab agr root k paas iss character ka children nai h to bnaado agr hai to aage bdho
+            if(crawl.children[ch-'a'] == null)
+            {
+                crawl.children[ch-'a'] = getNode();
+            }
+            crawl = crawl.children[ch-'a'] ;
+        }
+        // ab jb sb character khtam hogye hain tohh 
+        // iska endOfword ab true krdo ki khtam hogya h 
+        crawl.endOfWord = true;
+        crawl.word = str ;   // ye end hai kisi string ka or wo string y hai 
+    }
+}
+class Solution {
+    int direction[][] = {{0,1},{1,0},{0,-1},{-1,0}} ;
+    public List<String> findWords(char[][] board, String[] words) {
+
+        int m = board.length;
+        int n = board[0].length ;
+        List<String> res = new ArrayList<>();
+        // pehle trie bna k saare words daaldo
+        TrieNode root = new TrieNode();
+
+         root = root.getNode() ;   
+
+         for(var word : words)
+         {
+            root.insert(root,word);
+         }
+
+        // grid me ek hi baar traverse krege or find krege all words in trie if present
+        for(int i = 0;i<m;i++)
+        {
+            for(int j = 0;j<n;j++)
+            {
+                // ab hum root s puchte jaege ki tune ye char dekha hai ya nai 
+                char ch = board[i][j];
+                if(root.children[ch-'a'] != null)
+                {
+                    findAns(root,board , res,i,j,m,n) ;
+                }
+            }
+        }
+        return res;       
+    }
+
+    public void findAns(TrieNode root , char[][] board , List<String> res,int i,int j , int m,int n)
+    {
+        
+        // if out of bound to return 
+        if(i >= m || j >= n || i<0 || j < 0)  
+        return ;
+
+        // agr koi cell visited hai ya usk children m board ka current charater hi nai h to aage nai bdh skte 
+        if(board[i][j] == '$' || root.children[board[i][j] - 'a'] == null)
+        return ;
+
+        // iska mtlb ki curr char to hai root k paas to  root gya curr character k pass
+        root = root.children[board[i][j] - 'a'] ;  
+
+        if(root.endOfWord)
+        {
+            // agr root abhi jaha bhi uska end of word true h to mtlb ye koi string rhi hogi hmare string array m
+            res.add(root.word) ;   // root m wo word bhi store kr rhe the abhi k liy hi seedha ress m add krdia
+            root.endOfWord = false ;   // isko false krdo ab iska kaam hogya
+
+            // yaha s return nai hona h qki isk aage bhi words bn skte hain eg  bat , bate to bat mila to return krlia 
+            // to bate nai milega 
+        }
+
+        // ab aage jaana h to current koi visited mark krdo 
+        char tempo = board[i][j] ;  // mark visited for now
+        board[i][j] = '$';
+
+        // ab yaha s right left up down jaao 
+        for(var dir : direction)
+        {
+            int iNew = i + dir[0];
+            int jNew = j + dir[1];
+
+            findAns(root,board,res,iNew,jNew,m,n) ;
+        }
+        board[i][j] = tempo ;  // mark unvisited for future strings
+    }
+}
