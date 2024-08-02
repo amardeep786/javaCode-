@@ -1,0 +1,84 @@
+2134. Minimum Swaps to Group All 1's Together II :: https://leetcode.com/problems/minimum-swaps-to-group-all-1s-together-ii/description/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ // sliding window : hum total 1 count krlege or hrek totalOne k window m dekh lenge ki kitne 1 hai mtlb total - utne 1 ko swap krna hoga
+ // ab hum min swap chahte hain tohh max one chahiye hrek window me
+
+// TC - O(n) SC : O(2*n)
+
+/*
+
+class Solution {
+    public int minSwaps(int[] nums) {
+        int n = nums.length;
+
+        int []twice = new int[2*n];
+
+        for(int i = 0;i<2*n;i++)
+        {
+            twice[i] = nums[i%n] ;
+        }
+        int countOfOnes = 0 ; 
+
+        for(int i = 0;i<n;i++)
+        {
+            if(nums[i] == 1)
+            countOfOnes++ ;
+        }
+
+        int i = 0 , j = 0 , currOne = 0 , maxOne = 0 ;
+
+        while(j < 2*n)
+        {
+            if(twice[j] == 1)
+            {
+                currOne++ ;
+            }
+
+            if(j-i+1 > countOfOnes)
+            {
+                currOne -= twice[i] ;
+                i++ ;
+            }
+
+            maxOne = Math.max(maxOne , currOne) ;
+            j++ ;
+        }
+
+        return countOfOnes - maxOne ;
+    }
+}
+*/
+---------------------------------------------------------------- O(1) space  . O(N) time ------------------------------------------------------------------------------------------------------
+class Solution {
+    public int minSwaps(int[] nums) {
+        int n = nums.length ;
+        int countOfOnes = 0;
+        for(int i = 0;i<n;i++)
+        {
+            if(nums[i] == 1)
+            countOfOnes++ ;
+        }
+
+        int i = 0 , j = 0 , currOne = 0 , maxOne = 0 ;
+
+        while(j < 2*n)
+        {
+            if(nums[j%n] == 1)
+            {
+                currOne++ ;
+            }
+
+            if(j-i+1 > countOfOnes)
+            {
+                currOne -= nums[i%n] ;
+                i++ ;
+            }
+
+            maxOne = Math.max(maxOne , currOne) ;
+            j++ ;
+        }
+
+        return countOfOnes - maxOne ;
+
+    }
+}
