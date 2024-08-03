@@ -1,0 +1,64 @@
+151. Reverse Words in a String :: https://leetcode.com/problems/reverse-words-in-a-string/
+---------------------------------------------------------------------------------------------------------------------------------------------
+// using stringBuilder  METHOD 1
+
+/* 
+class Solution {
+    public String reverseWords(String s) {
+        Stack<String> st = new Stack<>();
+
+        int i = 0 , j = 0 , n = s.length();
+        StringBuilder sb = new StringBuilder();
+        while(j < n)
+        {
+            char ch = s.charAt(j);
+            if(ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch >= '0' && ch <= '9') 
+            {
+                sb.append(ch);
+
+                if(j==n-1)      // last index hi string ho to wah ipush krdo 
+                st.push(sb.toString());
+            }else
+            {
+               
+                if(sb.length() > 0)
+                    st.push(sb.toString());
+                sb.setLength(0);
+            }
+            j++;
+        }
+        
+        
+        StringBuilder res = new StringBuilder();
+        while(!st.isEmpty())
+        {
+            
+            res.append(st.pop());
+            res.append(" ");
+        }
+
+        res.deleteCharAt(res.length()-1);
+        
+        return res.toString();
+    }
+}
+*/
+// ---------------------------------MRTHOD 2 _________________------------------------------------
+class Solution {
+    public String reverseWords(String s) {
+
+        String []arr = s.trim().split("\\s+");
+        StringBuilder ans = new StringBuilder();
+        for(int i = arr.length - 1 ; i>=0 ;i--)
+        {
+            ans.append(arr[i]);
+
+            if(i != 0)
+            {
+                ans.append(" ");
+            }
+        }
+
+        return ans.toString();
+    }
+}
