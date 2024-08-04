@@ -1,0 +1,73 @@
+Q2. Shortest Distance After Road Addition Queries I :: https://leetcode.com/contest/weekly-contest-409/problems/shortest-distance-after-road-addition-queries-i/description/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// try all possible paths and find as constarint s less
+
+class Solution {
+    public int[] shortestDistanceAfterQueries(int n, int[][] queries) {
+        int q = queries.length;
+        int[] res = new int[q];
+        int idx = 0;
+
+        int[][] cost = new int[n][n];
+
+    
+        for (int[] row : cost) {
+            Arrays.fill(row, Integer.MAX_VALUE);
+        }
+
+        // unidirectional
+        for (int i = 0; i < n; i++) {
+            cost[i][i] = 0;
+            if (i < n - 1) {
+                cost[i][i + 1] = 1;
+            }
+        }
+
+        
+        floydWarshall(cost);
+
+        
+        for (int[] query : queries) {
+            int u = query[0];
+            int v = query[1];
+
+            
+            cost[u][v] = 1;
+
+            
+            updatePaths(cost, n, u, v);
+
+           
+            res[idx++] = cost[0][n - 1];
+        }
+
+        return res;
+    }
+
+    // trying all possible pairs of shortest path 
+    private void floydWarshall(int[][] cost) {
+        int n = cost.length;
+
+        for (int via = 0; via < n; via++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (cost[i][via] != Integer.MAX_VALUE && cost[via][j] != Integer.MAX_VALUE) {
+                        cost[i][j] = Math.min(cost[i][j], cost[i][via] + cost[via][j]);
+                    }
+                }
+            }
+        }
+    }
+
+    private void updatePaths(int[][] cost, int n, int u, int v) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (cost[i][u] != Integer.MAX_VALUE && cost[v][j] != Integer.MAX_VALUE) {
+                    cost[i][j] = Math.min(cost[i][j], cost[i][u] + 1 + cost[v][j]);  // 1 is coz direct edge bw s to e
+                }
+            }
+        }
+    }
+
+    
+}
