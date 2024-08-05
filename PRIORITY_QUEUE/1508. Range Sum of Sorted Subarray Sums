@@ -1,0 +1,67 @@
+1508. Range Sum of Sorted Subarray Sums :: https://leetcode.com/problems/range-sum-of-sorted-subarray-sums/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// brute force - do as said  --- O(n^2*logn) --------coz n^2 elements we store and sort--------------------------------------------------------------------------
+
+/*
+class Solution {
+    public int rangeSum(int[] nums, int n, int left, int right) {
+        
+        List<Integer>ans = new ArrayList<>();
+        int mod = (int)1e9+7 ;
+        for(int i = 0;i<n;i++)
+        {
+            int sum = 0;
+            for(int j = i;j<n;j++)
+            {
+                sum += nums[j] ;
+                ans.add(sum);
+            }
+        }
+
+        Collections.sort(ans);
+        int sum = 0 ;
+        for(int i = left-1 ; i<= right-1;i++)
+        {
+            sum = (sum + ans.get(i))%mod ;
+        }
+        return sum ;
+    }
+}
+
+*/
+
+// METHOD 2 --> USING PRIORITY QUEUE  ----------------------------------------------------------------//
+
+/*
+priority queue gives us all subarray sum in increasing/decreasing order depends upon min heap / max heap
+on the fly we can keep count that or left and right encounter and we get or ans
+*/
+class Solution {
+    public int rangeSum(int[] nums, int n, int left, int right) {
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->a[0]-b[0]) ;
+        int M = (int)1e9+7 ;
+        for(int i = 0;i<n;i++)
+        {
+            pq.offer(new int[]{nums[i],i}) ;
+        }
+        
+        int result = 0;
+
+        // sirf right tk hi jana h 
+        for (int i = 1; i <= right; i++) {
+            int[] current = pq.poll();
+
+            // If the current index is within the desired range, add the value to the result
+            if (i >= left) {
+                result = (result + current[0]) % M;
+            }
+
+            // If index is less than the last index, increment it and add the new subarray sum to the queue
+            if (current[1] < n - 1) {
+                pq.add(new int[]{current[0] + nums[current[1] + 1], current[1] + 1});
+            }
+        }
+        return result;
+    }
+}
