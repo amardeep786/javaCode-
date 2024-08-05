@@ -1,0 +1,25 @@
+1759. Count Number of Homogenous Substrings :: https://leetcode.com/problems/count-number-of-homogenous-substrings/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int countHomogenous(String s) {
+        int m = (int)1e9+7 ;
+
+        int n = s.length();
+        int len = 0;
+        int res = 0;
+        for(int i = 0;i<n;i++)
+        {
+            if(i>0 && s.charAt(i) == s.charAt(i-1))
+            {
+                // agr pichhle s same hai toh len bdhhao or add kro kiiko 1 + 2 + upto length tkk sb homo hi h
+                len++ ;
+            }else
+            {
+                len = 1 ;  // new charcater mila to len 1 s shuru kro 
+            }
+
+            res = (res + len)%m;
+        }
+        return res;
+    }
+}
