@@ -1,0 +1,81 @@
+2949. Count Beautiful Substrings II :: https://leetcode.com/problems/count-beautiful-substrings-ii/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+
+    task 1 : find those strings jaha jaha p vowels and consonants equal hain 
+
+    approach : prefix sum and map  (assume vowels as -1 and consonants as 1 then jaha p dono equal honge waha sum 0 hoga)
+
+                to in map we will store key as vowel - consonant so that we can check whether we have pehle seen same sum or not 
+                agr same prefix sum hmne pehle dekha hoga toh beech walo sum 0 hoga or for this consonants == vowel
+
+    task2 : (hme conso * vowel )%k == 0 b dekhna h toh hme hrek index k liy ek vowel ka count bhi store krege and check krege sbhi 
+            substings k liy ki vowel * vowel %k == 0 hai ki nai coz (vowel == conso ) hoga
+
+    so we will use map(vowel - conso , map(vowel Count , count ki kitny bar dekha h))
+
+
+//T.C :  O(n*k) where, k = avg size of mp[a-b]
+//S.C : O(n) in worst case when a-b is always a new value (example : "aeiouaeiou" or "bhjklhjk")
+
+
+*/
+class Solution {
+    public long beautifulSubstrings(String s, int k) {
+
+        long vowel = 0 , consonant = 0;
+        Map<Long , Map<Long,Long>> map = new HashMap<>();
+        long res = 0L ;
+        // initially vowel = 0 , conso = 0 so vowel - conso = 0 ;
+        map.put(0L , new HashMap<>());
+
+        // ander wale hashmap m bhi vowel ka count 0 or abhi hmne 1 baar dekha h 
+        map.get(0L).put(0L,1L);
+
+        int n = s.length();
+
+        for(int i = 0;i<n;i++)
+        {
+            char ch = s.charAt(i);
+            if(isVowel(ch))
+            {
+                vowel++ ;
+            }else
+            {
+                consonant++ ;
+            }
+
+            long pSum = vowel - consonant ;
+
+            for(Map.Entry<Long,Long> entry : map.getOrDefault(pSum , new HashMap<>()).entrySet())
+            {
+                // ab same prefix sum hmne pehle dekha h tbhi ander aaye hain 
+                // ab vowel ka count dekhna h jo ki keys hain 
+
+                Long pastVowelCount = entry.getKey();   // ye to hmne pehle hi mod k krke dala tha isliy isko mod k krne ki jrurt nai  h
+                Long currentVowelCount = vowel % k ;
+
+                Long vowelCountInCurrentString = currentVowelCount - pastVowelCount ;
+
+                // ab ye dekhlo ki iska square % k == 0 hai ki nai 
+
+                if (((vowelCountInCurrentString % k)  * (vowelCountInCurrentString % k))%k  == 0)
+                {
+                    res += entry.getValue();
+                }
+
+            }
+
+            // ab isko map m update krdo
+            map.computeIfAbsent(pSum , key -> new HashMap<>()).merge(vowel % k,1L,Long::sum);
+        }
+
+        return res ;
+        
+    }
+
+    public boolean isVowel(char ch)
+    {
+        return ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u' ;
+    }
+}
