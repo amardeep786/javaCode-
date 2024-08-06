@@ -1,0 +1,42 @@
+2947. Count Beautiful Substrings I :: https://leetcode.com/problems/count-beautiful-substrings-i/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+//T.C : O(n^2)
+//S.C : O(1)
+
+class Solution {
+    public int beautifulSubstrings(String s, int k) {
+        int n = s.length();
+        int res = 0;
+        for(int i = 0;i<n;i++)
+        {
+            int vowel = 0 , conso = 0 ;
+            for(int j = i;j<n;j++)
+            {
+                if(isVowel(s.charAt(j)))
+                {
+                    vowel++ ;
+                }else
+                {
+                    conso++ ;
+                }
+
+                if(vowel == conso && (vowel*conso)%k == 0)
+                {
+                    res++ ;
+                }
+            }
+        }
+
+        return res;
+    }
+
+    public boolean isVowel(char ch)
+    {
+        if(ch == 'a'||ch == 'e'||ch == 'i'||ch == 'o'||ch == 'u')
+        {
+            return true;
+        }
+
+        return false;
+    }
+}
