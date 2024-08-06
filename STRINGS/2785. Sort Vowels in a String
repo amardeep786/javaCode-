@@ -1,0 +1,138 @@
+2785. Sort Vowels in a String :: https://leetcode.com/problems/sort-vowels-in-a-string/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// approach one -> make collection of all vowels and sort them then place 1 by 1 in place of string vowels
+// TC - nlogn
+// SC - O(#vowels + n (for result string))
+
+/*
+class Solution {
+    public String sortVowels(String s) {
+        int n = s.length();
+
+        List<Character> list = new ArrayList<>();
+
+        for(int i = 0;i<n;i++)
+        {
+            char ch = s.charAt(i);
+            if(isVowel(ch))
+            {
+                list.add(ch);
+            }
+        }
+
+        Collections.sort(list) ;
+        System.out.println(list);
+        StringBuilder sb = new StringBuilder();
+
+        int j = 0;
+        for(int i = 0;i<n;i++)
+        {
+            char ch = s.charAt(i);
+            if(!isVowel(ch))
+            {
+                sb.append(ch);
+            }else
+            {
+                sb.append(list.get(j));
+                j++ ;
+            }
+        }
+
+        return sb.toString();
+        
+    }
+
+    public boolean isVowel(char ch)
+    {
+        return ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u' ||  
+                ch == 'A' || ch == 'E' || ch == 'I' || ch == 'O' || ch == 'U' ;
+    }
+}
+
+*/
+
+//Approach-2 (Without sorting. Counting the vowels - counting sort)
+//T.C : O(n)
+class Solution {
+    public String sortVowels(String s) {
+        int n = s.length();
+
+        String vowels = "AEIOUaeiou" ;
+
+        // store freq of vowels in map
+        Map<Character,Integer> map = new HashMap<>();
+        for(char ch : s.toCharArray())
+        {
+            if(isVowel(ch))
+            map.put(ch,map.getOrDefault(ch,0)+1);
+        }
+
+        int j = 0 ;
+        char []res = s.toCharArray();
+        
+
+        for(int i = 0;i<n;i++)
+        {
+            char ch = s.charAt(i);
+
+            if(isVowel(ch))
+            {
+                while(map.getOrDefault(vowels.charAt(j),0) == 0)
+                {
+                    j++ ;
+                }
+
+            
+            res[i] = vowels.charAt(j);
+
+            
+            map.put(vowels.charAt(j), map.get(vowels.charAt(j)) - 1);
+        }
+
+        }
+
+        return new String(res);
+    }
+
+
+    public boolean isVowel(char ch)
+    {
+        return ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u' ||  
+                ch == 'A' || ch == 'E' || ch == 'I' || ch == 'O' || ch == 'U' ;
+    }
+}
+
+// public class Solution {
+//     private boolean isVowel(char ch) {
+//         ch = Character.toLowerCase(ch);
+//         return (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u');
+//     }
+
+//     public String sortVowels(String s) {
+//         Map<Character, Integer> map = new HashMap<>();
+
+//         for (char ch : s.toCharArray()) {
+//             if (isVowel(ch)) {
+//                 map.put(ch, map.getOrDefault(ch, 0) + 1);
+//             }
+//         }
+
+//         String vowels = "AEIOUaeiou";
+//         int j = 0; // pointing to temp (current vowel)
+
+//         char[] resultArray = s.toCharArray();
+
+//         for (int i = 0; i < s.length(); i++) {
+//             if (isVowel(s.charAt(i))) {
+//                 while (map.getOrDefault(vowels.charAt(j), 0) == 0) {
+//                     j++;
+//                 }
+
+//                 resultArray[i] = vowels.charAt(j);
+//                 map.put(vowels.charAt(j), map.get(vowels.charAt(j)) - 1);
+//             }
+//         }
+
+//         return new String(resultArray);
+//     }
+// }
