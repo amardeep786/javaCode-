@@ -1,0 +1,29 @@
+3014. Minimum Number of Pushes to Type Word I :: https://leetcode.com/problems/minimum-number-of-pushes-to-type-word-i/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// greddily jo button khali h usp char ko rkhte jaao agr sb bhr gya to frse 2 s start kroo
+// TC -> O(n)  , SC: O(8) -> constant
+class Solution {
+    public int minimumPushes(String word) {
+        int n = word.length();
+        int minPush = 0;
+        int assignTo = 2 ;  // we start assigning from 2
+
+        Map<Integer,Integer> map = new HashMap<>();
+        for(int i = 0 ; i < n ;i++)
+        {
+            map.put(assignTo,map.getOrDefault(assignTo,0)+1);   // suppose fr s button 2 p ab dusra char aay ato 2 baar push krna pdega to jo val h whi add krdo
+            minPush += map.get(assignTo);
+
+            if(assignTo == 9)
+            {
+                assignTo = 2 ;      // 9 k baad fr s 2 p jaao 
+            }else
+            {
+                assignTo++ ;
+            }
+            
+        }
+
+        return minPush;
+    }
+}
