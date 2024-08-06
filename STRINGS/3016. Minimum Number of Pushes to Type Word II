@@ -1,0 +1,53 @@
+3016. Minimum Number of Pushes to Type Word II :: https://leetcode.com/problems/minimum-number-of-pushes-to-type-word-ii/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// GREEDY :- jiski jaada freq hai usey hum pehle number p rkhna chahege taaki 1 press lge 
+// agr sbhi jgeh bhr gyi tbb dusre pe rkhege mtlb 8 button m sbhi p koi n koi character aagya h 
+// to pehle to hum sbhi freq nikaal karr descending m sort krk fr usey greedly rkhege
+
+class Solution {
+    public int minimumPushes(String word) {
+        
+        int n = word.length();
+
+        int freq[] = new int[26];
+        for(int i = 0;i<n;i++)
+        {
+            freq[word.charAt(i)-'a']++ ;
+        }
+
+        Arrays.sort(freq);
+        reverse(freq);
+
+        int ans = 0;
+        for(int i = 0;i<26;i++)
+        {
+            if(freq[i] > 0)
+            {
+                int noOfTimes = freq[i];
+                int press = i/8 + 1 ;       // agr koi 9,10.. baar aaya to usey ghum k fr se upr jana hoga to mtlb 1-1 char fill hogye hoge 
+                //sbhi me to index/8 krege to pta lgega ki kitne char bhr gye h sbme then 1 for char itself 
+
+                // eg koi 20 index p hai to 20/8 krege to 2 aaega mtlb 2-8 tkk button m sbhi 2 -2 chars sbme aagye hai to is wale ko 3rd place lena
+                // hoga kisi me 
+
+                ans += press*noOfTimes ;
+            }
+        }
+
+        return ans ;
+    }
+    public void reverse(int[]arr)       // reverse for descending order
+    {
+        int i = 0 , j = arr.length-1 ;
+
+        while(i<j)
+        {
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+            i++;
+            j--;
+        }
+
+    }
+}
