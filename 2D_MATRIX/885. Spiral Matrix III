@@ -1,0 +1,43 @@
+885. Spiral Matrix III :: https://leetcode.com/problems/spiral-matrix-iii/description/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int[][] spiralMatrixIII(int rows, int cols, int rStart, int cStart) {
+        
+        int [][] directions = {{0,1},{1,0},{0,-1},{-1,0}} ;  // east,south,west,north
+
+        int dir = 0 ;  // we are at 0th index ie we want to go to east diections
+
+        int steps = 0 ;
+
+        int [][] res = new int[rows*cols][2];
+
+        res[0] = new int[]{rStart,cStart};   // currently isp hain to ye to ans m aaega hi 
+        int count = 1 ;     // 1 aachuka h anser m
+
+        // jbtk poora res update nai hojata
+        while(count < rows*cols)
+        {
+            // jb bhi hum east ya west me jaa rhe hain to ek step increase ho rha h 
+            // east and west ka index 0 and 2 hai to 
+            if(dir == 0 || dir == 2)
+            steps++ ;
+
+            for(int i = 0;i < steps;i++)
+            {
+                rStart += directions[dir][0];
+                cStart += directions[dir][1];
+
+                // if new row/col is valid then add to result
+                if(rStart >= 0 && rStart < rows && cStart >= 0 && cStart < cols)
+                {
+                    res[count++] = new int[]{rStart,cStart};
+                }
+            }
+
+            // go to next dirctions
+            dir = (dir+1)%4 ;
+        }
+
+        return res;
+    }
+}
