@@ -1,0 +1,60 @@
+54. Spiral Matrix :: https://leetcode.com/problems/spiral-matrix/
+---------------------------------------------------------------------------------------------------
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        
+
+
+    // Function to return a list of integers denoting spiral traversal of matrix.
+    
+        
+        List<Integer> result = new ArrayList<>();
+        
+        int rows = matrix.length , cols = matrix[0].length ;
+        
+        int top = 0 , bottom = rows-1 , left = 0 , right = cols - 1 ;
+        
+        while(top <= bottom && left <= right)
+        {
+            // pehle left s right ko add krdo
+            for(int i = left ; i<= right ; i++)
+            {
+                result.add(matrix[top][i]);
+            }
+            top++ ;  // qki ab next row m dekho
+            
+            // ab right k top s bottom aana h 
+            for(int i = top;i<= bottom;i++)
+            {
+                result.add(matrix[i][right]);  // right constant hoga abhi 
+            }
+            right-- ;
+            
+            // ab right to left print krna h  lekin top ab neeche aagya but ek row hui to y usi ko print krdega isliy 
+            // ek baar frse dekhlo ki top <= bottom hai ki nai 
+            if(top <= bottom)
+            {
+                for(int i = right ; i>= left;i--)
+                {
+                    result.add(matrix[bottom][i]);
+                }
+            
+                bottom-- ;
+            }
+            
+            // ab bottom s top 
+            if(left <= right)
+            {
+                for(int i = bottom ; i>= top;i--)
+                {
+                    result.add(matrix[i][left]);
+                }
+                
+                left++ ;
+            }
+        }
+        
+        return result;
+    }
+}
+    
