@@ -1,0 +1,47 @@
+59. Spiral Matrix II :: https://leetcode.com/problems/spiral-matrix-ii/description/
+--------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int[][] generateMatrix(int n) {
+        
+        int res[][] = new int[n][n] ;
+
+        int top = 0 , bottom = n-1 , left = 0 , right = n-1 ;
+        int ans = 1 ;
+        while(top <= bottom && left <= right){
+
+            // print left to right or ad left to right
+            for(int i = left;i<=right;i++)
+            {
+                res[top][i] = ans++ ;
+            }
+            top++ ; // move down
+
+            // add last col 
+            for(int i = top;i<=bottom;i++)
+            {
+                res[i][right] = ans++ ;
+            }
+            right-- ; // move left
+
+            if(top <= bottom)
+            {
+                for(int i = right;i >= left;i--)
+                {
+                    res[bottom][i] = ans++ ;
+                }
+                bottom-- ;
+            }
+
+            if(left <= right)
+            {
+                for(int i = bottom;i >= top;i--)
+                {
+                    res[i][left] = ans++ ;
+                }
+                left++ ;
+            }
+
+        }
+        return res;
+    }
+}
