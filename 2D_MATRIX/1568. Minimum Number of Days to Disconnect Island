@@ -1,0 +1,97 @@
+1568. Minimum Number of Days to Disconnect Island :: https://leetcode.com/problems/minimum-number-of-days-to-disconnect-island/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+hme max 2 days lgege disconnect krne k liy qki hum ek 1 ko isolate krskte h uske diagonally 0 bna k 
+to hmara ans 0,1,2 hi ho skta hai 
+
+agr pehle hi 0 ya 1 s jada island hai tb to pehle hi disconnected hai to hme kuj nai krna h ans 0 hoga 
+
+agr 1 island hai 
+to hum hrek 1 ko 0 bnane k baad check krege ki disconnect hua ki nai agr hua to days = 1 hoga lkin aisa nai hua to ans 2 hoa
+
+
+*/
+
+
+class Solution {
+
+    int directions[][] = {{0,-1},{0,1},{-1,0},{1,0}} ;
+
+    public int minDays(int[][] grid) {
+        
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        int islands = countIslands(grid) ;
+
+        if(islands == 0 || islands > 1)
+        {
+            return 0 ; // already disconnected
+        }
+
+        // ab hme ek ek krk sbko 0 bna k dekhna h ki disconnect hota hai ki nai 
+        for(int i = 0;i<rows;i++)
+        {
+            for(int  j= 0;j<cols;j++)
+            {
+                if(grid[i][j] == 1)
+                {
+                    grid[i][j] = 0;  // mark visit4ed or 1 ko 0 
+
+                    islands = countIslands(grid) ;
+
+                    grid[i][j] = 1 ;  // otherwise isko fr s 1 bnakr agle 1 ko 0 bnanae ka try kroo
+
+                    if(islands > 1 || islands == 0)
+                    return 1;
+
+                    
+                }
+            }
+        }
+
+        return 2 ; // agr 1 return nai hoga to defiitely 2 hoga 
+
+
+    }
+    public int countIslands(int[][] grid)
+    {
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        boolean visited[][] = new boolean[rows][cols];
+        int count = 0;
+        for(int i = 0;i<rows;i++)
+        {
+            for(int j = 0;j<cols;j++)
+            {
+                if(!visited[i][j] && grid[i][j] == 1)
+                {
+                    DFS(grid,i,j,rows,cols,visited);
+                    count++ ;
+                }
+            }
+        }
+        return count ;
+    }
+
+    public void DFS(int[][] grid , int i,int j, int rows,int cols,boolean visited[][])
+    {
+        // check ki safe hai ya nai
+        if(i < 0 || i >= rows || j < 0 || j>= cols || visited[i][j] || grid[i][j] == 0)
+        return ;
+
+        visited[i][j] = true ;
+
+        for(var d : directions)
+        {
+            int inew = i + d[0];
+            int jnew = j + d[1];
+
+            DFS(grid,inew,jnew,rows,cols,visited);
+        }
+
+
+    }
+}
+
