@@ -1,0 +1,55 @@
+Job Sequencing Problem :: https://www.geeksforgeeks.org/problems/job-sequencing-problem-1587115620/1
+---------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution
+{
+    //Function to find the maximum profit and the number of jobs done.
+    int[] JobScheduling(Job arr[], int n)
+    {
+       // pehle deadline k base p sort krleta hu taaki shuru s job krta jaau
+       // ek priority queue min heap le leta hu jo bhi krta jauga usko iss que m daalta jauga
+       // que ka size ye btaega ki hum kitny jobs kr chuke hain 
+       // agr aage koi bdia profit wala job aaya jisko isi deadline m fnsih hona tha 
+       // to hum top k job ka profit dekh lenge ki kitna hai 
+       // agr current ka jdaa h to isko push krege 
+       
+       Arrays.sort(arr , (a,b)-> Integer.compare(a.deadline, b.deadline)) ;  // sort based on deadline
+       PriorityQueue<Job> pq = new PriorityQueue<>((a,b)->a.profit-b.profit) ;  // min profit top p rhega
+       int maxProfit = 0 ;
+       
+       for(int i = 0;i<n;i++)
+       {
+           // agr kisi ki deadline jitny hmne job krli h usse jada h mtlb isko to hum kr skte hain 
+           if(arr[i].deadline > pq.size())
+           {
+               // we can do it 
+               pq.offer(arr[i]);
+               maxProfit += arr[i].profit ;
+           }else
+           {
+               // hme check krna pdega ki curr job ko include krna fydemand hai ya nai 
+               if(arr[i].profit > pq.peek().profit)
+               {
+                   Job removed = pq.poll();
+                   maxProfit -= removed.profit ;
+                   
+                   pq.offer(arr[i]);
+                   maxProfit += arr[i].profit ;
+               }
+           }
+       }
+       
+       int res[] = {pq.size() , maxProfit};
+       return res;
+    }
+}
+
+/*
+class Job {
+    int id, profit, deadline;
+    Job(int x, int y, int z){
+        this.id = x;
+        this.deadline = y;
+        this.profit = z; 
+    }
+}
+*/
