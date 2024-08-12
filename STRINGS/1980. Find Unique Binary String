@@ -1,0 +1,71 @@
+1980. Find Unique Binary String :: https://leetcode.com/problems/find-unique-binary-string/
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// method 1 :- 
+/*
+sbhi numbers ko integer m convert krk set m daal do 
+baaad m dekhlo ki set m knsa number nai h to usko frse string bna k bhejdo
+
+*/
+
+/*
+class Solution {
+    public String findDifferentBinaryString(String[] nums) {
+        
+        int n = nums.length ;
+
+        // hum chaahe to 2^n-1 tkk jaa skte hain coz n length ki string s 2^n numbers generate ho skte hai 
+        // but array ki length n hai to agr hum 0 to n ie n+1 length tkk hi jae to inme s hi koi ek missing hoga 
+        // wahi return kr denge 
+
+        Set<Integer>set = new HashSet<>();
+        for(var s : nums)
+        {
+            set.add(Integer.parseInt(s,2)); // binary string to number
+        }
+
+        String res = "";
+        for(int i = 0;i<=n;i++)
+        {
+            if(!set.contains(i))
+            {
+                // max 16 digit ka ans hoskta hai 
+                
+                res = Integer.toBinaryString(i);
+
+                while(res.length() < n)
+                {
+                    res = "0"+res ;
+                }
+            }
+        }
+
+        return res;
+
+    }
+}
+*/
+
+/*
+    method 2 : length n hai array ki as well as hrek string ki 
+
+    to mai pehle string k pehle char ko dekha or uska flipped maene ans m append kia 
+    then agle string p uska 1st index dekha or uska flipped ans m append kia 
+    aise hmara n length ka string hoga or ith index ith string k ith index s different hoga
+    similar to cantor diagonalization 
+
+*/
+class Solution {
+    public String findDifferentBinaryString(String[] nums) {
+
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0;i<nums.length;i++)
+        {
+            char ch = nums[i].charAt(i);
+            char toInsert = ch=='0'?'1':'0' ;
+            sb.append(toInsert);
+        }
+
+        return sb.toString();
+    }
+}
