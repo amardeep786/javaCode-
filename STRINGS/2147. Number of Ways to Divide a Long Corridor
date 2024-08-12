@@ -1,0 +1,45 @@
+2147. Number of Ways to Divide a Long Corridor :: https://leetcode.com/problems/number-of-ways-to-divide-a-long-corridor/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// we can use dp approach but without dp we can also solve 
+
+// we can make pairs of store indexes of seats and 
+// we can put divider bw starting of next pair and end of last pair
+
+class Solution {
+    public int numberOfWays(String corridor) {
+        int mod = (int)1e9+7 ;
+
+        int n = corridor.length();
+        
+        List<Integer> seat_pos = new ArrayList<>();
+        if(n == 1 || n == 0)return 0;
+        int count = 0;
+        for(int i = 0;i<n;i++)      
+        {
+            if(corridor.charAt(i) == 'S')           
+            {
+                count++  ;
+                seat_pos.add(i);
+            }
+        }
+
+        if(seat_pos.size() == 0 || seat_pos.size() %2 != 0)
+        return 0 ;  // we cannot accodmodate 2-2 seats
+
+
+
+        int end = seat_pos.get(1) ;   // first pair ka end yhi hoga 
+        long ways = 1 ;
+        for(int i = 2;i< seat_pos.size();i+=2)
+        {
+            int currStart = seat_pos.get(i) ;
+            
+            ways =  (ways * (currStart - end) )%mod;   //agle start or pichle end k beech m kahi b corridor dal skte hain 
+
+            end = seat_pos.get(i+1);
+        }
+
+        return (int)ways ;
+
+    }
+}
