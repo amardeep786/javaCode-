@@ -1,0 +1,95 @@
+1930. Unique Length-3 Palindromic Subsequences :: https://leetcode.com/problems/unique-length-3-palindromic-subsequences/description/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+    3 length ka subsequence chahiye jo ki palindrome bhi ho 
+    3 length k palindrome m first and last value same honi vhahiye and beech wala kuj b ho 
+
+    hum hrek char k liy dekh lege uska dusra occurence kha h undono k beech m jitne chars honge wahi ans hoga 
+
+    lekin aise fr kahi same char aaya to dikke hogi to better ki hrek char k liy hum uska first and last index nikal le 
+    or ab beech m jitne uniq char honge wo sb palindrome m coiunt honge 
+
+    O(n)
+*/
+class Solution {
+    public int countPalindromicSubsequence(String s) {
+        
+
+        int n = s.length() ;
+
+        Set<Character > set = new HashSet<>() ;
+        for(var f : s.toCharArray())    
+        {
+            set.add(f);
+        }
+        int res = 0;
+        // ab hrek char k liy solve krte hain 
+        for(var ch : set)       // O(26)
+        {
+            // find leftmost and rightmost indexes
+            int leftIdx = -1 , rightIdx = -1 ;
+
+            for(int i = 0;i<n;i++)      //O(n)
+            {
+                if(s.charAt(i) == ch)
+                {
+                    if(leftIdx == -1)
+                    {
+                        leftIdx = i ;
+                    }
+
+                    rightIdx = i ;  // right ko to override krte rho
+                }
+            }
+
+            // ab bs yhi dekhna h is left s right k beech m kitne uniq char h
+            Set<Character> uniq =  new HashSet<>();
+            for(int i = leftIdx+1 ; i<= rightIdx-1;i++) //O(n)
+            {
+                uniq.add(s.charAt(i));
+            }
+
+            res+= uniq.size();
+        }
+
+        return res;
+    }
+}
+
+// ------------ method 2  preCompute left and right index -----------------------------------------------------//
+//Approach-2 (Storing first and last indices before hand
+//T.C : O(n)
+//S.C : O(1) - Only 26 sized always
+class Solution {
+    public int countPalindromicSubsequence(String s) {
+        int[] first = new int[26];
+        int[] last = new int[26];
+        Arrays.fill(first, -1);
+        Arrays.fill(last, -1);
+        
+        for (int i = 0; i < s.length(); i++) {
+            int curr = s.charAt(i) - 'a';
+            if (first[curr] == - 1) {
+                first[curr] = i;
+            }
+            
+            last[curr] = i;
+        }
+        
+        int ans = 0;
+        for (int i = 0; i < 26; i++) {
+            if (first[i] == -1) {
+                continue;
+            }
+            
+            Set<Character> st = new HashSet();
+            for (int middle = first[i] + 1; middle < last[i]; middle++) {
+                st.add(s.charAt(middle));
+            }
+            
+            ans += st.size();
+        }
+        
+        return ans;
+    }
+}
