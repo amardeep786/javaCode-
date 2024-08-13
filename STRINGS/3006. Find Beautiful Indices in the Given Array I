@@ -1,0 +1,160 @@
+3006. Find Beautiful Indices in the Given Array I :: https://leetcode.com/problems/find-beautiful-indices-in-the-given-array-i/description/
+-----------------------------------------------------------------------------------------------------------------------------------------------
+/*
+    pehle to hme indexes chahiye a or b k usi ko hum i and j bol rhe h ques me to use KMP
+*/
+// KMP - for string matching 
+
+/*
+     O(nlogn) for lowerbound and O(m+n) for KMP
+
+*/
+
+class Solution {
+    public List<Integer> beautifulIndices(String s, String a, String b, int k) {
+        
+        List<Integer> indexI = KMP(a,s);
+        List<Integer> indexJ = KMP(b,s);
+
+        List<Integer> res = new ArrayList<>();
+        int n = s.length();
+        // ab bs ye dekhna h ki j - i <= k wala 
+
+        // | j - i | <= k  is equivalent too j-i <= k  -> j <= k + i and -(j-i) <= k -> j <= i - k 
+
+        // to hme koi bhi ek j mila jo ki i+k s lekr i - k tkk hai to wo valid hai 
+
+        // to bss hrek i k liy dekhlo j wale list me ki valid j hai ya nai 
+
+        for(var i : indexI)
+        {
+            int left = Math.max(0,i-k);
+            int right = Math.min(n-1,i+k);
+
+            // check ki kya koi element hai jo ki left s bda and right s chhota h toh lower bound nikal lo ie
+            // smallest element greater than equal to left 
+
+            int ele = lowerBound(indexJ,left);
+
+            if(ele != -1 && indexJ.get(ele) <= right )
+            {
+                res.add(i);
+            }
+        }
+
+        return res;
+    }
+
+    public int lowerBound(List<Integer> indexJ,int left)
+    {
+        int i = 0 , j = indexJ.size()-1;
+
+        int ans = -1;
+
+        while(i<=j)
+        {
+            int mid = i + (j-i)/2 ;
+
+            if(indexJ.get(mid) == left)
+            {
+                return mid;
+            }else if(indexJ.get(mid) > left)
+            {
+                ans = mid;
+                j = mid - 1;
+            }else
+            {
+                i = mid+1;
+            }
+        }
+
+        return ans;
+    }
+
+
+    public ArrayList<Integer> KMP(String pat, String txt)  // O(m+n)
+    {
+        int n = txt.length();
+        int m = pat.length();
+        
+        ArrayList<Integer> res = new ArrayList<>();
+        
+        // pehle LPS calculate krlete hai pattern ka fr KMP likhege 
+        
+        int LPS[] = new int[m];
+        computeLPS(pat , LPS , m);
+        
+        int i = 0 , j = 0 ;
+        
+        while(i < n)
+        {
+            // write KMP 
+            if(txt.charAt(i) == pat.charAt(j))
+            {
+                // agr match h to dono ko aage bdhaado kuj nai krna h 
+                i++;
+                j++;
+            }
+            
+            if(j == m)
+            {
+                // agr pattern k end m phoch gye mtlb match mila h to index ko daalo 
+                res.add(i-m) ;  // 0 based indexing isliy 1 add kia 
+                
+                // j ko frse ek peeche wale k lps m bhejo qki kuj match part hoga already
+                j = LPS[j-1];
+            }else if(i < n && txt.charAt(i) != pat.charAt(j))
+            {
+                // agr char match nai h to j ko peeche bhejo
+                if(j != 0)
+                {
+                    j = LPS[j-1] ;
+                }else
+                {
+                    // agr j 0 hai to kuj nai kr skte i ko aage bdhna pdega 
+                    i++ ;
+                }
+            }
+        }
+        
+        return res ;
+        
+    }
+    
+    public void computeLPS(String pat ,int LPS[] , int m)
+    {
+        int len = 0 ; // length of prev longest prefix == suffix 
+        
+        LPS[0] = 0 ; // 1 length k liy proper prefix suffix nai milega 
+        
+        int i = 1 ;
+        while(i < m)
+        {
+            // say len = 2 hai mtlb pichhle char k liy 2 len ka prefix and siffix equal mila 
+            // kindOf aaaa ab hum 5th char k liy dekhna chahte h to isko kis char s match klrana chaehege
+            // ie len p jo h hme malom h ki  2 len ka equal h to 3rd char ie index at len wale ko curr
+            // char s match krana chah rhe hain 
+            
+            if(pat.charAt(i) == pat.charAt(len))
+            {
+                len++;
+                LPS[i] = len ;
+                i++ ;
+            }else
+            {
+                // ager nai hua match to length ko ek ghta k match krana chahege ki kya ek kam len ka 
+            // prefixx suffix mila k nai 
+            
+                if(len != 0)
+                {
+                    len = LPS[len - 1]; // ek length kam p kitne ki matching hui thi to kya utni abhi frse hogi 
+                }else
+                {
+                    // agr 0 length tkk bna imila mtlb LPS hi 0 hai or i ko aage bdhado 
+                    LPS[i] = 0 ;
+                    i++;
+                }
+            }
+        }
+    }
+}
