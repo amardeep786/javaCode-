@@ -1,0 +1,43 @@
+3029. Minimum Time to Revert Word to Initial State I :: https://leetcode.com/problems/minimum-time-to-revert-word-to-initial-state-i/
+---------------------------------------------------------------------------------------------------------------------------------------------------
+// T.C O(n/k * n)  ~~ O(n^2)
+
+
+class Solution {
+    public int minimumTimeToInitialState(String word, int k) {
+        
+        int n = word.length();
+
+        int i = k , count = 1 ; // 1 baar to remove krna hi h to count = 1 lelia and i ko k p shidt krdia
+
+        // abhi kuj append nai kia h assume kuj b krdia h append 
+        // ab agr jaha p i hai waha s lekr end tkk ka string == hogya initial string k utne leng k preifx s
+
+        // abacaba to i abhi 3 p hoga to 3 s lekr end tkk caba == initial string ka utna length(abac)
+        // match nai ho rhe mtlb hme count ko aage bdhana hoga or i ko bhi 
+
+        // agr hojata to hm maam lete ki hmne jo append kia the wo remaining char h initial strig ka 
+        // abacaba ko 2 baar remove kia to modify string a??????  to ab a jo h wo match kr rha h initial string k preifx s to 
+        // to maan lege ki hmne bacaba hi append kia tha 
+
+        String temp = word;
+        while(i<n)
+        {
+            String suffix = temp.substring(i);   // i se n-1 tkkk ka string aajega
+            String prefix = word.substring(0,suffix.length());
+
+            if(suffix.equals(prefix))
+            {
+                return count;
+            }else
+            {
+                count++;
+                i+=k ;
+            }
+        } 
+
+        // agr kbhi match nai mila tohh mtlb sbhi char ko hi remove krna pdega k -k krke 
+        
+        return (int)Math.ceil(1.0*n/k) ;
+    }
+}
