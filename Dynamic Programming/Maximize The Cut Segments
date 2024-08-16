@@ -1,0 +1,41 @@
+Maximize The Cut Segments :: https://www.geeksforgeeks.org/problems/cutted-segments1642/1
+----------------------------------------------------------------------------------------------------------------------------------------------
+class Solution
+{
+    //Function to find the maximum number of cuts.
+    public int maximizeCuts(int n, int x, int y, int z)
+    {
+    
+       int dp[] = new int[n+1];
+       Arrays.fill(dp,-1);
+       
+       int a = help(n,x,y,z,dp);
+       
+       if(a<0)
+       return 0;
+       
+       return a;
+       
+    }
+    
+    public int help(int n, int x, int y, int z,int dp[])
+    {
+        if(n <= 0)
+        return 0;
+        
+        if(dp[n] != -1)
+        return dp[n];
+        
+        int cutX = Integer.MIN_VALUE , cutY = Integer.MIN_VALUE , cutZ = Integer.MIN_VALUE ;
+        
+        if(n-x >= 0)
+         cutX = help(n-x,x,y,z,dp);
+        if(n-y >= 0)
+         cutY = help(n-y,x,y,z,dp);
+        if(n-z >= 0)
+         cutZ = help(n-z,x,y,z,dp);
+        
+        
+        return dp[n] = 1 + Math.max(cutX , Math.max(cutY,cutZ));
+    }
+}
