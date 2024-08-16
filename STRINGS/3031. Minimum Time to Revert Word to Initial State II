@@ -1,0 +1,125 @@
+3031. Minimum Time to Revert Word to Initial State II :: https://leetcode.com/problems/minimum-time-to-revert-word-to-initial-state-ii/description/
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+// -------------- O(n^2) --- gives TLE ---------------------------------------------------------------------------------------//
+/*
+class Solution {
+    public int minimumTimeToInitialState(String word, int k) {
+        
+        int n = word.length();
+
+        int i = k , count = 1 ; // 1 baar to remove krna hi h to count = 1 lelia and i ko k p shidt krdia
+
+        // abhi kuj append nai kia h assume kuj b krdia h append 
+        // ab agr jaha p i hai waha s lekr end tkk ka string == hogya initial string k utne leng k preifx s
+
+        // abacaba to i abhi 3 p hoga to 3 s lekr end tkk caba == initial string ka utna length(abac)
+        // match nai ho rhe mtlb hme count ko aage bdhana hoga or i ko bhi 
+
+        // agr hojata to hm maam lete ki hmne jo append kia the wo remaining char h initial strig ka 
+        // abacaba ko 2 baar remove kia to modify string a??????  to ab a jo h wo match kr rha h initial string k preifx s to 
+        // to maan lege ki hmne bacaba hi append kia tha 
+
+        String temp = word;
+        while(i<n)
+        {
+            String suffix = temp.substring(i);   // i se n-1 tkkk ka string aajega
+            String prefix = word.substring(0,suffix.length());
+
+            if(suffix.equals(prefix))
+            {
+                return count;
+            }else
+            {
+                count++;
+                i+=k ;
+            }
+        } 
+
+        // agr kbhi match nai mila tohh mtlb sbhi char ko hi remove krna pdega k -k krke 
+        
+        return (int)Math.ceil(1.0*n/k) ;
+    }
+}
+*/
+//----------- method 2 ---------USING KMP -------------------------------------------------O(N)-------------------------------------------------//
+
+/*
+    isme hum jo upr prefix ==  suffix check kr rhe the usey O(n) m kr rhe the 
+    isi ko hum optimize krege with LPS -> longest length where prefix == suffix
+
+*/
+
+
+
+class Solution {
+    private void computeLPS(String word,int LPS[],int n)   // O(n)
+    {
+        LPS[0] = 0 ;  
+
+        int len = 0 , i = 1 ;
+
+        while(i < n)
+        {
+            if(word.charAt(i) == word.charAt(len))  // if equal 
+            {
+                len++ ;   // 1 length bdha common prefix suffix ka 
+
+                LPS[i] = len ;
+
+                i++ ;
+            }else
+            {
+                // to ek kam len ka dhund lo 
+                if(len != 0)
+                {
+                    len = LPS[len-1] ;   // ek kam ka lps dhundo
+                }else
+                {
+                    // agr len = 0 hai to koi option nai h 
+                    LPS[i] = 0;
+                    i++ ;
+                }
+            }
+        }
+    }
+    public int minimumTimeToInitialState(String word, int k) {
+
+        int n = word.length();
+        int LPS[] = new int[n];
+
+        computeLPS(word,LPS,n);
+
+
+        int suffix_length = LPS[n-1] ;   // itne length ka common hai 
+
+        // agr to suffix length hta k jitna bcha wo length divis by k hai mtlb 
+        // hum araam s divide kr skte h to ans is( n - LPS[n-1] ) / k ;
+
+        // agr nai hai tohh hume siffux length ghtana hoga to 
+        // ab hum uss suffix length ki string m dekhege ki kitna commn hai 
+
+        //abacabc to LPS[n-1] = 3 to baaki length bcha 4 and k = 3 hota toh 4/3 krte to wrong aata 
+        // abacabc ke 3-1 = 2 ka LPS dekhege coz abc equal tha lst k abc k to issey to kaam bna nai 
+        // aba me last k ka LPS 1 aaega to ab 1 legth ka suffix dekhege original word me 
+
+        while(suffix_length > 0 && (n - suffix_length )%k != 0)  // O(n)
+        {
+            suffix_length = LPS[suffix_length-1];
+        }
+
+
+        // agr ab suffix len divisible hua 
+        if((n - suffix_length )%k == 0)
+        {
+            return (n - suffix_length ) / k ;
+        }
+
+        // agr suff len 0 hogya to sbhi word ko hi dele krna pdega to
+        return (int)Math.ceil(1.0*n/k) ;
+    }
+}
