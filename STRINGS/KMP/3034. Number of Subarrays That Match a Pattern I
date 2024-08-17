@@ -1,0 +1,45 @@
+3034. Number of Subarrays That Match a Pattern I :: https://leetcode.com/problems/number-of-subarrays-that-match-a-pattern-i/
+-----------------------------------------------------------------------------------------------------------------------------------------------
+// constraint chhota h BRUTE FORCE will work
+
+
+//O(m*n)
+class Solution {
+    public int countMatchingSubarrays(int[] nums, int[] pattern) {
+        
+        int count = 0;
+        int n = nums.length;
+        int m = pattern.length;
+
+        for(int i = 0;i<= n-m-1;i++)      // last index n-m+1 wala hoga
+        {
+            int k = 0;
+
+            while(k<m)
+            {
+                if(pattern[k] == 1 && nums[i + k + 1] > nums[i + k])
+                {
+                    k++ ;
+                }else if(pattern[k] == 0 && nums[i + k + 1] == nums[i + k])
+                {
+                    k++;
+                }else if(pattern[k] == -1 && nums[i + k + 1] < nums[i + k])
+                {
+                    k++ ;
+                }else
+                {
+                    //a agr ais akuj nai t break krdo 
+                    break;
+                }
+            }
+
+            if(k==m)
+            {
+                count++;
+            }
+        }
+
+        return count;
+
+    }
+}
