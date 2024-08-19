@@ -1,0 +1,101 @@
+3261. Count Substrings That Satisfy K-Constraint II :: https://leetcode.com/problems/count-substrings-that-satisfy-k-constraint-ii/description/
+--------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+    hme hrek query k liy agr constant time lete hain O(q)
+    sliding O(n) to n+q me hone k chances hain 
+
+    O(n+q)
+
+*/
+class Solution {
+    public long[] countKConstraintSubstrings(String s, int k, int[][] queries) {
+
+        int n = s.length();
+
+        // agr mai kahi store krlu ki hrek index s right m kaha tkk jaa skta hu to hep milegi range me 
+        // pehle wahi krte h fr
+        int rightMost[] = new int[n];
+        int leftMost[] = new int[n];   // leftMost[j] = i -> for index j , what is the leftmost validIndex i till which we get valid substring
+
+        int i = 0 , j = 0 ;
+
+        Map<Character,Integer> map = new HashMap<>();       // we store count of 0  and 1 
+
+        while(j<n)
+        {
+            char ch = s.charAt(j);
+            map.put(ch,map.getOrDefault(ch,0)+1);
+
+            
+            while(map.getOrDefault('0',0) > k && map.getOrDefault('1',0) > k)
+            {
+                map.put(s.charAt(i),map.get(s.charAt(i))-1);
+                i++;
+            }
+
+            leftMost[j] = i ;
+            j++;
+        }
+
+        // now store righMost index for each index
+        map.clear(); 
+        i = n-1 ; j = n-1 ;
+        
+        while(j>=0)
+        {
+            char ch = s.charAt(j);
+            map.put(ch,map.getOrDefault(ch,0)+1);
+
+            
+            while(map.getOrDefault('0',0) > k && map.getOrDefault('1',0) > k)
+            {
+                map.put(s.charAt(i),map.get(s.charAt(i))-1);
+                i--;
+            }
+
+            rightMost[j] = i ;
+            j--;
+        }
+        
+
+        // number of valid substring ending at eaxh position
+        int tempValidSubstr[] = new int[n];
+
+        for(int m = 0;m<n;m++)
+        {
+            tempValidSubstr[m] = m - leftMost[m] + 1 ;
+        }
+
+        // cumulative sum taaki range nikalte wqt duplicacy nai aaegi
+        long[] cumSum = new long[n];
+        cumSum[0] = tempValidSubstr[0];
+        for(int m = 1;m<n;m++)
+        {
+            cumSum[m] = cumSum[m-1] + tempValidSubstr[m];
+        }
+
+        // now process queries
+        long[] res = new long[queries.length] ;
+        for(int t = 0;t<queries.length;t++)
+        {
+            int low = queries[t][0];
+            int high = queries[t][1];
+
+            int validRightIndex = Math.min(rightMost[low],high);
+
+            long length = validRightIndex - low + 1 ;        // iss length k saare substring bhi valid honge toh
+
+            // NO OS SUBSTRINGS
+            long tempResult  =  length * (length+1) / 2 ;
+
+            if(validRightIndex < high)
+            {
+                tempResult += cumSum[high] - cumSum[validRightIndex] ;
+            }
+
+            res[t] = tempResult ;
+        }
+
+        return res;
+    }
+}
