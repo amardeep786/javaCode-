@@ -1,0 +1,106 @@
+650. 2 Keys Keyboard :: https://leetcode.com/problems/2-keys-keyboard/description/
+----------------------------------------------------------------------------------------
+// recursion 
+/*
+class Solution {
+    public int minSteps(int n) {
+        if(n==1)
+        return 0;
+        // initially 1 copy to krna pdega
+        return 1 + help(1,1,n); // currentA = 1 , clipBoardA = 1       
+    }
+    private int help(int currA,int clipA,int n)
+    {
+        if(currA == n)
+        return 0;
+
+        if(currA > n)
+        return 1000000;
+
+        // copy pste krege to ek opr copy ka , ek paste ka and currA ab 2 times hojega qki
+        // usi ko copy krk paste krdia and clipBoard me ab currA aagya hoga
+        int copyPaste = 1 + 1 + help(currA + currA , currA , n) ;
+
+        // pste krege to  ek paste ka and currA ab currA + clipboard m jo bhi tha 
+        int paste = 1 + help(currA + clipA , clipA,n);
+
+        return Math.min(copyPaste , paste);
+    }
+}
+*/
+// ---------------------- memoization ------------------------------------------------//
+/*
+class Solution {
+    public int minSteps(int n) {
+        if(n==1)
+        return 0;
+        // initially 1 copy to krna pdega
+        int dp[][] = new int[1001][1001];
+        for(var t : dp)
+        Arrays.fill(t,-1);
+        return 1 + help(1,1,n,dp); // currentA = 1 , clipBoardA = 1       
+    }
+    private int help(int currA,int clipA,int n,int dp[][])
+    {
+        if(currA == n)
+        return 0;
+
+        if(currA > n)
+        return 1000000;
+
+        if(dp[currA][clipA] != -1)
+        return dp[currA][clipA];
+
+        // copy pste krege to ek opr copy ka , ek paste ka and currA ab 2 times hojega qki
+        // usi ko copy krk paste krdia and clipBoard me ab currA aagya hoga
+        int copyPaste = 1 + 1 + help(currA + currA , currA , n , dp) ;
+
+        // pste krege to  ek paste ka and currA ab currA + clipboard m jo bhi tha 
+        int paste = 1 + help(currA + clipA , clipA ,n,dp);
+
+        return dp[currA][clipA] = Math.min(copyPaste , paste);
+    }
+}
+*/
+// ---------------------- bottom up ------------ O(n2) ------------------------------------//
+class Solution {
+    public int minSteps(int n) {
+        if(n==1)
+        return 0;
+
+        if(n==2)
+        return 2;
+        
+        int dp[] = new int[n+1];
+        dp[0] = 0 ;
+        dp[1] = 0;
+        dp[2] = 2 ;
+        for(int i = 3;i<=n;i++)
+        {
+            int factor = i/2 ;
+
+            while(factor >= 1)
+            {
+                if( i % factor  == 0)
+                {
+                    int steps_to_print_factor = dp[factor] ; // itnme steps m iska largest factor aajega
+
+                    int copy = 1 ; // uss no of opr ko copy kro
+
+                    int paste = (i/factor) -1 ;
+
+                    dp[i] = steps_to_print_factor + copy + paste ;
+                    break;
+
+                }
+                else
+                {
+                    factor--;
+                }
+            }
+            
+        }
+
+        return dp[n];
+    }
+}
