@@ -1,0 +1,52 @@
+1140. Stone Game II :: https://leetcode.com/problems/stone-game-ii/description/
+--------------------------------------------------------------------------------------
+/*
+    alice ki turn h to hrek poss lete jaao and max of all
+    bob ki turn h to wo b hrek option choose krega to hme minimum of all chahiye
+*/
+class Solution {
+    public int stoneGameII(int[] piles) {
+        int n = piles.length;
+
+        int dp[][][] = new int[2][101][101];
+
+        for(var i : dp)
+        {
+            for(var j : i)
+            {
+                Arrays.fill(j,-1);
+            }
+        }
+        // 1-> alice , 0->bob
+        return solve(piles,1,0,1 , n,dp);  // initially alice to 1 for alice and 0th index and initial m = 1
+    }
+    private int solve(int[] piles , int person , int idx , int m,int n , int dp[][][])
+    {
+        if(idx >= n)
+        return 0;
+
+        if(dp[person][idx][m] != -1)
+        return dp[person][idx][m];
+
+        int stones = 0 ;
+
+        int res = person == 1 ? -1 : Integer.MAX_VALUE ;
+
+        for(int x = 1 ;x <= Math.min(2*m , n-idx);x++)
+        {
+            stones += piles[idx + x - 1];
+
+            if(person == 1){    // alice turn
+
+                res = Math.max(res,stones + solve(piles,0,idx+x,Math.max(m,x),n,dp));
+            }
+            else
+            {
+                // bob turn to isko worst expect krna h to minimum lege ab
+                res = Math.min(res,solve(piles,1,idx+x,Math.max(m,x),n,dp));
+            }
+        }
+
+        return dp[person][idx][m] = res;
+    }
+}
