@@ -1,0 +1,106 @@
+Top View of Binary Tree :: https://www.geeksforgeeks.org/problems/top-view-of-binary-tree/1
+------------------------------------------------------------------------------------------------------------------------------
+class pair
+{
+    Node node;
+    int hd ;  // for horizontally kitne dist p or left/right me 
+    
+    pair(Node node , int hd)
+    {
+        this.node = node;
+        this.hd = hd ;
+    }
+}
+class Solution {
+    
+    static ArrayList<Integer> topView(Node root) {
+        
+        ArrayList<Integer> res = new ArrayList<>();
+        
+        if(root == null) return res;
+        
+        Map<Integer,Integer> map = new TreeMap<>();  // it will store ki left or right m koi node kitna door h
+        Queue<pair> que = new LinkedList<>() ;  // iss int[] -> node ka data and uska level store krege 
+        
+        // ab bfs maarege to level wise neeche jaate jaaege and map m saath k saath node bhi store krte jaege 
+        // isse hum level wise neeche jaege to koi issue nai h + map m pehla node b store krte jaege hrek horizontal dist p 
+        
+        que.offer(new pair(root,0));
+        
+        while(!que.isEmpty())
+        {
+            var temp = que.poll();
+            
+            Node curr = temp.node;
+            int currDistance = temp.hd;
+            
+            if(!map.containsKey(currDistance))
+            {
+                map.put(currDistance , curr.data);
+            }
+            
+            if(curr.left != null)
+            {
+                que.offer(new pair(curr.left,currDistance-1));
+            }
+            
+            if(curr.right != null)
+            {
+                que.offer(new pair(curr.right,currDistance+1));
+            }
+        }
+        
+        
+        // abmap fill hogya hoga bs res m ans daalo ab
+        for(var i : map.keySet())
+        {
+            res.add(map.get(i));
+        }
+        return res;
+    }
+}
+
+--------------------------------------------------------------wrong approach which i thought ----------------------------------------------------------------------
+// recurive solution wrong ans de skta h 
+// agr hum y bhi kre pehli baaar m jo dikh rha curr index pr usey store krle tb b wrong aaega 
+// to hme hrek level ka bhi note rkhna pdega and vertically dist ka bhi 
+
+// WRONG SOLUTION :- 
+
+/*
+class Solution {
+    
+    static ArrayList<Integer> topView(Node root) {
+        
+        
+        Map<Integer,Integer> map = new TreeMap<>();
+        
+        
+        // help will fill map 
+        help(root, map , 0);
+        
+        ArrayList<Integer> list = new ArrayList<>();
+        for(var i : map.keySet())
+        {
+            list.add(map.get(i));
+        }
+        
+        return list;
+        
+    }
+    private static void help(Node root , Map<Integer,Integer> map , int idx)
+    {
+        if(root == null)
+        return ;
+        
+        if(!map.containsKey(idx))
+        {
+            map.put(idx , root.data) ;
+        }
+        
+        help(root.left,map,idx-1);
+        help(root.right,map,idx+1);
+    }
+}
+
+*/
