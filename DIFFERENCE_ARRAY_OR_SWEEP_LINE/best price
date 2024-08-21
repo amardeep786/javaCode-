@@ -1,0 +1,54 @@
+best price :: https://practice.geeksforgeeks.org/contest/job-a-thon-36-hiring-challenge/problems
+-----------------------------------------------------------------------------------------------------
+class Solution{
+    static int[] bestPrice(int n,int price[][],int k,int q,int queries[][]){
+        
+        TreeMap<Integer , Integer> map = new TreeMap<>();
+        
+        for(var p : price)
+        {
+            map.put(p[0],map.getOrDefault(p[0],0)+1);
+            map.put(p[1]+1,map.getOrDefault(p[1]+1,0)-1);
+        }
+        
+        int maxPrice = map.lastKey();
+        int[] prefix = new int[maxPrice+1];
+        
+        int sum = 0;
+        for(int i = 0;i<prefix.length;i++)
+        {
+            if(map.containsKey(i))
+            {
+                sum += map.get(i);
+                
+            }
+            prefix[i] = sum;
+            
+        }
+        
+        int[] countPrefix = new int[maxPrice + 1];
+        for (int i = 1; i <= maxPrice; i++) {
+            countPrefix[i] = countPrefix[i - 1];
+            if (prefix[i] >= k) {
+                countPrefix[i]++;
+            }
+        }
+        int[] res = new int[q];
+        int idx = 0;
+        
+        for(var que : queries)
+        {
+            int l = que[0];
+            int r = que[1];
+            
+            if(l > maxPrice)  l = maxPrice;
+            if(r > maxPrice)  r = maxPrice;
+            
+            int count = countPrefix[r] - (l>0?countPrefix[l-1]:0);
+            
+            res[idx++] = count ;
+            
+        }
+        return res;
+    }
+}
