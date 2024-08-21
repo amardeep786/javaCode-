@@ -1,0 +1,59 @@
+Shortest path in Undirected Graph :: https://www.geeksforgeeks.org/problems/shortest-path-in-undirected-graph-having-unit-distance/1
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    
+    public int[] shortestPath(int[][] edges,int n,int m ,int src) {
+        
+        int cost[] = new int[n];
+        Arrays.fill(cost,-1);
+        
+        cost[src] = 0;  // src ka src s distance
+        
+        Map<Integer,List<Integer>> map = new HashMap<>();
+        
+        for(var edge : edges)
+        {
+            int u = edge[0];
+            int v = edge[1];
+            
+            map.computeIfAbsent(u,k->new ArrayList<>()).add(v);
+            map.computeIfAbsent(v,k->new ArrayList<>()).add(u);
+        }
+        
+        // do bfs and update cost
+        Queue<Integer>que = new LinkedList<>();
+        Set<Integer> vis = new HashSet<>();
+        
+        
+        que.offer(src);
+        vis.add(src);
+        int level = 0 ;
+        while(!que.isEmpty())
+        {
+            int t = que.size();
+            
+            while(t-- > 0)
+            {
+                int curr = que.poll();
+                
+                
+                // put everyNeighbour in queue
+                for(var nei : map.getOrDefault(curr,new ArrayList<>()))
+                {
+                    if(!vis.contains(nei))
+                    {
+                        que.offer(nei);
+                        vis.add(nei);
+                    }
+                }
+                
+                cost[curr] = level ;
+                
+            }
+            level++ ;
+        }
+        
+        return cost;
+        
+    }
+}
