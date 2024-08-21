@@ -1,0 +1,32 @@
+BBT counter :: https://www.geeksforgeeks.org/problems/bbt-counter4914/1?itm_source=geeksforgeeks&itm_medium=article&itm_campaign=practice_card
+----------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    int mod = (int)1e9+7;
+     long countBT(int h){
+        
+        long dp[] = new long[h+1];
+        Arrays.fill(dp,-1);
+        return help(h,dp);
+    }
+    
+    public long help(int h,long dp[])
+    {
+        if(h == 0 || h ==1 )
+        return 1;
+        
+        if(dp[h] != -1)
+        {
+            return dp[h];
+        }
+        
+        long x = help(h-1,dp);
+        long y = help(h-2,dp);
+        
+        // formula ie both left an right height can be h-1 = x , h-2 se no of subtrees y
+        // to ya to dono height h-1 ki hogi to x*x
+        // ya to h-1 and h-2 or h-2 and h-1 ie x*y and y*x ie 2*x*y
+        long ans = ((x*x)%mod + (2*x*y)%mod)%mod;
+        
+        return dp[h] = ans;
+    }
+}
