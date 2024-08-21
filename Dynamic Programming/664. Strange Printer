@@ -1,0 +1,59 @@
+664. Strange Printer :: https://leetcode.com/problems/strange-printer/description/
+----------------------------------------------------------------------------------------
+class Solution {
+    public int strangePrinter(String s) {
+        
+        int n = s.length();
+        int dp[][] = new int [n+1][n+1];
+
+        for(var i : dp)
+        Arrays.fill(i,-1);
+
+        return help(0,n-1,s,dp);
+    }
+
+    public int help(int l,int r,String s,int dp[][])
+    {
+        if(l > r)
+        {
+            return 0;
+        }
+
+        if(l==r)
+        return 1; // ek char hai to 1 step usko print krne ka time 
+
+        if(dp[l][r] != -1)
+        return dp[l][r];
+
+        int i = l+1;    // ek aage ss huru kro 
+
+        while(i <= r && s.charAt(i) == s.charAt(l))
+        {
+            i++ ;
+        }
+
+        if(i == r+1)
+        {
+            // mtlb saare char same the 
+            return 1;
+        }
+
+        /// wrna hum kisi ith location p h jo ki pichlke wale s same nai h
+        // ek treeka h ki jitne same mile usey print kra dia + i s r tkk ka anser le aao
+        int basic = 1 + help(i,r,s,dp);
+
+        // another approach ki pooore r tkk dekho ki kaha kaha charAt(l) wala h usey print krado 
+        int laalach = Integer.MAX_VALUE ;
+        for(int j = i;j<=r;j++)
+        {
+            if(s.charAt(j) == s.charAt(l))
+            {
+                // think greedy ki saare print kraadi yaha tkk or beech walo ka sol le aao 
+                int ans = help(i,j-1,s,dp) + help(j,r,s,dp);
+                 laalach = Math.min(laalach, ans);
+            }
+        }
+
+        return dp[l][r] = Math.min(basic,laalach);
+    }
+}
