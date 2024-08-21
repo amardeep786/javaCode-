@@ -1,0 +1,76 @@
+987. Vertical Order Traversal of a Binary Tree :: https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/
+-----------------------------------------------------------------------------------------------------------------------------------
+class pair
+{
+    TreeNode node;
+    int x;
+    int y;
+
+    pair(TreeNode node , int x , int y)
+    {
+        this.node = node;
+        this.x = x;
+        this.y = y ;
+    }
+}
+class Solution {  
+    public List<List<Integer>> verticalTraversal(TreeNode node) {
+
+        // i will store node , horizontal level and vertical level 
+        // to muje col store krna h orr hrek column k liy row and nodes store krna h
+        // suppose vol 0 ke row 2 me 2 nodes hain to entry 0->2->{node1,node2} in sorted
+
+        Map<Integer , Map<Integer , PriorityQueue<Integer>> > map = new TreeMap<>();
+
+        Queue<pair> que = new LinkedList<>();
+        que.offer(new pair(node,0,0));  // initally 0 row and 0 col
+
+        while(!que.isEmpty())
+        {
+            pair temp = que.poll();
+
+            if(!map.containsKey(temp.y))                // agr col nai h to col daalo 
+            {
+                map.put(temp.y , new TreeMap<>());
+            }
+
+            if(!map.get(temp.y).containsKey(temp.x))        // agr row nai h to row daalo  with priorityqueue y sorted rkhega 
+            {
+                map.get(temp.y).put(temp.x,new PriorityQueue<>());
+            }
+
+            map.get(temp.y).get(temp.x).offer(temp.node.val);
+
+            // check left and right child
+            if(temp.node.left != null)
+            {
+                que.offer(new pair(temp.node.left , temp.x+1,temp.y-1));
+            }
+
+            if(temp.node.right != null)
+            {
+                que.offer(new pair(temp.node.right , temp.x+1,temp.y+1));
+            }
+        }
+
+        // ab map fil hogya hoga to bss sahi s abb list m add krana h
+        List<List<Integer>> res = new ArrayList<>();
+
+        for(var m : map.values())       // ye map return krega 
+        {
+            // m represent map here 
+            
+            List<Integer> inner = new ArrayList<>();
+            for(var pq : m.values())        // ye particular rows k pq return krege
+            {
+                while(!pq.isEmpty())
+                {
+                    inner.add(pq.poll());
+                }
+            }
+            res.add(inner);
+        }
+
+        return res;
+    }  
+}
