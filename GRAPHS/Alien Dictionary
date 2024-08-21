@@ -1,0 +1,84 @@
+Alien Dictionary  :: https://www.geeksforgeeks.org/problems/alien-dictionary/1
+-----------------------------------------------------------------------------------
+// albhebet  ke first k chars hi lene h or alien ki dictionary di h
+// hme bs ye btana h ki alient knsa order follow kr rha h
+// to hhum hrek consecutive words ko compare krk toposort lga skte h
+class Solution
+{
+    public String findOrder(String [] dict, int N, int K)
+    {
+        int n = dict.length;
+        List<Integer> arr[] = new ArrayList[K];
+        
+        // jinki indegre 0 hai usey pehle que m daalo
+        int inDegree[] = new int[K];
+        
+        for(int i = 0;i<K;i++)
+        {
+            arr[i] = new ArrayList<>();
+        }
+        
+        for(int i = 0;i<n-1;i++)
+        {
+            String word1 = dict[i];
+            String word2 = dict[i+1];
+            
+            // check kaha unequal hain 
+            // word 1 ki length ya to chhoti hogi ya to char unequalhoga kbhi bdi nai hogi
+            int len = Math.min(word1.length(),word2.length());
+            for(int j = 0;j<len;j++)  
+            {
+                
+                if(word1.charAt(j) != word2.charAt(j))
+                {
+                    int u = word1.charAt(j)-'a';
+                    int v = word2.charAt(j) - 'a' ;
+                    arr[u].add(v);  // numeric representation a->0,b->1 and so on
+                    inDegree[v]++ ;
+                    break;
+                }
+            }
+            
+        }
+        
+        // ab hmaare paas array hai arr[i] = j ---->  i pehle hai j se 
+        // to bss ispe topo sort hi to lgana h
+        
+        // jinka ans 0 hai unhe queue m daalo ie inorder 0 walo ka 
+        Queue<Integer> que = new LinkedList<>();
+        
+        for(int i = 0;i<K;i++)
+        {
+            if(inDegree[i] == 0)
+            {
+                que.offer(i);
+            }
+        }
+        
+        // ab bs topo lgado BFS WALA
+        StringBuilder res = new StringBuilder();
+        while(!que.isEmpty())
+        {
+            int u = que.poll();
+            res.append((char)('a'+u));
+            
+            // ab isk jitne neighbor the unki indgree ghta do ek se
+            for(var nei : arr[u])
+            {
+                inDegree[nei]-- ;
+                
+                if(inDegree[nei] == 0)
+                {
+                    que.offer(nei);
+                }
+            }
+        }
+        
+        if (res.length() != K) {
+            return ""; // Not all characters are included
+        }
+        
+        return res.toString();
+    }
+}
+
