@@ -1,0 +1,63 @@
+Longest Sub-Array with Sum K :: https://www.geeksforgeeks.org/problems/longest-sub-array-with-sum-k0809/1?itm_source=geeksforgeeks&itm_medium=article&itm_campaign=practice_card
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+class Solution{
+    
+   /*
+   sliding window will fail coz agr sum bdh b gya to aage neg elements k liy ans fr
+   se ght k sum k brabr hoskta hai
+    */
+/*
+    public static int lenOfLongSubarr (int A[], int N, int K) {
+        
+        int len = 0;
+        int sum = 0;
+        int i = 0 , j = 0 ;
+        
+        while(j<N)
+        {
+            sum += A[j];
+            
+            while(i<=j && sum > K)
+            {
+                sum -= A[i];
+                i++;
+            }
+            
+            if(sum == K)
+            {
+                len = Math.max(len,j-i+1);
+            }
+            j++;
+        }
+        return len;
+    }
+}
+
+*/
+// ---------------using hashmap and prefix--------------------
+class Solution{
+    
+    public static int lenOfLongSubarr (int A[], int N, int K) {
+        
+        Map<Integer,Integer> map = new HashMap<>();
+        map.put(0,-1);
+        int len = 0;
+        int prefixSum = 0;
+        for(int i = 0;i<N;i++)
+        {
+            prefixSum += A[i];
+            if(map.containsKey(prefixSum-K))
+            {
+                len = Math.max(len,i - map.get(prefixSum-K));
+                
+            }
+            // prefix sum nai h tbhi daalna h wrna update hogya to longest 
+            // ans naa aaye kya pta 
+            if(!map.containsKey(prefixSum))
+                map.put(prefixSum,i);
+        }
+        
+        return len;
+    }
+}
