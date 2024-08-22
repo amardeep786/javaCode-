@@ -1,0 +1,91 @@
+Tree Boundary Traversal :: https://www.geeksforgeeks.org/problems/boundary-traversal-of-binary-tree/1?itm_source=geeksforgeeks&itm_medium=article&itm_campaign=practice_card
+=============================================================================================================================================================================
+/*
+pehle left boundary chahiye to preOrder krk store kraalo jb tk leaf naa aaje
+
+then inOrder s hum left to right leaf store kra lenge 
+[ hum level order nai krske qki kuj leaf up hue kuj neeche to isue hoga]
+[ hme left to right chahiye isliy inorder/preOrder kuj b krskte h]
+then reverse me right k travel krege
+
+*/
+
+class Solution
+{
+	ArrayList <Integer> boundary(Node node)
+	{
+	    ArrayList <Integer> res = new ArrayList<>();
+	    
+	    if(isLeaf(node) == false)       // add root first
+	    {
+	        res.add(node.data);
+	    }
+	    
+	    addLeftBoundary(node,res);
+	    addLeaves(node,res);
+	    addRightBoundary(node,res);
+	    
+	    return res;
+	}
+	
+	private boolean isLeaf(Node node)
+	{
+	    return node.left == null && node.right == null ;
+	}
+	
+	private void addLeftBoundary(Node node , ArrayList <Integer> res)
+	{
+	    Node child = node.left;
+	    
+	    while(child != null)
+	    {
+	        if(isLeaf(child) == false) res.add(child.data);
+	        if(child.left != null)
+	        {
+	            // agr left child nai tp right ko daalo ki wo boundary p hoga 
+	            child = child.left;
+	        }else
+	        {
+	            child = child.right ;
+	        }
+	    }
+	}
+	
+	private void addLeaves(Node node , ArrayList <Integer> res)
+	{
+	    
+	    if(isLeaf(node))
+	    {
+	        res.add(node.data);
+	        return ;
+	    }
+	    
+	    if(node.left != null) addLeaves(node.left,res);
+	    if(node.right != null) addLeaves(node.right,res);
+	}
+	
+	private void addRightBoundary(Node node , ArrayList <Integer> res)
+	{
+	    Stack<Integer>st = new Stack<>();  // qki right ko hme revrse m chahiye
+	    Node child = node.right;
+	    
+	    while(child != null)
+	    {
+	        if(isLeaf(child) == false) st.push(child.data);
+	        if(child.right != null)
+	        {
+	            // agr left child nai tp right ko daalo ki wo boundary p hoga 
+	            child = child.right;
+	        }else
+	        {
+	            child = child.left ;
+	        }
+	    }
+	    
+	    while(!st.isEmpty())
+	    {
+	        res.add(st.pop());
+	    }
+	}
+}
+
