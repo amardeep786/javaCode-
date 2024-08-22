@@ -1,0 +1,107 @@
+Prime Inversions :: https://practice.geeksforgeeks.org/contest/job-a-thon-35-hiring-challenge/problems
+---------------------------------------------------------------------------------------------------------
+class Solution {
+    public  long PrimeInversions(int n, int[] arr) {
+        
+        int b[] = new int[n];
+        
+        for(int i = 0;i<n;i++)   // n&sqrt(n)
+        {
+            b[i] = countDistinctPrimeFactors(arr[i]);
+        }
+        
+        
+        return mergeSort(b,0,n-1);  // nlogn
+        
+    }
+    // func to find distinct prime factors O(sqrt(n))
+    private int countDistinctPrimeFactors(int n)
+    {
+        Set<Integer>set = new HashSet<>();
+
+        // pehle jbtk 2 s divide hota jaa rha h krte jaao 
+        while(n%2 == 0)
+        {
+            n /= 2 ;
+            set.add(2);
+        }
+
+        // fr 3,5,7 s check krte jaao and n odd hogya hoga iss smy 
+        for(int i = 3;i<= Math.sqrt(n);i+=2)
+        {
+            while(n%i == 0)
+            {
+                set.add(i);
+                n/=i;
+            }
+        }
+
+        // agr odd prime hua to usko as it is daaldo
+        if(n>2)
+        {
+            set.add(n);
+        }
+        
+        return set.size();
+    }
+    
+    private long mergeSort(int b[],int l,int r)
+    {
+        long res = 0;
+        
+        if(l<r)
+        {
+            int mid = l+(r-l)/2 ;
+            
+            res += mergeSort(b,l,mid);
+            res += mergeSort(b,mid+1,r);
+            
+            res += merge(b,l,mid,r);
+        }
+        
+        return res;
+    }
+    
+    private long merge(int b[],int l,int mid,int r)
+    {
+        int temp[] = new int[r-l+1] ;
+        int k = 0;
+        
+        long count = 0;
+        
+        int i = l , j = mid+1 ;
+        
+        while(i <= mid && j <= r)
+        {
+            if(b[i] > b[j])
+            {
+                count += (mid-i+1);
+                temp[k++] = b[j++];
+                
+            }else
+            {
+                temp[k++] = b[i++];
+            }
+        }
+        
+        while(i<=mid)
+        {
+            temp[k++] = b[i++];
+        }
+        
+        while(j<=r)
+        {
+            temp[k++] = b[j++];
+        }
+        
+        
+        int idx = 0;
+        
+        for(int t = l;t<= r;t++)
+        {
+            b[t] = temp[idx++];
+        }
+        return count;
+    }
+    
+}
