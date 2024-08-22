@@ -1,0 +1,55 @@
+Missing And Repeating :: https://www.geeksforgeeks.org/problems/find-missing-and-repeating2512/1?page=1&sortBy=submissions
+-----------------------------------------------------------------------------------------------------------------------------
+
+// method 1 to simple freq store krlo map me jiski freq 2 hai usey add krdo or jo missing h wo bhi 
+// mil jaega
+
+class Solve {
+    int[] findTwoElement(int arr[], int n) {
+        
+        int []res = new int[2];
+        
+        // n*n=1 jo h wo overflow hokr neg hojaa rha tha to usey long m convert kr dia 
+        long missing = (long)((long)n*(n+1)/2);
+        int repeating = -1;
+        
+        // hrek index p jaake usey neg bnaado age koi pehle hi neg hai
+        // mtlb ek or koi element same aaya tha usey neg bnake gya mtlb jo neg h wahi repeating 
+        // hai
+        
+        for(int i = 0;i<n;i++)
+        {
+            int absValue = Math.abs(arr[i]);
+            
+            // uss index p jaao or dekhlo +ve hai to neg bnaado 
+            if(arr[absValue-1] > 0)
+            {
+                arr[absValue-1] = -arr[absValue-1];
+                // sirf uniq elemnt ko ghtaate jaao baad m jo bchega wo mssing wala hoga
+                missing -= absValue;  
+            }else
+            {
+                // mtlb y neg h ele mtlb same elem pehle b aachuka h 
+                res[0] = absValue;
+                
+            }
+        }
+        
+        // ab missing m jo bcha hoga wo missing element hi hoga
+        res[1] = (int)missing;
+        
+        return res;
+        
+    }
+}
+
+// ----------- method 2 -------------------------------------
+
+/*
+    xor krdo sbhi ka to repeating wala hayeb hojaega and missing wala to pehle hi gaayeb tha 
+    frf iss ans ko frse xor krdo 1se n tkk xor^1^2^3 ..n  to ab baaki gayeb hojaege
+    repeating and missing prakat hojaege 
+    
+    bs ab yehi pta lgana h knsa missing h and knsa repeating 
+    to array p travel krk dekh lege knsa missing h to dusra repeaing hoga 
+*/
