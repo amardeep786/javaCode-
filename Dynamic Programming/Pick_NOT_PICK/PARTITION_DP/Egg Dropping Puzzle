@@ -1,0 +1,111 @@
+Egg Dropping Puzzle :: https://www.geeksforgeeks.org/problems/egg-dropping-puzzle-1587115620/1
+=======================================================================================================================================================================
+
+/*
+class Solution 
+{
+    
+    int eggDrop(int n, int k) 
+	{
+	    int dp[][] = new int[201][201];
+	    
+	    for(var t : dp)
+	    Arrays.fill(t,-1);
+	    
+	    
+	    return help(n,k,dp);
+	}
+	
+	private int help(int n,int k,int dp[][])
+	{
+	    if(n==0)        // agar ande hi nai bche to 0 return krdo
+	    return 0;
+	    
+	    if(k == 1)      // agr 1 hi floor hai to wahi critical hoga
+	    return 1;
+	    
+	    if(n==1)            // agr sirf ek anda h to maanlo ki issey hrek floor s try kia fekne ka 
+	    return k;           // worst case m nai foota to ans k hi aajaega last floor
+	    
+	    if(k == 0)          // agr floor hi nai h to 0 return krdo 
+	    return 0;
+	    
+	    if(dp[n][k] != -1)
+	    return dp[n][k];
+	    
+	    
+	    
+	    int ans = Integer.MAX_VALUE;
+	    
+	    // hrek floor s fenk kr dekhege hum 
+	    for(int floor = 1 ;floor <= k ;floor++)
+	    {
+	         // agr toot gya anda kisi floor f se tohh ab n-1 ande bche orr hmara required floor b neeche kahi hoga 
+	         // to call n-1 ande on floor-1 pr
+	        int tootgya =  help(n-1,floor-1,dp); 
+	        
+	        // agr anda bch gya to mtlb critical floor upr kahi k-floor wale me s koi hoga or ande to utne hi hain 
+	        int bchgya  =  help(n,k-floor,dp);
+	        
+	        // hum man k chlgeeg ki sbse jaada tum hrek floor s jo lgg rha h wo lete h
+	        int worstCase = Math.max(tootgya,bchgya);
+	        
+	        // or un sbbse jada tym walo m s min wala hi hme gurannteed bta dega ki iss floor hum guratee s wo floor nikal skte h
+	        ans = Math.min(ans,worstCase+1);
+	    }
+	    
+	    return dp[n][k] = ans;
+	}
+}
+*/
+// ================================== bottom up ===================================================================================
+class Solution 
+{
+    
+    int eggDrop(int n, int k) 
+	{
+	    int dp[][] = new int[n+1][k+1];
+	    int len = dp.length;
+	    // suppose row number eggs hain and col no floors
+	    
+	    // pehle base case se ye 2D array fill krlo
+	    
+	    // cse 1 : jb eggs 0 to ans 0 hoga and jb 1 anda tha to ans #no of floors tha
+	    for(int i = 1;i<=k;i++)
+	    {
+	        // 1 egg = j trials needed for j floors
+	        dp[1][i] = i ;  // i hi to no of floors bta rha h
+	    }
+	    
+	    // cse 2 : jb floors 0 to ans 0 hoga and floor 1 hai to ans bhi 1 hoga 
+	    for(int i = 0;i<len;i++)
+	    {
+	        dp[i][0] = 0 ;  // 0 floors = 0 trials needed
+	        dp[i][1] = 1 ;  // 1 floor = 1 trial needed
+	    }
+	    
+	    for(int i = 2;i<=n;i++) // i = eggs
+	    {
+	        for(int j = 2;j<=k;j++) // j = floors
+	        {
+	            int min = Integer.MAX_VALUE ;
+	            
+	            for(int x = 1; x <= j; x++)
+	            {
+	                int eggBreaks = dp[i - 1][x - 1];  // Egg breaks
+                    int eggSurvives = dp[i][j - x];    // Egg survives
+	                
+	                int temp = 1 + Math.max(eggBreaks, eggSurvives);
+	                
+	                min = Math.min(min, temp);
+	            }
+	            
+	            dp[i][j] = min;
+	        }
+	        
+	        
+	    }
+	    
+	    return dp[n][k];
+	}
+}
