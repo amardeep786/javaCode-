@@ -1,0 +1,46 @@
+0 - 1 Knapsack Problem :: https://www.geeksforgeeks.org/problems/0-1-knapsack-problem0945/1
+---------------------------------------------------------------------------------------------
+
+//------------------recursion + memo ------------------------------------------------------//
+/*
+class Solution {
+    
+     int knapSack(int W, int wt[], int val[]) {
+        
+        int dp[][] = new int[wt.length+1][W+1];
+        
+        for(var t : dp)
+        Arrays.fill(t,-1);
+        
+        return help(W,wt,val,0,dp);
+    }
+    
+    private int help(int W, int wt[], int val[] , int idx,int dp[][])
+    {
+        if(idx == wt.length-1)
+        {
+            if(wt[idx] <= W)
+            {
+                return val[idx] ;
+            }
+            else
+                return 0;
+        }
+        
+        if(dp[idx][W] != -1)
+        return dp[idx][W];
+        
+        // pick / notPick
+        
+        int notPick = help(W,wt,val,idx+1,dp);
+        
+        int pick = Integer.MIN_VALUE;
+        
+        if(wt[idx] <= W)
+        {
+            pick = val[idx] + help(W-wt[idx],wt,val,idx+1,dp);
+        }
+        
+        return dp[idx][W] = Math.max(pick,notPick);
+    }
+}
