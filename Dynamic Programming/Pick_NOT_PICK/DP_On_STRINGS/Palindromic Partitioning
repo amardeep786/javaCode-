@@ -1,0 +1,53 @@
+Palindromic Partitioning :: https://www.geeksforgeeks.org/problems/palindromic-patitioning4845/1
+=======================================================================================================================================
+
+class Solution{
+    static int palindromicPartition(String s)
+    {
+       int n = s.length() ;
+        int count = 0;
+        boolean t[][] = new boolean[n][n];  // dp[i][j] = true means substring from i to j index is palindrome else not
+
+        for(int length = 1 ;length <=n;length++)        // for every length 
+        {
+            for(int i = 0;i+length-1<n;i++)  // for every index
+            {
+                int j = i+length-1  ;   // every time 0 se j tkk for example length = 4 then 0->4 , 1->4 ,2->4,3->4 etc in sbko dekhna h paindrome hai ki nai
+
+                if(i==j)   // if 1 length -> palindrome
+                {
+                    t[i][j] = true ; 
+                }
+                else if(i+1 == j)
+                {
+                    t[i][j] = s.charAt(i) == s.charAt(j) ;  // agr 2 length to dekhlo ki same hai ya alag
+                }else
+                {
+                    t[i][j] = (s.charAt(i) == s.charAt(j) && t[i+1][j-1]) ;  // agr first and last char equal hai and remain b palin hai to true else false
+                }
+
+            }
+        }
+        
+        // dp [i][j] = true means substring  i to j is palindrome
+        
+        // Step 2: Calculate the minimum cuts using the `dp` array
+        
+        int[] dp = new int[n];  // dp[i] will hold the minimum cuts needed for substring s[0:i]
+        
+        for (int i = 0; i < n; i++) {
+            if (t[0][i]) {
+                dp[i] = 0;  // If the substring s[0:i] is a palindrome, no cuts are needed
+            } else {
+                dp[i] = Integer.MAX_VALUE;
+                for (int j = 0; j < i; j++) {  // else j se i tkk jo bhi minimum cut me le jaaye 
+                    if (t[j + 1][i]) {  // If s[j+1:i] is a palindrome
+                        dp[i] = Math.min(dp[i], dp[j] + 1);
+                    }
+                }
+            }
+        }
+        
+        return dp[n-1];
+    }
+}
