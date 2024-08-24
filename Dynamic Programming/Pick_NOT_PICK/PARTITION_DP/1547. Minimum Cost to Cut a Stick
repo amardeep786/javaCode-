@@ -1,0 +1,65 @@
+1547. Minimum Cost to Cut a Stick :: https://leetcode.com/problems/minimum-cost-to-cut-a-stick/description/
+------------------------------------------------------------------------------------------------------------------
+
+
+
+// ------------- recur + memo ---------------------------------------------------------------------------------------
+class Solution {
+    public int minCost(int n, int[] cuts) {
+        
+        // hum ek nya array bnaate hain jisme staring or ending index extra store krege 
+        // issey hume length nikaalne m ezy hoga 
+
+        int len = cuts.length;
+        int arr[] = new int[len+2];
+
+        arr[0] = 0;
+        
+        for(int i = 0;i<len;i++)
+        {
+            arr[i+1] = cuts[i];
+        }
+
+        arr[len+1] = n ;
+
+        // ab iss array ko srot krdete hain taaki kahi cut lgaege to baaki cut position 
+        // according left ya right ssahi s rhe
+        Arrays.sort(arr);
+
+
+        int dp[][] = new int[len+2][len+2];
+
+        for(var sub : dp)
+        Arrays.fill(sub,-1);
+
+        return help(arr,0,arr.length-1,dp);
+    }
+
+    private int help(int[]arr,int l,int r,int dp[][])
+    {
+        if(r-l < 2)
+        {
+            // cut hi nai kr paege km s km ek element hona chahiye beech me
+            // {l,c1,r}  -> for cut atleast 3 to ho and nai hai to 0 return krdo
+            return 0;
+            
+        }
+
+        if(dp[l][r] != -1)
+        return dp[l][r];
+
+        int res = Integer.MAX_VALUE;
+
+        // hrek pos p cut maaro aur sbhi me se jo minimum aaye wahi ans hoga
+        for(int i = l+1 ;i<= r-1;i++)
+        {
+
+            // i p cut maara tb length thi arr[r]-arr[l] so
+            int cost = (arr[r]-arr[l]) + help(arr,l,i,dp) + help(arr,i,r,dp);
+
+            res = Math.min(res,cost);
+        }
+
+        return dp[l][r] = res;
+    }
+}
