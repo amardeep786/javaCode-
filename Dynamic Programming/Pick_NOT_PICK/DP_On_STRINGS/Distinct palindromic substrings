@@ -1,0 +1,40 @@
+Distinct palindromic substrings :: https://www.geeksforgeeks.org/problems/distinct-palindromic-substrings5141/1
+======================================================================================================================================
+
+class Solution 
+{ 
+    int palindromeSubStrs(String s) { 
+        int n = s.length() ;
+        int count = 0;
+        boolean t[][] = new boolean[n][n];  // dp[i][j] = true means substring from i to j index is palindrome else not
+
+        Set<String> set = new HashSet<>();
+        for(int length = 1 ;length <=n;length++)        // for every length 
+        {
+            for(int i = 0;i+length-1<n;i++)  // for every index
+            {
+                int j = i+length-1  ;   // every time 0 se j tkk for example length = 4 then 0->4 , 1->4 ,2->4,3->4 etc in sbko dekhna h paindrome hai ki nai
+
+                if(i==j)   // if 1 length -> palindrome
+                {
+                    t[i][j] = true ; 
+                }
+                else if(i+1 == j)
+                {
+                    t[i][j] = s.charAt(i) == s.charAt(j) ;  // agr 2 length to dekhlo ki same hai ya alag
+                }else
+                {
+                    t[i][j] = (s.charAt(i) == s.charAt(j) && t[i+1][j-1]) ;  // agr first and last char equal hai and remain b palin hai to true else false
+                }
+
+                if(t[i][j] == true)
+                {
+                    set.add(s.substring(i,j+1));
+                }
+            }
+        }
+        
+        return set.size();
+      
+    }
+} 
