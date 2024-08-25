@@ -1,0 +1,30 @@
+Reverse a linked list :: https://www.geeksforgeeks.org/problems/reverse-a-linked-list/1
+===========================================================================================
+
+class Solution {
+    // Function to reverse a linked list.
+    Node reverseList(Node head) {
+        
+        
+        // Initialize three pointers: curr, prev and next
+        Node curr = head, prev = null, next;
+
+        // Traverse all the nodes of Linked List
+        while (curr != null) {
+            
+            // Store next
+            next = curr.next;
+            
+            // Reverse current node's next pointer
+            curr.next = prev;
+            
+            // Move pointers one position ahead
+            prev = curr;
+            curr = next;
+        }
+        
+        // Return the head of reversed linked list
+        return prev;
+    
+    }
+}
