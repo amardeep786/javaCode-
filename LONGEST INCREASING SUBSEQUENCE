@@ -97,3 +97,58 @@ class Solution {
     
     }
 }
+
+====================================== n log n ==============================================================================================
+//----------------------------NLOGN------------------------------//
+
+// we have better approach ie nlogn
+
+/*
+
+    int n  = nums.length;
+    ArrayList<Integer> list = new ArrayList<>();
+
+    for(int i = 0;i<n;i++)
+    {
+        int index = binarysearch(list,nums[i]);
+
+        // index agr size k brabr aaya mtlb ye sbsse bda element h or y largest subsequence m help kr skta h
+        // agr nai aaya to uss index p currr element ko daal do 
+        // isey size to nai bdhega prr list hmesa increasing order m hi rhega 
+
+
+
+        if(index == list.size())                  //curernt element is max
+        {
+            list.add(nums[i]);
+        }else
+        {
+            list.set(index,nums[i]);            //replace existing element
+        }
+    }
+
+        return list.size();
+    }
+
+    public int binarysearch(ArrayList<Integer> list,int target)
+    {
+        int left = 0 ,right = list.size();
+        int result = list.size();
+        while(left < right)
+        {
+            int mid= left + (right-left)/2 ;
+
+            if(list.get(mid)<target)
+            {
+                left = mid+1;
+            }else
+            {
+                result = mid;
+                right = mid;
+            }
+        }
+        return result;
+    }
+}
+*/
+
