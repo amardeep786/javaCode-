@@ -1,0 +1,170 @@
+155. Min Stack :: https://leetcode.com/problems/min-stack/
+
+Get minimum element from stack  :: https://www.geeksforgeeks.org/problems/get-minimum-element-from-stack/1
+=========================================================================================================================================================================
+
+class MinStack {
+
+    long minEle;
+    Stack<Long> s ;
+    public MinStack() {
+        s = new Stack<>();
+    }
+    
+    public void push(int val) {
+        if(s.isEmpty())
+	    {   // agr stack khaali h wahi push kro and wahi min bhi h
+	        s.push((long)val);
+	        minEle = val;
+	    }else
+	    {
+	        // agr stack khaali nai h tbb min s compare krk daalo
+	        if(val >= minEle)
+	        {
+	            s.push((long)val);
+	        }else
+	        {
+	            // mtlb ab nya min chlega isk aage se
+	            // to hm nye min ko directly nai daalege stack me blki encrypt krk daalege ie val + val - prevMin
+	            // or iss val ko nya min to maan hi lege 
+	            // ab val + val - min jo hai wo min s chhota hi hoga 
+	            // coz val < min tha to val - min = negative so val - neg < val and min m val daal rhe
+	            // to min is greater than val+val-min
+	            
+	            
+	            // iska mtlb jb b stack ki top chhota hoga min se..mtlb iss smy hme min s bhi chhoti value mili thi 
+	            // and wo val ko encrypt krk stack m dala tha hmne and wo val ko min s bhi update kr dia tha
+	            long newVal = (long)val+val-minEle;
+	            s.push(newVal);
+	            minEle = val ;
+	        }
+	    }
+    }
+    
+    public void pop() {
+        if(!s.isEmpty())
+    	{
+    	    // agr to top ki value bdhi h min s to ye to sahi val hai isey hi return krdo
+    	    if(s.peek() >= minEle)
+    	    {
+    	         s.pop();
+    	    }else
+    	    {
+    	        // hme val + val - min store kia the iska mtlb ywha p hme min s hhoti value mili thi
+    	        // and hme enrypt krk kuj or stor kia tha stack me or min value ko min m daala th
+    	        
+    	        // lekin ab min ele bhi apne purane min ele ko jaega to 
+    	        // newValue = 2*val - minElement   ===>> minElement = 2*val - newValue(that we stored in stack)
+    	        
+    	         minEle = 2*minEle - s.peek();
+    	         s.pop();
+    	        //  return originalValue ;
+    	        
+    	    }
+    	}
+    	
+    }
+    
+    public int top() {
+        
+        if(s.peek() >= minEle)
+        {
+            return s.peek().intValue();
+        }else
+        {
+            return (int)minEle ;
+        }
+    }
+    
+    public int getMin() {
+        
+    	    return (int)minEle;    	
+    }
+}
+
+
+ ==================================================== GFG SOLUTION ===============================================================================
+class GfG
+{
+    int minEle;
+    Stack<Integer> s;
+    
+    // Constructor    
+    GfG()
+	{
+        s = new Stack<>();
+	}
+	
+    /*returns min element from stack*/
+    int getMin()
+    {
+    	if(!s.isEmpty())
+    	{
+    	    return minEle;
+    	}
+    	return -1;
+    }
+    
+    /*returns poped element from stack*/
+    int pop()
+    {
+	    if(!s.isEmpty())
+    	{
+    	    // agr to top ki value bdhi h min s to ye to sahi val hai isey hi return krdo
+    	    if(s.peek() >= minEle)
+    	    {
+    	        return s.pop();
+    	    }else
+    	    {
+    	        // hme val + val - min store kia the iska mtlb ywha p hme min s hhoti value mili thi
+    	        // and hme enrypt krk kuj or stor kia tha stack me or min value ko min m daala tha
+    	        int originalValue = minEle ;
+    	        
+    	        // lekin ab min ele bhi apne purane min ele ko jaega to 
+    	        // newValue = 2*val - minElement   ===>> minElement = 2*val - newValue(that we stored in stack)
+    	        
+    	         minEle = 2*minEle - s.peek();
+    	         s.pop();
+    	         return originalValue ;
+    	        
+    	    }
+    	}
+    	else
+    	return -1;
+    }
+
+    /*push element x into the stack*/
+    void push(int x)
+    {
+	    if(s.isEmpty())
+	    {   // agr stack khaali h wahi push kro and wahi min bhi h
+	        s.push(x);
+	        minEle = x;
+	    }else
+	    {
+	        // agr stack khaali nai h tbb min s compare krk daalo
+	        if(x >= minEle)
+	        {
+	            s.push(x);
+	        }else
+	        {
+	            // mtlb ab nya min chlega isk aage se
+	            // to hm nye min ko directly nai daalege stack me blki encrypt krk daalege ie val + val - prevMin
+	            // or iss val ko nya min to maan hi lege 
+	            // ab val + val - min jo hai wo min s chhota hi hoga 
+	            // coz val < min tha to val - min = negative so val - neg < val and min m val daal rhe
+	            // to min is greater than val+val-min
+	            
+	            
+	            // iska mtlb jb b stack ki top chhota hoga min se..mtlb iss smy hme min s bhi chhoti value mili thi 
+	            // and wo val ko encrypt krk stack m dala tha hmne and wo val ko min s bhi update kr dia tha
+	            int val = x+x-minEle;
+	            s.push(val);
+	            minEle = x ;
+	        }
+	    }
+	    
+    }	
+}
+
+
