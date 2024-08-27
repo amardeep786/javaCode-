@@ -1,0 +1,71 @@
+1514. Path with Maximum Probability :: https://leetcode.com/problems/path-with-maximum-probability/
+======================================================================================================
+/*
+start s end node tkk jaana h orr hrek path ka probability diya hua h
+
+dijkstra lgaskte hain lkin probability max krni h to jb bhi max milega tbbhi update krege
+
+minheap ki jgeh ab maxHeap lege qki max nikalna h
+
+*/
+
+class pair
+{
+    Integer x;
+    Double y;
+
+    pair(Integer x,Double y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+}
+class Solution {
+    public double maxProbability(int n, int[][] edges, double[] succProb, int start_node, int end_node) {
+        
+        
+        // make graph
+        Map<Integer,List<pair>> map = new HashMap<>();       
+        for(int i = 0;i<edges.length;i++)
+        {
+            int u = edges[i][0];
+            int v = edges[i][1];
+            double prob = succProb[i];
+            map.computeIfAbsent(u,k->new ArrayList<>()).add(new pair(v,prob));
+            map.computeIfAbsent(v,k->new ArrayList<>()).add(new pair(u,prob));
+        }
+
+        // put values based on probability 
+        PriorityQueue<pair> pq = new PriorityQueue<>((a,b)-> Double.compare(b.y , a.y));
+        pq.offer(new pair(start_node,1.0)) ;  // start s start tkk ki probability 1 hogi 
+
+        double probArray[] = new double[n];
+
+        probArray[start_node] = 1;
+
+        while(!pq.isEmpty())
+        {
+            pair temp = pq.poll();
+
+            int currNode = temp.x;
+            double currProb = temp.y;
+
+            if(map.containsKey(currNode))
+            {
+                for(var nei : map.get(currNode))
+                {
+                    int nextNode = nei.x;
+                    double nextProb = nei.y;
+
+                    if((currProb * nextProb) > probArray[nextNode])
+                    {
+                        probArray[nextNode] = currProb * nextProb ;
+                        pq.offer(new pair(nextNode,currProb * nextProb));
+                    }
+                }
+            }
+        }
+
+        return probArray[end_node];
+    }
+}
