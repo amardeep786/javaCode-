@@ -1,0 +1,46 @@
+Stock buy and sell :: https://www.geeksforgeeks.org/problems/stock-buy-and-sell-1587115621/1
+================================================================================================
+class Solution{
+    //Function to find the days of buying and selling stock for max profit.
+    ArrayList<ArrayList<Integer> > stockBuySell(int arr[], int n) {
+        
+        ArrayList<ArrayList<Integer>> ans = new  ArrayList<>();
+        
+        int buy = 0 , sell = 0 ;
+        
+        for(int i = 0;i<n-1;i++)
+        {
+            if(arr[i+1] > arr[i])
+            {
+                sell++ ;  // move pointer forward
+            }else
+            {
+                if(sell > buy)
+                {
+                    ArrayList<Integer> temp = new ArrayList<>();
+                    temp.add(buy);
+                    temp.add(sell);
+                    
+                    ans.add(temp);
+                }
+                
+                    // 310,40 tbb dono ko reset krdo
+                    buy = i+1;
+                    sell = i+1;
+                
+            }
+        }
+        
+        // cchecl forlast element
+        if(sell > buy)
+        {
+            ArrayList<Integer> temp = new ArrayList<>();
+                    temp.add(buy);
+                    temp.add(sell);
+                    
+                    ans.add(temp);
+        }
+        
+        return ans;
+    }
+}
