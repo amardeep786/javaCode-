@@ -1,0 +1,111 @@
+1905. Count Sub Islands  :: https://leetcode.com/problems/count-sub-islands/description/
+===================================================================================================
+
+// using DFS  -> time and space complexity => O(m*n) and O(1)
+
+/*
+
+class Solution {
+    public int countSubIslands(int[][] grid1, int[][] grid2) {
+        
+        int rows = grid2.length;
+        int cols = grid2[0].length;
+
+        int count = 0 ;
+
+        for(int i = 0;i<rows;i++)
+        {
+            for(int j = 0;j<cols;j++)
+            {
+                if(grid2[i][j] == 1 && checkSubIslands(grid1,grid2,i,j))
+                {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    private boolean checkSubIslands(int[][] grid1, int[][] grid2,int i,int j)
+    {
+
+        // chhek out of bounds and hmne shuru 1 s kia tha or travel krte lkrte out of bound hogye 
+        // mtlb island mila
+        if(i<0 || i >= grid2.length || j<0 || j>= grid2[0].length)
+        return true;
+
+        // age klahi water mila to bhi return true krdo 
+        if(grid2[i][j] != 1)
+        return true;
+
+        grid2[i][j] = -1;  // mark visited taaki dubara wahi p na ajae
+
+        boolean res = (grid1[i][j] == 1);
+
+        res = res & checkSubIslands(grid1,grid2,i+1,j);
+        res = res & checkSubIslands(grid1,grid2,i-1,j);
+        res = res & checkSubIslands(grid1,grid2,i,j+1);
+        res = res & checkSubIslands(grid1,grid2,i,j-1);
+
+        return res;
+    }
+}
+
+*/
+
+
+// using BFS  -> time and space complexity => O(m*n) and O(m*n)
+class Solution {
+    int directions[][] = {{-1,0},{0,1},{1,0},{0,-1}};
+    public int countSubIslands(int[][] grid1, int[][] grid2) {
+        
+        int rows = grid2.length;
+        int cols = grid2[0].length;
+
+        int count = 0 ;
+
+        for(int i = 0;i<rows;i++)
+        {
+            for(int j = 0;j<cols;j++)
+            {
+                if(grid2[i][j] == 1 && checkSubIslands(grid1,grid2,i,j))
+                {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    private boolean checkSubIslands(int[][] grid1, int[][] grid2,int i,int j)
+    {
+        int rows = grid2.length;
+        int cols = grid2[0].length;
+
+        boolean res = true;
+        Queue<int[]> que = new LinkedList<>();
+        que.offer(new int[]{i,j});
+
+        while(!que.isEmpty())
+        {
+            var temp = que.poll();
+            int x = temp[0];
+            int y = temp[1];
+
+            if (grid1[x][y] != 1) { // grid1 must have 1 at the same coordinate
+                res = false;
+            }
+
+            for (int[] dir : directions) {
+                int newX = x + dir[0];
+                int newY = y + dir[1];
+
+                if (newX >= 0 && newX < rows && newY >= 0 && newY < cols && grid2[newX][newY] == 1) {
+                    grid2[newX][newY] = -1; // mark visited
+                    que.offer(new int[]{newX, newY});
+                }
+            }
+        }
+        return res;
+    }
+}
