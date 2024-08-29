@@ -1,0 +1,52 @@
+947. Most Stones Removed with Same Row or Column :: https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/description/
+=======================================================================================================================================================
+
+class Solution {
+    public int removeStones(int[][] stones) {
+        
+        // agar mai kis itra se same row ya col share krne wale ko ek grup m daal du 
+        // to uss group me 1 stone hi bchega baakion ko remove krna pdega
+        
+        // iska mtlb ye bhi keh rskte hain ki total stones me s jitne bchege utna ghtaado toh
+        // kitne remove kiye wo bhi aajaega jo ki hmse puchha hai 
+        
+        // toh mai pehle ek visited array bna leta hu ki kon konse stone visited hogye h ie
+        //similar to DFS
+        
+        int n = stones.length;
+        
+        boolean visited[] = new boolean[n];
+        
+        int group = 0;
+        
+        for(int i = 0;i < n;i++)
+        {
+            if(!visited[i])
+            {
+                dfs(stones,i,visited);
+                group++ ;
+            }
+        }
+        
+        return n-group ;       
+        
+    }
+    
+    public void dfs(int[][] stones , int index , boolean visited[] )
+    {
+        visited[index] = true;
+        
+        int currRow = stones[index][0];
+        int currCol = stones[index][1];
+        
+        for(int i = 0 ; i<stones.length;i++)
+        {
+            
+            
+            if(!visited[i] && (stones[i][0] == currRow || stones[i][1] == currCol))
+            {
+                dfs(stones,i,visited);
+            }
+        }
+    }
+}
