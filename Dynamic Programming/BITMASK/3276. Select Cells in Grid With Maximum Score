@@ -1,0 +1,83 @@
+3276. Select Cells in Grid With Maximum Score :: https://leetcode.com/problems/select-cells-in-grid-with-maximum-score/description/
+=========================================================================================================================================================================
+class Solution {
+
+    // coz 10 rows hain to mask k liy 2^10 values k liy chahiye 
+    int dp[][] = new int[2001][101];
+
+    public int maxScore(List<List<Integer>> grid) {
+
+     int n = grid.size();
+     int m = grid.get(0).size();
+
+     Set<Integer> set = new HashSet<>() ;  // for maintaining uniqueness
+     for(int i = 0;i<n;i++)
+     {
+        for(int j = 0;j<m;j++)
+        {
+            set.add(grid.get(i).get(j)) ;
+        }
+     }
+    // ek map rkhna taaki ye store kr ske ki knsa element kis kis row m tha taaki same row s multiple elements 
+    // naa pick krlen
+
+    Map<Integer,List<Integer>> map = new HashMap<>();
+
+    for(int i = 0;i<n;i++)
+    {
+        for(int j = 0;j<m;j++)
+        {
+            map.computeIfAbsent(grid.get(i).get(j) , k->new ArrayList<>()).add(i) ; // added row for same element
+        }
+    }
+
+    // and hum sbse bdi value s descending order m aaege taaki koi value mile to usey ans m add krte rhege
+    List<Integer> list = new ArrayList<>(set);
+    Collections.sort(list,Collections.reverseOrder());
+
+    for(var sub : dp)
+    {
+        Arrays.fill(sub,-1);
+    }
+
+    return solve(0,list.size(),list,map,0); // 0 is mask [ tells ki knsa row pick krlia h ya nai ] and 0 is index
+
+    }
+
+    private int solve(int i , int n,List<Integer> list,Map<Integer,List<Integer>> map,int mask)
+    {
+        if(i == n)
+        {
+            return 0;
+        }
+
+        if(dp[mask][i] != -1)
+        {
+            // we picked this row previously and solved
+            return dp[mask][i] ;
+        }
+
+        int ans = 0 ;
+
+        // curr element jis jis row m hai uss hrek row m jaao
+        for(var j : map.get(list.get(i)))
+        {
+            if((mask & (1<<j)) == 0)
+            {
+                // mtlb ki wo row unvisited hai jaha curr lement present hai  and marked that row visited
+                ans = Math.max(ans , list.get(i) + solve(i+1,n,list,map, mask | (1<<j)));
+            }
+
+        }
+
+        // ek case ye bhi hoga ki curr row m kuj pick nai kia to seedhe aage s ans le aao
+        ans = Math.max(ans , solve(i+1,n,list,map, mask )) ;
+
+        dp[mask][i] = ans ;
+
+        return ans;
+    }
+
+
+}
+
