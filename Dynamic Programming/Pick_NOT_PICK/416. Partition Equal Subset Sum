@@ -1,0 +1,50 @@
+416. Partition Equal Subset Sum :: https://leetcode.com/problems/partition-equal-subset-sum/
+====================================================================================================
+// ------------ recursion + memoization --------------------------------------------------------------------------------//
+/*
+class Solution {
+    public boolean canPartition(int[] nums) {
+        
+        int totalSum = 0;
+
+        for(var i : nums)
+        totalSum += i;
+
+        int dp[][] = new int[nums.length][totalSum+1];
+
+        for(var t : dp)
+        Arrays.fill(t,-1);
+
+        return help(nums,0,totalSum,0,dp) == 1 ? true : false;
+    }
+
+    public int help(int []nums,int idx,int totalSum,int currentSum,int dp[][])
+    {
+
+        // ek subset aagya hoga 
+
+        if(idx == nums.length)
+        {
+            int secondSum = totalSum - currentSum ;
+
+            if(secondSum == currentSum)
+            return 1 ;
+
+            return 0;
+        }
+
+        if(dp[idx][currentSum] != -1)
+        {
+            return dp[idx][currentSum] ;
+        }
+
+        // pick or not pick
+
+        int pick = help(nums,idx+1,totalSum,currentSum+nums[idx],dp);
+        int notPick = help(nums,idx+1,totalSum,currentSum,dp);
+
+        return dp[idx][currentSum] = ((pick | notPick) > 0 ? 1 : 0);
+    }
+}
+
+*/
