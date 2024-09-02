@@ -1,4 +1,5 @@
 Palindromic Partitioning :: https://www.geeksforgeeks.org/problems/palindromic-patitioning4845/1
+132. Palindrome Partitioning II  :: https://leetcode.com/problems/palindrome-partitioning-ii/description/
 =======================================================================================================================================
 
 class Solution{
@@ -51,3 +52,67 @@ class Solution{
         return dp[n-1];
     }
 }
+
+
+// ========================== recursion + MEMO ============O(n^2 * (n+n)) == O(n^3)============================================================== //
+
+/*
+
+class Solution {
+    public int minCut(String s) {
+        int n = s.length();   
+
+        int dp[][] = new int[n+1][n+1]  ;
+
+        for(var t : dp)
+        Arrays.fill(t,-1);
+
+        return help(s,0,n-1,dp);   // 0 se lekr n-1 tkk cut maar skte hain 
+    }
+
+    private int help(String s,int i,int j,int dp[][])
+    {
+
+        if(i >=j)
+        return 0;
+        // pehle to yehi dekhlo ki string palindrome hai ki nai agr hai to 
+        // cut maarne ki jrurt hi nai h seedha 0 return krdo 
+
+        if(dp[i][j] != -1)
+        return dp[i][j];
+
+        if(isPalin(s,i,j))
+        return dp[i][j] =  0;
+
+        int ans = Integer.MAX_VALUE ;
+
+        // hrek possible cut maar k jo bhi minimum de rha h wahi ans h
+
+        for(int k = i ; k<j;k++)
+        {
+            int temp = 1 + help(s,i,k,dp) + help(s,k+1,j,dp);
+
+            ans = Math.min(ans,temp);
+        }
+
+        return dp[i][j] =  ans;
+    }
+
+    private boolean isPalin(String s ,int i,int j)
+    {
+
+        while(i<j)
+        {
+            if(s.charAt(i) != s.charAt(j))
+            return false;
+
+            i++;
+            j--;
+        }
+
+        return true;
+    }
+}
+
+
+*/
