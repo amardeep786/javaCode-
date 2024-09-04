@@ -1,0 +1,21 @@
+
+Count ways to N'th Stair(Order does not matter) :: https://www.geeksforgeeks.org/problems/count-ways-to-nth-stairorder-does-not-matter5639/1
+
+=======================================================================================================================================
+class Solution {
+    public long nthStair(int n) {
+        
+        // 1,1,1 lekr jaane wala ek hi rsta haii
+        // ab 2 wale count krne hain 
+        
+        // to ek 2 orr baaki === baaki 1 or ek 2 kahi bhi 
+        // to hme order nai dekhna h to hme bs yhi dekhna hi ki alg alg 2's 
+        // aa skte hain n k ander 
+        
+        // if n is even tbb to n/2 2's aa skte hain 
+        // n odd hua toh bhi n/2 hi aaege or 1 bch jaega 
+        
+        // so overall n/2 ways taking diff 2's and 1 way of all ones
+        return (long)n/2 + 1 ;
+    }
+}
