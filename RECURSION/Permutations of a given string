@@ -1,0 +1,58 @@
+Permutations of a given string :: https://www.geeksforgeeks.org/problems/permutations-of-a-given-string2041/1
+=========================================================================================================================================
+class Solution {
+    public List<String> find_permutation(String S) {
+        
+        // map isliy ki agr 5 a hai to kisi position k liy ek hi a chahiy to 5 calls nai jaegi 
+        // sirf a k liy uniq call jaegi and baaki freq gha dege 
+        Map<Character,Integer> map = new HashMap<>();
+        
+        // treeset to keep sorted
+        Set<String>set = new TreeSet();
+        
+        
+        for(char ch : S.toCharArray())
+        {
+            map.put(ch,map.getOrDefault(ch,0)+1);
+        }
+        
+        int n = S.length();
+        
+        // current string isme build hota jaaega
+        StringBuilder sb = new StringBuilder();
+        
+        
+        help(S,map,0,sb,n,set);
+        
+        // return list 
+        return new ArrayList<>(set);
+        
+    }
+    
+    // idx is basically telling position ki kiss position p knsa element hmne rkha ya kis p nai 
+    // rkha ..agr idx pos p element rkha to ab idx+1 pos p rkhege 
+    void help(String s,Map<Character,Integer> map,int idx,StringBuilder sb,int n,Set<String>set )
+    {
+        if(idx == n)
+        {
+            
+            set.add(new String(sb.toString()));
+            return ;
+        }
+        
+        // hrek different key k liy dekhege 
+        for(var key : map.keySet())
+        {
+            if(map.get(key) > 0)    // agr uski freq 1 ya usse jada h toh aage bdho 
+            {
+                map.put(key,map.get(key)-1);        // curr ko lege to 1 s freq ghta dege 
+                
+                sb.append(key);
+                help(s,map,idx+1,sb,n,set);         // func call 
+                
+                sb.deleteCharAt(sb.length()-1);     // fr usko naa loo orr kisi orr ko loo and freq bdha do 
+                map.put(key,map.get(key)+1);
+            }
+        }
+    }
+}
