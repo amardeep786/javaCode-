@@ -1,0 +1,115 @@
+Multiply two strings  :: https://www.geeksforgeeks.org/problems/multiply-two-strings/1
+43. Multiply Strings  :: https://leetcode.com/problems/multiply-strings/description/
+
+============================================================================================================
+
+class Solution
+{
+    public String multiplyStrings(String s1,String s2)
+    {
+        int n = s1.length();
+        int m = s2.length();
+        // Check if the result should be negative
+        boolean isNegative = false;
+        if (s1.charAt(0) == '-') {
+            isNegative = !isNegative;
+            s1 = s1.substring(1);
+        }
+        if (s2.charAt(0) == '-') {
+            isNegative = !isNegative;
+            s2 = s2.substring(1);
+        }
+        
+        
+        // check ki leading zeroes hain to hta do 
+        int i1 = 0;
+        while(i1 < n && s1.charAt(i1) == '0')
+        {
+            i1++ ;
+        }
+        // check ki leading zeroes hain to hta do 
+        int j1 = 0;
+        while(j1 < m && s2.charAt(j1) == '0')
+        {
+            j1++ ;
+        }
+        
+        // agr koi b end phocha mtlb koi ekk "000 tyoe tha " to ans 0 hoga 
+        if(i1 == n || j1 == m)
+        return "0";
+        
+        
+        // leading zeroes htane k baad ki string 
+        if(i1<n)
+        {
+            s1 = s1.substring(i1);
+        }
+        
+        if(j1<m)
+        {
+            s2 = s2.substring(j1);
+        }
+        
+        // new length update krdo abb 
+        
+        n = s1.length();
+        m = s2.length();
+        
+        int ans[] = new int [n+m];
+        
+        // reverse krdo taaki multiply krna easy hoga 
+        StringBuilder sb1 = new StringBuilder(s1);
+        StringBuilder sb2 = new StringBuilder(s2);
+        
+        sb1.reverse();
+        sb2.reverse();
+        
+        // s1 and s2 ab reversed ko point kr rhe hain 
+        s1 = sb1.toString();
+        s2 = sb2.toString();
+        
+        for(int i = 0;i<n;i++)
+        {
+            int carry = 0 ;
+            int n1 = s1.charAt(i)-'0';
+            
+            for(int j = 0;j<m;j++)
+            {
+                int n2 = s2.charAt(j)-'0';
+                
+                int val = n1*n2 + ans[i+j] + carry  ;
+                
+                
+                ans[i+j] = val%10;
+                carry = val/10 ;
+                
+            }
+            
+            // agr abhi b kuj carry bcha hai toh 
+            if(carry > 0)
+            {
+                ans[i+m] = carry ;
+            } 
+        }
+        
+        // Convert the result array back to a string, skipping leading zeros
+        StringBuilder result = new StringBuilder();
+        
+        boolean leadingZero = true;
+        for (int i = ans.length - 1; i >= 0; i--) {
+            if (ans[i] == 0 && leadingZero) {
+                continue;
+            }
+            leadingZero = false;
+            result.append(ans[i]);
+        }
+        
+        // Add negative sign if necessary
+        if (isNegative) {
+            result.insert(0, '-');
+        }
+        
+        // If the result is empty, that means the answer is 0
+        return result.length() == 0 ? "0" : result.toString();
+    }
+}
