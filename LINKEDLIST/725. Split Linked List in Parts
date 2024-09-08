@@ -1,0 +1,48 @@
+725. Split Linked List in Parts :: https://leetcode.com/problems/split-linked-list-in-parts/description/
+=========================================================================================================
+
+class Solution {
+    public ListNode[] splitListToParts(ListNode head, int k) {
+
+        ListNode[] ans = new ListNode[k];
+
+        int n = length(head); // Get the total length of the list
+
+        int eachBucketNode = n / k;  // Number of nodes in each part
+        int remaining = n % k;  // Extra nodes that will be distributed to the first 'remaining' parts
+
+        ListNode curr = head;
+        ListNode prev = null;
+
+        for (int i = 0; i < k; i++) {
+            ans[i] = curr;  // Start of the current part
+
+            int nodesInThisPart = eachBucketNode + (remaining > 0 ? 1 : 0); // Add one extra node if there are remaining nodes to distribute
+
+            for (int count = 0; count < nodesInThisPart; count++) {
+                prev = curr;
+                if (curr != null) {
+                    curr = curr.next;  // Move to the next node
+                }
+            }
+
+            if (prev != null) {
+                prev.next = null;  // Break the list after the current part
+            }
+
+            remaining--;  // Decrement remaining nodes to distribute
+        }
+        return ans;
+    }
+
+    private int length(ListNode head) {
+        int count = 0;
+
+        while (head != null) {
+            count++;
+            head = head.next;
+        }
+
+        return count;
+    }
+}
