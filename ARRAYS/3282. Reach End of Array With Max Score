@@ -1,0 +1,64 @@
+3282. Reach End of Array With Max Score :: https://leetcode.com/problems/reach-end-of-array-with-max-score/
+====================================================================================================================
+/*
+ hme (j-i)*nums[i] ko maximize krna h mtlb ki nums[i] k aagr next greater element nikalte hain tohh suppose kisi index j prr aaya
+
+ to j-i to hoga hi butt beeech k saare elements chhote honge tohh nums[i] hi bda element hoga to maximize jaada hoga 
+
+ agr hum greedily ek ek ko swap kre to nums[i] wala factor ght skta hai to ans may be maximum naaa aaye 
+
+*/
+
+class Solution {
+    public long findMaximumScore(List<Integer> nums) {
+         
+        int gIdx[] = nextGreater(nums);
+        
+        int n = nums.size();
+
+        long ans = 0; 
+
+        int s = 0 ;
+        while(s < n-1)
+        {
+            ans += ((gIdx[s] - s)*(long)(nums.get(s)));
+
+            s = gIdx[s] ;
+        }
+
+        return ans ;
+    }
+
+    private int[] nextGreater(List<Integer> nums)
+    {
+        int n = nums.size();
+        Stack<Integer> st = new Stack<>();
+        int[] ans = new int[nums.size()];
+
+        ans[n-1] = 0 ;
+        st.push(n-1);
+
+        for(int i = n-2;i>=0;i--)
+        {
+            if(st.isEmpty())
+            {
+                st.push(i);
+            }
+
+            while(!st.isEmpty() && nums.get(st.peek()) < nums.get(i) )
+            {
+                st.pop();
+            }
+            if(st.isEmpty())
+            {
+                ans[i] = n-1 ;
+            }else
+            ans[i] = st.peek();
+            st.push(i);
+        }
+
+        return ans;
+
+
+    }
+}
