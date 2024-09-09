@@ -1,0 +1,31 @@
+max Diff Contest :: https://practice.geeksforgeeks.org/contest/gfg-weekly-171-rated-contest/problems
+===========================================================================================================
+class Solution {
+    public static long fndMax(int n, int m, int[] arr1, int[] arr2) {
+    
+        Arrays.sort(arr1);
+        Arrays.sort(arr2);
+        
+        long ans = 0 ;
+        int s1 = 0 , s2 = 0 , e1 = n-1 , e2 = m-1 ;
+        while(s1 <= e1 && s2 <= e2)
+        {
+            int d1 = Math.abs(arr1[s1] - arr2[e2]) ;
+            int d2 = Math.abs(arr2[s2] - arr1[e1]) ;
+            
+            if(d1 >= d2)
+            {
+                ans += d1 ;
+                s1++;
+                e2--;
+            }else 
+            {
+                ans += d2 ;
+                s2++;
+                e1--;
+            }
+        }
+        
+        return ans;
+    }
+}
