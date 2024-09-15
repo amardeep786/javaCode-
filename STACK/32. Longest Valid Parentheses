@@ -1,0 +1,41 @@
+32. Longest Valid Parentheses :: https://leetcode.com/problems/longest-valid-parentheses/
+Longest valid Parentheses:: https://www.geeksforgeeks.org/problems/longest-valid-parentheses5657/1
+==============================================================================================================================
+
+class Solution {
+    public int longestValidParentheses(String S) {
+        Stack<Integer> st = new Stack<>();
+        int n = S.length();
+        for(int i = 0;i<n;i++)
+        {
+            if(S.charAt(i) == '(')
+            {
+                st.push(i);
+            }else
+            {
+                if(!st.isEmpty() && S.charAt(st.peek()) == '(')
+                st.pop();
+                else
+                {
+                    st.push(i);
+                }
+            }
+        }
+        
+        
+        // ab bss stack me invalid index hi store hain 
+        // last isliy ki top p koi invalid hai to waha s n tkk ka bhi valid count krna hoga
+        int res = 0 , last = n;
+        
+        while(!st.isEmpty())
+        {
+            int now = st.pop();
+            
+            res = Math.max(res,last-now-1);
+            
+            last = now ;
+        }
+        
+        return Math.max(res , last) ;
+    }
+}
