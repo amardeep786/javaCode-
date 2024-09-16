@@ -1,0 +1,46 @@
+Minimize the Heights II :: https://www.geeksforgeeks.org/problems/minimize-the-heights3351/1
+======================================================================================================
+class Solution {
+    int getMinDiff(int[] arr, int k) {
+        int n = arr.length ;
+        
+        // sort krne k baad consecutive elements me +k or -k krne par 
+        // minimum ans milne k chances hain
+        Arrays.sort(arr);
+        
+        
+        // currently to largest - smallest yehi ans hai 
+        int ans =  arr[n-1]-arr[0] ;
+        
+        
+        // ab hum starting m +k krege to bde m -k tbhi to diff minimum hota dikhega 
+        int mini = arr[0]+k ;
+        int maxi = arr[n-1]-k;
+        
+        // ye current minimi and maximum store krege 
+        // qki hoskta hai ki kisi me +k kiya to wo jo maximum purana tha use bda hojae
+        // ya -k krne pr jo minimum tha usey b chhota ho jaae 
+        int mi = 0;
+        int ma = 0 ;
+        
+        
+        // since sorted hai to jo chhota h usme + k kreege orr uske agla element jo bda h usme - k
+        // tbhi diff minimize hota dikhega
+        for(int i = 0;i<n-1;i++)
+        {
+            ma = Math.max(maxi , arr[i]+k);
+            mi = Math.min(mini , arr[i+1]-k);
+            
+            
+            // agr kbhi mini negative hua to max - min bdi vaue aajaegi as min is negative
+            if(mi < 0)
+            continue;
+            
+            // ans m min update krte raho
+            ans = Math.min(ans,ma-mi);
+            
+        }
+        
+        return ans ;
+    }
+}
