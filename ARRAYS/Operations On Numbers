@@ -1,0 +1,48 @@
+Operations On Numbers :: https://practice.geeksforgeeks.org/contest/gfg-weekly-172-rated-contest/problems
+===================================================================================================================
+
+class Solution {
+    public static long minOps(long a, long b) {
+
+        long ans = 0;
+        
+        if(a > b) return -1;
+        
+        while(a!= b)
+        {
+            long sq = (long)Math.sqrt(b);
+            
+            if(sq*sq > b)
+            {
+                sq--;
+            }
+            if(sq*sq == b)
+            {
+                if(sq >= a)
+                {
+                    ans++;
+                    b = sq;
+                }else
+                {
+                    ans += b-a;
+                    b = a;
+                }
+            }else
+            {
+                if(sq >= a)
+                {
+                    ans += b - sq*sq ;
+                    b = sq*sq;
+                    
+                }else
+                {
+                    ans += b-a;
+                    b = a;
+                }
+            }
+        }
+        
+        return ans ;
+        
+    }
+}
