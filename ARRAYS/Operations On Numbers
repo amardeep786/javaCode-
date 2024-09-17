@@ -6,29 +6,49 @@ class Solution {
 
         long ans = 0;
         
+        // agr a bda hua b s to kbhi bhi nai convert hoga 
         if(a > b) return -1;
         
+        
+        // jbtk a or b brabr nai ho jaate 
         while(a!= b)
         {
+            // b ka sqrt nikaalo 
             long sq = (long)Math.sqrt(b);
             
+            // kyi baari ceil value deta h to sq*sq jo h wo b ko cross krjata h
+            // to sq ko ek kam krdo
             if(sq*sq > b)
             {
                 sq--;
             }
+            
+            // agr toh perfect square hai to uske baad 2 case bnega 
             if(sq*sq == b)
             {
+                // agr sqrt a se bda h tbb to ek operation lgega and
+                // b ko sqrt p set krde 
+                // eg : a=10 , b = 121 to after this ans = 1 and b = 11
                 if(sq >= a)
                 {
                     ans++;
                     b = sq;
                 }else
                 {
+                    // lekin sqrt a s chhota aagya eg 10 and 25 me 25 ka sqrt 5 hoga jo ki
+                    // less than 10 hain to hme ek ek krk hi ghtana pdega
+                    // to b-a operation legege
                     ans += b-a;
                     b = a;
                 }
             }else
             {
+                // lkin perfect square nai hai b tohh
+                // uska root (chaahe ceiling/floor jo bhi hoga )
+                // wo a se bda h to mtlb hme pehle b ko nearest square tkk lekr jaana 
+                // hoga sq*sq hme wo value dega jo b s nearest sqyuare wali value h
+                // b-(sq*sq) opr lgege hme nearest square tkk jaane me 
+                // to utne operation lga kr b ab perfext square bn gya hoga
                 if(sq >= a)
                 {
                     ans += b - sq*sq ;
@@ -36,6 +56,8 @@ class Solution {
                     
                 }else
                 {
+                    // lekin sq a s km aaya to wahi ek ek krk ghtana hoga a tkk to 
+                    // b-a operation
                     ans += b-a;
                     b = a;
                 }
