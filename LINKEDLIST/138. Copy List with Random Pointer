@@ -1,0 +1,63 @@
+138. Copy List with Random Pointer :: https://leetcode.com/problems/copy-list-with-random-pointer/description/
+                                    : https://www.geeksforgeeks.org/problems/clone-a-linked-list-with-next-and-random-pointer/1
+=====================================================================================================================================================
+
+// method 1 -> using HASHING + O(n) space 
+
+class Solution {
+    public Node copyRandomList(Node head) {
+        // map will store ki kis puraane node k corresponding hmne new node knsa bnaya
+        Map<Node,Node>map = new HashMap<>();
+        
+        if(head == null)
+        return null;
+        
+        Node prev = null , curr = head , newHead = null ;
+        
+        while(curr != null)
+        {
+            Node temp = new Node(curr.val);
+            
+            map.put(curr,temp);
+            
+            if(newHead  == null)
+            {
+                newHead = temp;
+                prev = newHead;
+                
+            }
+            else
+            {
+                prev.next = temp;
+                prev = temp;
+            }
+            
+            curr = curr.next;
+        }
+        
+        // ek baar frse start kro and ab random pointer fill krna h 
+        curr = head;
+        
+        Node temp = newHead;
+        
+        
+        // ab curr ka random null hai to temp k random ko bhi null krdo
+        // else curr k random k corresponding hmne knsa node bnaya tha wo map m store 
+        // hai hi to waha s nikal lo or dono ko aage bdhate haao
+        while(curr != null)
+        {
+            if(curr.random == null)
+            {
+                temp.random = null;
+            }else
+            {
+                temp.random = map.get(curr.random);
+            }
+            
+            curr = curr.next;
+            temp = temp.next;
+        }
+        
+        return newHead;
+    }
+}
