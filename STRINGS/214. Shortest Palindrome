@@ -1,0 +1,87 @@
+214. Shortest Palindrome :: https://leetcode.com/problems/shortest-palindrome/description/
+==========================================================================================================
+
+
+
+/*
+// ============================== O(n^2)===============================================================//
+class Solution {
+    public String shortestPalindrome(String s) {
+
+        // string ko reverese krde orr fr hum dekhe ki kya longest prefix h jo ki reverse k suffix k brabr h to ye
+        // hme longest palindrom de dega 0 s start hone wala 
+        // to reverse m jitne char bche unhe hi bss front m append krna h 
+
+        // this can be done using LPS [longest proper prefix which is suffix too ]  -- > method 2
+
+        StringBuilder rev = new StringBuilder(s).reverse();
+        String revS = rev.toString();
+        
+        int n = s.length();
+        // Find the longest palindromic prefix in the string
+        for (int i = 0; i < n; i++) {
+            if (s.startsWith(revS.substring(i))) {
+                // Append the reverse of the non-palindromic suffix at the front
+                return revS.substring(0, i) + s;
+            }
+        }
+        
+        return "";  // This case will not be hit unless the input is empty
+    }
+}
+*/
+// ===== method 2 ======================= using LPS ===========O(n)=====================================================//
+class Solution {
+    public String shortestPalindrome(String s) {
+
+        StringBuilder rev = new StringBuilder(s).reverse();
+        String revS = rev.toString();
+        
+        int n = s.length()*2+1;
+
+        int LPS[] = new int[n];
+
+        String pat = s+"_"+revS;
+
+        computeLPS(pat,LPS);
+
+        // LPS[n-1] -> longest proper prefix which is suffix too
+
+        return revS.substring(0,s.length()-LPS[n-1])+s;
+    }
+    private void computeLPS(String pat,int[]LPS)
+    {
+        int n = pat.length();
+        LPS[0] = 0;
+        int len = 0;
+        int i = 1 ;
+        while(i < n)
+        {
+            // say len = 2 hai mtlb pichhle char k liy 2 len ka prefix and siffix equal mila 
+            // kindOf aaaa ab hum 5th char k liy dekhna chahte h to isko kis char s match klrana chaehege
+            // ie len p jo h hme malom h ki  2 len ka equal h to 3rd char ie index at len wale ko curr
+            // char s match krana chah rhe hain 
+            
+            if(pat.charAt(i) == pat.charAt(len))
+            {
+                len++;
+                LPS[i] = len ;
+                i++ ;
+            }else
+            {
+                // ager nai hua match to length ko ek ghta k match krana chahege ki kya ek kam len ka 
+            // prefixx suffix mila k nai 
+            
+                if(len != 0)
+                {
+                    len = LPS[len - 1]; // ek length kam p kitne ki matching hui thi to kya utni abhi frse hogi 
+                }else
+                {
+                    // agr 0 length tkk bna imila mtlb LPS hi 0 hai or i ko aage bdhado 
+                    LPS[i] = 0 ;
+                    i++;
+                }
+            }
+        }
+    }
+}
