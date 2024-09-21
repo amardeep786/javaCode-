@@ -1,0 +1,40 @@
+386. Lexicographical Numbers :: https://leetcode.com/problems/lexicographical-numbers/description/
+==============================================================================================================================
+
+/*
+approach ye h ki 1 se lekr 9 tkk loop chlaege and hrek number k peeche 0-9 tkk append krte jaaege 
+jo jo valid h usey result m daaldo and jaha s invalid h waha s return krdo
+
+*/
+class Solution {
+    public List<Integer> lexicalOrder(int n) {
+        List<Integer> res = new ArrayList<>();
+
+        for(int num = 1;num <=9;num++)
+        {
+            solve(num,res,n);  // n is limit abive which we cant go
+        }
+
+
+        return res;
+    }
+
+    private void solve(int num,List<Integer> res , int n)
+    {
+        if(num > n)
+        return;
+
+
+        res.add(num);
+
+        for(int append = 0;append <= 9;append++)
+        {
+            int newNum = num*10 + append ;
+
+            if(newNum > n)
+            continue;
+
+            solve(newNum,res,n);
+        }
+    }
+}
