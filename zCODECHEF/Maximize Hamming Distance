@@ -1,0 +1,72 @@
+Maximize Hamming Distance :: https://www.codechef.com/problems/MAXHAMDIST
+--------------------------------------------------------------------------------------------------
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class Codechef
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+
+        while (t-- > 0)
+        {
+            int m = sc.nextInt();   // length of each string
+            int n = sc.nextInt();   // numbr of strings
+            
+            String arr[] = new String[n];
+            sc.nextLine();
+            for(int i = 0;i<n;i++)
+            {
+                arr[i] = sc.nextLine();
+            }
+            long ans = 0;
+            // hrek position p 0,1,? count krlo 
+            for(int j =0;j<m;j++)
+            {
+                long zero = 0 , one = 0,questionMark = 0;
+                
+                for(int i = 0;i<n;i++)
+                {
+                    if (arr[i].charAt(j) == '1')
+                        one++;
+                    else if(arr[i].charAt(j) == '0')
+                        zero++;
+                    else
+                        questionMark++ ;
+                }
+                
+                // 4 one ahi and 5 zero toh 4*5 = 20 haming dis iss position k liy 
+                // aa jaega
+                if(questionMark == 0)
+                {
+                    ans += (zero*one);
+                    continue;
+                }
+                // jitne ? hai usey hrek possible combination bnake dekhlia
+                // knsa jaada de rha h anser
+                // usey hi ans m add krdo 
+                long maxPossFromQuestionMark = 0;
+                
+                for(long i = 0;i<= questionMark;i++)
+                {
+                    long extraOne = i;
+                    long extraZero = questionMark - extraOne ;
+                    
+                    maxPossFromQuestionMark = Math.max(maxPossFromQuestionMark, (one+extraOne)*(zero+extraZero));
+                }
+                
+                ans += maxPossFromQuestionMark ;
+                
+            }
+            
+            
+            System.out.println(ans);
+            
+            
+        }
+	}
+}
