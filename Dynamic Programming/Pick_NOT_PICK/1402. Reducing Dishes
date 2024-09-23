@@ -1,0 +1,89 @@
+1402. Reducing Dishes :: https://leetcode.com/problems/reducing-dishes/
+______________________________________________________________________________________________
+
+/*
+    hme coef bdhana h to wo h time * satisfaction[i] ... toh agr sbse bda satisfaction sbse bde time s multiply ho
+    to max. value aane k chances hain isliy sort kr dege 
+
+    orr hrek dish ko we can cook or we cannot cook  and jo bhi max aaya wahi ans h
+
+    --------------------- recursion + memoization ------------------------------------------
+
+*/
+/*
+class Solution {
+    public int maxSatisfaction(int[] satisfaction) {
+
+        int n = satisfaction.length;
+        Arrays.sort(satisfaction);
+
+        int dp[][] = new int[n+1][n+1];
+
+        for(var t : dp)
+        Arrays.fill(t,-1);
+
+        return solve(0,1,n,satisfaction,dp) ;  // initially 0 index p hain orr time 1 ho rha h 
+        
+    }
+
+    private int solve(int i,int time,int n,int []sat, int dp[][])
+    {
+        if(i == n)
+        return 0;  // ab kuj add nai hopaega
+
+        if(dp[i][time] != -1)
+        return dp[i][time];
+        int cook = time*sat[i] + solve(i+1,time+1,n,sat,dp);
+        int notCook = solve(i+1,time,n,sat,dp);  // time wahi rha agr cook nai kia hmne tohh
+
+
+        return dp[i][time] = Math.max(cook,notCook);
+    }
+}
+*/
+class Solution {
+    public int maxSatisfaction(int[] satisfaction) {
+
+        int n = satisfaction.length;
+        Arrays.sort(satisfaction);
+
+        int dp[][] = new int[n][n+1];  // dp[i][j] -> max coefficient for dish 0...i  at jth time
+
+        // Initialize dp with Integer.MIN_VALUE
+        for (int dish = 0; dish < n; dish++) {
+            Arrays.fill(dp[dish], Integer.MIN_VALUE);
+            dp[dish][0] = 0;  // At time 0, satisfaction is 0
+        }
+
+        dp[0][1] = satisfaction[0];
+
+        for(int dish = 1;dish < n;dish++)
+        {
+            for(int time = 1;time<=n;time++)
+            {
+                int include = Integer.MIN_VALUE;
+                if (dp[dish - 1][time - 1] != Integer.MIN_VALUE) {
+                    include = dp[dish - 1][time - 1] + time * satisfaction[dish];
+                }
+                int exclude = dp[dish - 1][time];
+                dp[dish][time] = Math.max(include, exclude);
+                
+            }
+        }
+
+
+        // ab hmse last value nai puchhi h ... hmse pucha hi jb b max kitne h kisi bhi time m jb sb kuj hogya
+        // mtlb hme dish[n-1] tkk jo bhi max value thi whi ans hoga
+        int ans = 0 ;
+
+        for(int i = 1;i<=n;i++)
+        {
+            ans = Math.max(ans , dp[n-1][i]);
+        }
+
+        return ans;
+    }
+}
+
+
+
