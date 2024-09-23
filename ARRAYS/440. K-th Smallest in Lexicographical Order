@@ -1,0 +1,41 @@
+440. K-th Smallest in Lexicographical Order :: https://leetcode.com/problems/k-th-smallest-in-lexicographical-order/
+=========================================================================================================================================================
+class Solution {
+    public int countNumbers(long curr, long next, int n) {
+        int countNum = 0;
+
+        while (curr <= n) {
+            countNum += Math.min(next, (long) n + 1) - curr;
+            // multiply by 10 krne se hm tree k next level p phoch jaege or uss level p kitne elements ka diff h wo
+            // nikal paege
+            curr *= 10;
+            next *= 10;
+        }
+
+        return countNum;
+    }
+
+    public int findKthNumber(int n, int k) {
+        int curr = 1;
+        k -= 1; // Since we start from the first number (1), we need k-1 more numbers
+
+        while (k > 0) {
+            // hrek 2 no k beech kitne valid no h wo nikal lo 
+            // eg 1 and 2 and k = 22 toh 1,10,11,...,19 valid hai to itne no ka count nikalo
+            // agr y count less than hai k se tb to agle no k paas jao or 2,3 k beech ka valid nikalo 
+
+            int count = countNumbers(curr, curr + 1, n);
+            if (count <= k) {
+                curr++;
+                k -= count; // Skipping the elements under the current prefix tree
+            } else {
+
+                // agr count jaada aaya to usi tree m neeche jaao and k ko ek s ghta do 
+                curr *= 10;
+                k -= 1;
+            }
+        }
+
+        return curr;
+    }
+}
