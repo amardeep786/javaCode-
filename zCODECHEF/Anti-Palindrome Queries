@@ -1,0 +1,87 @@
+Anti-Palindrome Queries :: https://www.codechef.com/problems/ANTIPALQ
+================================================================================
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class Codechef
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+
+        while (t-- > 0)
+        {
+            int n = sc.nextInt();
+            int q = sc.nextInt();
+            
+            // make 3 arrays for 1 and 2 and 3
+            int one[] = new int[n+1];
+            int two[] = new int[n+1];
+            int three[] = new int[n+1];
+            
+            for(int i = 1;i<=n;i++)
+            {
+                int x = sc.nextInt();
+                
+                if(x == 1)
+                one[i] = 1 ;
+                
+                if(x == 2)
+                two[i] = 1 ;
+                
+                if(x == 3)
+                three[i] = 1 ;
+            }
+            
+            // cumulative sum 
+            for(int i = 1;i<=n;i++)
+            {
+                one[i] = one[i-1]+one[i];
+                two[i] = two[i-1]+two[i];
+                three[i] = three[i-1]+three[i];
+            }
+            
+            while(q-- > 0)
+            {
+                int l = sc.nextInt();
+                int r = sc.nextInt();
+                
+                // ab bs ye dekhna h ki iss range m kitne 3 ,2,or 1 hain
+                // jo sbse jaada h unke beech m baaki k do chhote walo ko daal dege
+                // agr dono chhote ka sum bde wale k brabr hai mtlb hum hmesa ek arrangemenet kr
+                // skte hai jo ki anti palindromic hoga and uska hrek rotaion bhi
+                
+                int len = r-l+1;
+                
+                if(len % 2 == 1)
+                {
+                    System.out.println("NO");
+                    continue;
+                }
+                
+                int temp[] = new int[3];
+                
+                temp[0] = one[r]-one[l-1];
+                temp[1] = two[r]-two[l-1];
+                temp[2] = three[r]-three[l-1];
+                
+                
+                Arrays.sort(temp);
+                
+                int mx = temp[2];
+                int mn = temp[0]+temp[1];
+                
+                if(mx == mn)
+                {
+                    System.out.println("YES");
+                }else
+                {
+                    System.out.println("NO");
+                }
+            }
+        }
+	}
+}
