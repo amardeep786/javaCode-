@@ -1,0 +1,68 @@
+2707. Extra Characters in a String :: https://leetcode.com/problems/extra-characters-in-a-string/description/
+============================================================================================================================================================
+
+// ===================== recursion + memo ============== O(n^3) =========================================//
+/*
+class Solution {
+    public int minExtraChar(String s, String[] dictionary) {
+        
+        Set<String>set = new HashSet<>(Arrays.asList(dictionary));
+
+        int dp[] = new int[s.length()+1];
+        Arrays.fill(dp,-1);
+        return solve(0,s,set,s.length(),dp);
+    }
+    private int solve(int i,String s,Set<String>set,int n,int dp[] )
+    {
+        if(i >= n)
+        return 0;
+
+        if(dp[i] != -1 )
+        return dp[i];
+
+        int res = 1 + solve(i+1,s,set,n,dp);   // skip current character
+
+        // if we keep then from this index find till u find valid substring
+        for(int j = i;j<n;j++)
+        {
+            String temp = s.substring(i,j+1);
+
+            if(set.contains(temp))
+            {
+                // a valid string is found 
+                res = Math.min(res , solve(j+1,s,set,n,dp));
+            }
+        }
+
+        return dp[i]=res;
+    }
+}
+*/
+// ===================== bottom up ============== O(n^3) =========================================//
+class Solution {
+    public int minExtraChar(String s, String[] dictionary) {
+        int n = s.length();
+      int t[] = new int[n+1]; 
+        // t[i] = min extra characters in s from index i to index n-1
+        // we want to return t[0]
+        Set<String>set = new HashSet<>(Arrays.asList(dictionary));
+
+        for(int i = n-1;i>=0;i--)
+        {
+            t[i] = 1 + t[i+1];  // skipping the ith char
+
+            for(int j = i;j<n;j++)
+            {
+                String temp = s.substring(i,j+1);
+
+                if(set.contains(temp))
+                {
+                    t[i] = Math.min(t[i], t[j+1]);
+                }
+
+            }
+        }
+
+        return t[0];
+    } 
+}
