@@ -1,0 +1,94 @@
+2218. Maximum Value of K Coins From Piles  :: https://leetcode.com/problems/maximum-value-of-k-coins-from-piles/
+------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+we have option ie pick a pile or not pick a pile 
+
+if we pick a pile then again option ie pick 1 o and remaining from next piles or pick 2 from current and remaining from other
+or pick k from curr and nothing from others 
+
+
+
+*/
+
+/*  // _______________________ RECURSION + MEMOIZTION _________________________________________________//
+
+
+class Solution {
+    public int maxValueOfCoins(List<List<Integer>> piles, int k) {
+        
+        int dp[][] = new int[piles.size()+1][k+1];
+
+        for(var t : dp)
+        Arrays.fill(t,-1);
+
+        return help(0,piles,k,dp);
+
+    }
+
+
+    private int help(int idx ,List<List<Integer>> piles , int k,int dp[][])
+    {
+        if(idx >= piles.size())
+            return 0 ;
+
+        if(dp[idx][k] != -1)
+        return dp[idx][k];
+
+        int notTaken = help(idx+1,piles,k,dp);
+
+        
+        int taken = 0 , sumFromOneWallet = 0 , moneyIncludingOtherPiles = 0 ;
+
+        for(int i = 0;i< Math.min(k , piles.get(idx).size());i++)
+        {
+            sumFromOneWallet += piles.get(idx).get(i);      // pick into 1 wallet 
+
+            if((k - (i+1)) >= 0)
+            moneyIncludingOtherPiles = sumFromOneWallet + help(idx+1,piles, k - (i+1),dp);  // help pick from remaining piles
+
+            taken = Math.max(taken , moneyIncludingOtherPiles) ;
+        }
+
+        return dp[idx][k] = Math.max(taken,notTaken);
+    }
+}
+
+*/
+
+class Solution {
+    public int maxValueOfCoins(List<List<Integer>> piles, int k) {
+        
+        int n = piles.size();
+        int dp[][] = new int[n+1][k+1]; // dp[i][j] -> max money when we have i piles and k coins
+
+        // Initialize dp[0][*] to 0 because when there are no piles, the money is always 0
+        for(int i = 0;i <= k;i++)
+        {
+            dp[0][i] = 0 ;  
+        }
+
+         // Iterate through each pile
+        for(int i = 1;i<=n;i++)
+        {   
+            // Iterate through each possible number of coins
+            for(int coin = 0;coin <= k;coin++)    // `coin` is the number of coins we're allowed to pick
+            {
+                int sum = 0;
+                // Iterate through the possible number of coins to pick from the current pile
+                for(int currCoins = 0;currCoins <= Math.min(piles.get(i-1).size(),coin);currCoins++)
+                {
+                    if(currCoins > 0)
+                        sum += piles.get(i-1).get(currCoins-1);   // Sum the top `currCoins` coins from pile `i-1`
+
+                    // Maximize the result by considering whether to pick `currCoins` from the current pile
+                    dp[i][coin] = Math.max( dp[i][coin] , sum + dp[i-1][coin - currCoins ]);
+                } 
+
+
+            }
+        }
+
+        return dp[n][k];    // Return the maximum value by picking `k` coins from all piles
+    }
+}
