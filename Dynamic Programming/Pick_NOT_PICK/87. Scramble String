@@ -1,0 +1,52 @@
+87. Scramble String :: https://leetcode.com/problems/scramble-string/description/
+_______________________________________________________________________________________________________________________________________________________
+
+// at every partition swap or dont swap
+class Solution {
+    public boolean isScramble(String s1, String s2) {
+        
+        if(s1.length() != s2.length())
+        return false;
+
+
+        //string hi change ho rhi h isliy map bna lia 
+        Map<String , Boolean> map = new HashMap<>();
+        
+
+        return solve(s1,s2,map);
+    }
+
+    private boolean solve(String s1, String s2, Map<String , Boolean> map)
+    {
+        if(s1.equals(s2))
+        {
+            return true;
+        }
+
+        String key = s1+"_"+s2;
+
+        if(map.containsKey(key))
+        return map.get(key);
+
+        int n = s1.length();
+
+        boolean result = false ;
+
+        for(int i = 1;i<n;i++)
+        {
+            // hrek partition k liy .. iska first partition target k first partition and same for second half match kraao -> not swap 
+            boolean notSwap = solve(s1.substring(0,i),s2.substring(0,i),map) && solve(s1.substring(i),s2.substring(i),map) ;
+
+            // agr swap kreg to iska partition ka first portion usk last and remaining s2 k first s match krao
+            boolean swap = solve(s1.substring(0,i) ,s2.substring(n-i),map) && solve(s1.substring(i) ,s2.substring(0,n-i),map);
+
+            result = notSwap || swap ;
+            map.put(key,result);
+
+            if(result)
+            return result ;
+        }
+
+        return result;
+    }
+}
