@@ -1,0 +1,126 @@
+3043. Find the Length of the Longest Common Prefix :: https://leetcode.com/problems/find-the-length-of-the-longest-common-prefix/
+________________________________________________________________________________________________________________________________________________________________________
+
+
+// approach 1 -> arr1 k sbhi prefixes ko map m store krlo and 
+// arr2 s dekhte jaao
+
+
+// TC : O(m*D) -> D is no of digits  log10(number)
+// SC : (all prefixes)
+
+/*
+class Solution {
+    public int longestCommonPrefix(int[] arr1, int[] arr2) {
+        
+        Set<Integer>set = new HashSet<>();
+
+        for(var num : arr1)
+        {
+
+            while(!set.contains(num) && num > 0)
+            {
+                set.add(num);
+
+                num /= 10 ;
+            }
+        }
+
+        int ans = 0;
+        for(var num : arr2)
+        {
+            while(!set.contains(num) && num > 0)
+            {
+                num /= 10 ;
+            }
+
+            if(num > 0)
+            {
+                ans = Math.max(ans , (int)(Math.log(num)/Math.log(10)) + 1);
+            }
+        }
+
+        return ans;
+    }
+}
+
+*/
+// -----------  using TRIE ------------------------------------------------------------------------------------------------//
+//Approach 2 - Using Prefix Tree (TRIE)
+//T.C : O(m⋅d+n⋅d)
+//S.C : O(m⋅d)
+
+class TrieNode
+{
+    TrieNode child[] = new TrieNode[10] ; // 0,1,2,...,9
+}
+
+class Solution {
+
+    public TrieNode getTrieNode()
+    {
+        return new TrieNode();
+    }
+        
+
+    public void insert (int num , TrieNode root)
+    {
+        TrieNode crawl = root ;
+
+        String numStr = Integer.toString(num);
+
+        for(var ch : numStr.toCharArray())
+        {
+            int idx = ch - '0';
+
+            if(crawl.child[idx] == null)    // agr curr ch nai hai to new child node bna do 
+            {
+                crawl.child[idx] = new TrieNode();  // ab null nai h mtlb iss index p koi nya node h mtlb curr char ab child bngya 
+            }
+
+            crawl = crawl.child[idx] ;  // crawler aage bdhta jaega 
+        }
+    }
+    // Returns the length of the longest prefix
+    public int search (int num , TrieNode root)
+    {
+        TrieNode crawl = root ;
+        int length = 0;
+        String numStr = Integer.toString(num);
+
+        for(var ch : numStr.toCharArray())
+        {
+            int idx = ch - '0';
+
+            if(crawl.child[idx] != null)    // agr curr ch nai hai to new child node bna do 
+            {
+                length++;
+                crawl = crawl.child[idx] ;  // crawler aage bdhta jaega   
+            }else
+            {
+                break;
+            }
+
+            
+        }
+
+        return length;
+    }
+
+
+    public int longestCommonPrefix(int[] arr1, int[] arr2) {
+        
+        TrieNode root = getTrieNode();
+        for(var num : arr1)
+        {
+            insert(num,root);
+        }
+        int ans = 0;
+        for(var num : arr2)
+        {
+            ans = Math.max(ans , search(num,root));
+        }
+
+        return ans;
+    }
+}
