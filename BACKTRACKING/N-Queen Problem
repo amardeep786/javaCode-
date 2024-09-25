@@ -1,0 +1,64 @@
+N-Queen Problem :: https://www.geeksforgeeks.org/problems/n-queen-problem0315/1
+---------------------------------------------------------------------------------------
+
+
+// User function Template for Java
+
+class Solution {
+    
+    static ArrayList<ArrayList<Integer> > result = new ArrayList<ArrayList<Integer>>();
+    
+   static boolean[] cols,leftDiagonal,rightDiagonal;
+    public ArrayList<ArrayList<Integer>> nQueen(int n) {
+        // cols[i] = true if there is a queen previously placed at ith column
+        cols = new boolean[n];
+        // leftDiagonal[i] = true if there is a queen previously placed at 
+          // i = (row + col )th left diagonal
+        leftDiagonal = new boolean[2*n];
+          // rightDiagonal[i] = true if there is a queen previously placed at 
+          // i = (row - col + n - 1)th rightDiagonal diagonal
+        rightDiagonal = new boolean[2*n];
+        result  = new ArrayList<>();
+        ArrayList<Integer> temp = new ArrayList<>();
+        for(int i=0;i<n;i++)temp.add(0);
+        solveNQUtil(result,n,0,temp);
+        
+        // Sort the result in lexicographical order
+        Collections.sort(result, new Comparator<ArrayList<Integer>>() {
+            public int compare(ArrayList<Integer> a, ArrayList<Integer> b) {
+                for (int i = 0; i < a.size(); i++) {
+                    if (!a.get(i).equals(b.get(i))) {
+                        return a.get(i) - b.get(i);
+                    }
+                }
+                return 0;
+            }
+        });
+         
+        return result;
+    }
+    
+    private static void solveNQUtil(ArrayList<ArrayList<Integer> > result,int n,int row,List<Integer> comb){
+        if(row==n){
+          // if row==n it means we have successfully placed all n queens.
+          // hence add current arrangement to our answer
+          // comb represent current combination
+            result.add(new ArrayList<>(comb));
+            return;
+        }
+        for(int col = 0;col<n;col++){
+           // if we have a queen previously placed in the current column 
+           // or in current left or right diagonal we continue
+            if(cols[col] || leftDiagonal[row+col] || rightDiagonal[row-col+n])
+                continue;
+           // otherwise we place a queen at cell[row][col] and 
+           //make current column, left diagonal and right diagonal true
+            cols[col] = leftDiagonal[row+col] = rightDiagonal[row-col+n] = true;
+            comb.set(col,row+1);
+            // then we goto next row
+            solveNQUtil(result,n,row+1,comb);
+            // then we backtrack and remove our currently placed queen
+            cols[col] = leftDiagonal[row+col] = rightDiagonal[row-col+n] = false;
+        }
+    }
+}
