@@ -1,0 +1,91 @@
+46. Permutations :: https://leetcode.com/problems/permutations/description/
+-------------------------------------------------------------------------------------
+// Appraoch 1 :- TC : O(n!)*n   and SC : O(n)
+/*
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        
+        List<List<Integer>> res = new ArrayList<>();
+
+        List<Integer> ds = new ArrayList<>() ;  // data structure that make sure that all elenent present
+        boolean freq[] = new boolean[nums.length]; // tells which elemtn taken and not taken
+        solve(nums,res,ds,freq);
+        return res;
+    }
+
+    private void solve( int[] nums,List<List<Integer>> res,List<Integer> ds,boolean freq[])
+    {
+        if(ds.size() == nums.length)
+        {
+            res.add(new ArrayList<>(ds));
+            return ;
+        }
+
+
+        for(int i = 0;i<nums.length;i++)
+        {
+            if(!freq[i])    // agar pick nai kia h toh 
+            {
+                freq[i] = true;
+                ds.add(nums[i]);        // pick kro 
+
+                solve(nums,res,ds,freq);    // solve kro 
+
+                freq[i] = false;
+                ds.remove(ds.size()-1);     // remove kro 
+            }
+        }
+    }
+}
+*/
+// ------------------------------------------------------------------------------------------------//
+// Appraoch 2 :- O(n!*n)  SC: O(n!) -> for return ans
+
+// LOGIC :: hrek position k liy all acandidate ko laao with swapping 
+
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+
+        List<List<Integer>> res = new ArrayList<>();
+
+        solve(0,nums,res);
+
+        return res;
+    }
+
+    private void solve(int idx,int[]nums,List<List<Integer>> res)
+    {
+        if(idx == nums.length)
+        {
+            // nums m swap krte krte last m aagya 
+            List<Integer> temp = new ArrayList<>();
+
+            for(var element : nums)
+            {
+                temp.add(element);
+            }
+
+            res.add(new ArrayList<>(temp));
+
+            return ;
+        }
+
+        for(int i = idx;i<nums.length;i++)
+        {
+            // future ka hrek i ko iss idx p aane ka moka mil rha h 
+            swap(nums,idx,i);
+
+            // ab iss position p jo b aaya h to agle position k liy call krdo 
+            solve(idx+1,nums,res);
+
+            swap(nums,idx,i) ; // restore original position
+        }
+    }
+
+    private void swap(int arr[],int i,int j)
+    {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+}
