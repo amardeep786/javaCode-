@@ -1,0 +1,40 @@
+128. Longest Consecutive Sequence :: https://leetcode.com/problems/longest-consecutive-sequence/
+--------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        Set<Integer>set = new HashSet<>();
+
+        // set m daala for easy access
+        for(var ele : nums)
+        {
+            set.add(ele);
+        }
+        int ans = 0 ;
+        var it = set.iterator();
+
+        while(it.hasNext())
+        {
+            int start = it.next();
+
+            // agr start - 1 hai mtlb ki curr wla starting nai hoskta  to continue
+            if(set.contains(start-1))
+            {
+                continue ;
+            }else
+            {
+                // agar nai h toh mtlb ki yehi starting hai ab yaha s aage bdhk dekhte jaao kitna consecutive h
+                int count = 1 ;
+                while(set.contains(start+1))
+                {
+                    count++;
+                    start = start+1;
+                }
+
+                ans = Math.max(ans,count);
+            }
+        }
+
+        return ans;
+    }
+}
