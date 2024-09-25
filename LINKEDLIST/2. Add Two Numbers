@@ -91,3 +91,105 @@ class Solution {
     }
     
 }
+
+//------------------------- GFG version -------------------------------------------------------------------------------------
+
+
+class Solution{
+    static Node addTwoLists(Node num1, Node num2){
+        
+        // remove leading zeroes from input
+        
+        while(num1 != null && num1.data == 0)
+        num1 = num1.next;
+        
+        while(num2 != null && num2.data == 0)
+        num2 = num2.next;
+        
+        if(num1 == null && num2 == null)
+        return new Node(0);
+        
+        if(num1 == null) return num2;
+        if(num2 == null) return num1;
+        // reverse both list for efficient addition from back side
+        
+        
+        num1 = reverse(num1);
+        
+        // Node x = num1;
+        // while(x!= null)
+        // {
+        //     System.out.print(x.data+" ");
+        //     x = x.next;
+        // }
+        
+        num2 = reverse(num2);
+        
+        // do traverse and and add in ans node 
+        Node ans = new Node(0);  // remove this in last
+        Node res = ans;
+        int carry = 0 ;
+        while(num1 != null && num2 != null)
+        {
+            int sum = num1.data + num2.data + carry;
+            
+            ans.next = new Node(sum%10);
+            carry = sum/10;
+            num1 = num1.next;
+            num2 = num2.next;
+            ans = ans.next;
+        }
+        
+        // if anyone left then add as it is
+        
+        while(num1 != null)
+        {
+            int sum = carry+num1.data;
+            ans.next = new Node(sum%10);
+            carry = sum/10;
+            ans = ans.next;
+            num1 = num1.next;
+            
+        }
+        
+        while(num2 != null)
+        {
+            int sum = carry+num2.data;
+            ans.next = new Node(sum%10);
+            carry = sum/10;
+            ans = ans.next;
+            num2 = num2.next;
+            
+        }
+        
+        if(carry != 0)
+        ans.next = new Node(carry);
+        
+        // ab ans bhi reverse me hoga to isey again reverse krdo ek 0 ko chhor krr
+        
+        res = reverse(res.next);
+        return res;
+    }
+    
+    static Node reverse(Node temp)
+    {
+        if(temp.next == null)
+        return temp;
+        
+        Node curr = temp;
+        Node prev = null;
+        Node Next = temp.next;
+        
+        while(curr != null)
+        {
+            curr.next = prev;
+            prev = curr;
+            curr = Next;
+            
+            if(Next!= null)
+            Next = Next.next;
+        }
+        
+        return prev;
+    }
+}
