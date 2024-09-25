@@ -1,0 +1,93 @@
+2. Add Two Numbers  :: https://leetcode.com/problems/add-two-numbers/description/
+-----------------------------------------------------------------------------------------------------
+
+class Solution {
+    public ListNode addTwoNumbers(ListNode num1, ListNode num2) {
+       
+        // while(num1 != null && num1.val == 0)
+        // num1 = num1.next;
+        
+        // while(num2 != null && num2.val == 0)
+        // num2 = num2.next;
+        
+        if(num1 == null && num2 == null)
+        return new ListNode(0);
+        
+        if(num1 == null) return num2;
+        if(num2 == null) return num1;
+        // reverse both list for efficient addition from back side
+        
+        
+        //num1 = reverse(num1);
+        
+        //num2 = reverse(num2);
+        
+        // do traverse and and add in ans node 
+        ListNode ans = new ListNode(0);  // remove this in last
+        ListNode res = ans;
+        int carry = 0 ;
+        while(num1 != null && num2 != null)
+        {
+            int sum = num1.val + num2.val + carry;
+            
+            ans.next = new ListNode(sum%10);
+            carry = sum/10;
+            num1 = num1.next;
+            num2 = num2.next;
+            ans = ans.next;
+        }
+        
+        // if anyone left then add as it is
+        
+        while(num1 != null)
+        {
+            int sum = carry+num1.val;
+            ans.next = new ListNode(sum%10);
+            carry = sum/10;
+            ans = ans.next;
+            num1 = num1.next;
+            
+        }
+        
+        while(num2 != null)
+        {
+            int sum = carry+num2.val;
+            ans.next = new ListNode(sum%10);
+            carry = sum/10;
+            ans = ans.next;
+            num2 = num2.next;
+            
+        }
+        
+        if(carry != 0)
+        ans.next = new ListNode(carry);
+        
+        // ab ans bhi reverse me hoga to isey again reverse krdo ek 0 ko chhor krr
+        
+        //res = reverse(res.next);
+        return res.next;
+    }
+    
+    public ListNode reverse(ListNode temp)
+    {
+        if(temp.next == null)
+        return temp;
+        
+        ListNode curr = temp;
+        ListNode prev = null;
+        ListNode Next = temp.next;
+        
+        while(curr != null)
+        {
+            curr.next = prev;
+            prev = curr;
+            curr = Next;
+            
+            if(Next!= null)
+            Next = Next.next;
+        }
+        
+        return prev;
+    }
+    
+}
