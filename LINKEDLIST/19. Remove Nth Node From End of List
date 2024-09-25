@@ -1,0 +1,55 @@
+19. Remove Nth Node From End of List :: https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+------------------------------------------------------------------------------------------------------------
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        
+        ListNode temp = head;
+        int count = 1;
+        while(temp.next != null)
+        {
+            count++ ;           //it store total no of nodes
+            temp = temp.next ; 
+        }
+
+        if(count == 1)  // if count == 1 return nothing
+        return null;
+
+        //deleting kth node from last == delelting total nodes - k + 1 th node from first
+
+        if(count == n)   // if length and node to be deleted is same then simply dlete first node
+        {   head = head.next ;
+            return head ;
+        }
+        ListNode i =  head;
+        ListNode t =  null;
+        if(head.next != null)
+            t = head.next ;
+        int j = 1;
+
+        while(j < count-n)   //traverse 1 node behind till target and chnge varibles after loop
+        {
+            i = i.next;
+
+            if(t.next != null)
+                 t = t.next ;
+
+            j++;
+        }
+
+        if(t != null )  //if t is not null then addd
+        i.next = t.next ;
+
+        return head;
+
+    }
+}
