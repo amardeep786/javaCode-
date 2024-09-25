@@ -1,5 +1,8 @@
 Intersection Point in Y Shaped Linked Lists :: https://www.geeksforgeeks.org/problems/intersection-point-in-y-shapped-linked-lists/1
+160. Intersection of Two Linked Lists  :: https://leetcode.com/problems/intersection-of-two-linked-lists/description/
 =======================================================================================================================================================
+
+
 // =============== using length ====== TC O(m+n) ====================================== // 
 class Intersect {
     
@@ -62,4 +65,69 @@ class Intersect {
         
         return -1 ;
     }
+}
+
+// ---------------------------- LEETCODE ----------------------------------------------------------------------//
+
+
+public class Solution {
+    public ListNode getIntersectionNode(ListNode head1, ListNode head2) {
+        int len1 = length(head1);
+        int len2 = length(head2);
+        
+        int diff = 0;
+        
+        if(len1 >= len2)
+        {
+            diff = len1-len2 ;
+            return getIntersection(diff,head1,head2);
+        }else
+        {
+            diff = len2-len1 ;
+            return getIntersection(diff,head2,head1);
+        }
+    }
+    
+    int length(ListNode head1)
+    {
+        ListNode temp = head1 ;
+        
+        int count = 0;
+        
+        while(temp != null)
+        {
+            count++;
+            temp = temp.next ;
+        }
+        
+        return count;
+    }
+    
+    private ListNode getIntersection(int diff,ListNode head1,ListNode head2)
+    {
+        
+        ListNode temp1 = head1;
+        
+        for(int i = 0;i<diff;i++)
+        {
+            temp1 = temp1.next ;
+        }
+        
+        
+        ListNode temp2 = head2;
+        
+        while(temp1 != null && temp2 != null)
+        {
+            if(temp1 == temp2)
+            {
+                return temp1 ;
+            }
+            
+            temp1 = temp1.next ;
+            temp2 = temp2.next ;
+        }
+        
+        return null ;
+    }
+    
 }
