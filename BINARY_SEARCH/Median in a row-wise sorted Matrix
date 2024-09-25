@@ -1,0 +1,96 @@
+Median in a row-wise sorted Matrix :: https://www.geeksforgeeks.org/problems/median-in-a-row-wise-sorted-matrix1527/1
+--------------------------------------------------------------------------------------------------------------------------------
+/*
+    brute force  -> sbko ek arary m daal kar sort krdo and middle nikal lo  TC : (n*m)+(n*m)log(n*m)
+
+*/
+
+
+/*
+    EXPECTED APPROACH :: 
+         
+    hme pta h ki middle elemnt jo h (n*m)/2 index p hota agr sorted hota sbkuj hota or in 1D array
+         
+    to hum low and high nikal lege orr usp binary search lga dege and mid k liy dekh lege 
+          
+    ki kitny values mid s chhoti h ..and uss hisaab s agr desired index aa rha to wahi mid hoga wrna
+    
+    aage peeche shift krlo accordingly
+
+    TC : //O(32*R*log(C))  coz max 32 bits m sb aajaega 
+
+
+*/
+
+class Solution {
+    int median(int matrix[][], int R, int C) {
+              
+              
+        int low = Integer.MAX_VALUE , high = 0 , res = 0;
+        
+        for(int i = 0;i<R;i++)      // O(R)
+        {
+            low = Math.min(low , matrix[i][0]);
+            high = Math.max(high , matrix[i][C-1]);
+        }
+        
+        int desiredIndex = (R*C)/2 ;
+        
+        while(low <= high)      // O(log(R*C))
+        {
+            int mid = low + (high - low)/2 ;
+            
+            int noLessThanMid = count(matrix,R,C,mid);      //O(R*log(C))
+            
+            // agr no of elemnts less than ya equal to hai desired k to wo ans nai hoga .
+            // first greater elemnt hoga 
+            if(noLessThanMid <= desiredIndex)
+            {
+                // median or aage hoga 
+                low = mid + 1 ;
+            }else
+            {
+                res = mid ;
+                high = mid - 1;
+            }
+        }
+        
+        return res;
+        
+    }
+    
+    private int count(int matrix[][], int R, int C,int ele)
+    {
+        // hrek row m upper_BOUND lga kr no of elements less than ele nikal lo
+        int total = 0;
+        for(int i = 0;i<R;i++)      // O(R)
+        {
+            total += upperBound(matrix[i] , C , ele);
+        }
+        
+        return total;
+    }
+    
+    private int upperBound(int []arr , int c , int ele)
+    {
+        int ans = c ;
+        
+        int left = 0 , right = c-1 ;
+        
+        while(left <= right)
+        {
+            int mid = left + (right - left)/2 ;
+            
+            if(arr[mid] > ele)
+            {
+                ans = mid;
+                right = mid - 1;
+            }else
+            {
+                left = mid + 1;
+            }
+        }
+        
+        return ans;
+    }
+}
