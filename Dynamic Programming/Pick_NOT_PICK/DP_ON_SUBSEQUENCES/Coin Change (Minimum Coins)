@@ -1,0 +1,64 @@
+Coin Change (Minimum Coins)  :: https://www.geeksforgeeks.org/problems/number-of-coins1824/1
+----------------------------------------------------------------------------------------------------------
+class Solution {
+
+    public int minCoins(int coins[], int M, int sum) {
+        
+        
+        int dp[][] = new int[M+1][sum+1] ; // agr ek ek coin b lege to max sum coins le skte h 
+        
+        for(var sub : dp)
+        Arrays.fill(sub,-1);
+        
+        int totalNeeded =  help(0,coins,M,sum,dp);
+        
+        if(totalNeeded == Integer.MAX_VALUE)        // agar possible nai h to int_max return hoga to hm -1 krege
+        return -1;
+        
+        
+        return totalNeeded;
+    }
+    
+    private int help(int idx , int coins[], int M, int sum,int dp[][])
+    {
+        if(idx == M-1)
+        {
+            // ab aisa socho ki ek last denomination wala coin hai 
+            // kya issy target bnskta hai 
+            
+            // agr target curr denomination ka multiple hua tb bnega else nai 
+            
+            if(sum % coins[idx] == 0)
+            {
+                return sum / coins[idx] ;
+            }
+            
+            return Integer.MAX_VALUE ; // qki minimum nikalna h
+        }
+        
+        if(dp[idx][sum] != -1)
+        return dp[idx][sum];
+        
+        int notPick = help(idx+1 , coins , M , sum ,dp) ;
+        
+        // pick only when coins[idx] <= sum
+        int pick = Integer.MAX_VALUE ;
+        
+        if(coins[idx] <= sum)
+        {
+            // stay at same index as hm  frse iss coins ko le skte hain 
+            
+            // abhi 1 add nai kr rhe even ki pick kr rhe h qki agar future m yaha p INteger.max value return hua 
+            // to 1 + max_value jo h wo Integer.MIN_VALUE bn jaega and answer wrong ho skta h qki min nikalna h 
+            
+             pick = help(idx , coins , M , sum - coins[idx] , dp);  
+             
+             if (pick != Integer.MAX_VALUE) {
+                pick = 1 + pick; // Add one because we're using one more coin
+            }
+        }
+        
+        
+        return dp[idx][sum] = Math.min(pick,notPick);
+    }
+}
