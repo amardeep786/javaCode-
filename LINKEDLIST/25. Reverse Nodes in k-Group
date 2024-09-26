@@ -1,0 +1,87 @@
+25. Reverse Nodes in k-Group :: https://leetcode.com/problems/reverse-nodes-in-k-group/description/
+-----------------------------------------------------------------------------------------------------------------
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+
+        ListNode prevLast = null , temp = head , nextToKth = null ;
+
+        while(temp != null)
+        {
+            ListNode kthHead = kthNodeHead(temp,k);
+
+            if(kthHead == null)
+            {
+                // mtlb ki nodes kam hai k se and prev reversed ka last jo h
+                // usme append krdo
+                if(prevLast != null)
+                {
+                    prevLast.next = temp ;
+                    break ;
+                }
+            }
+
+                nextToKth = kthHead.next ;
+                kthHead.next = null ;  // break the link and iss independent part ko reverse krdo
+
+                reverseList(temp);
+
+                // mtlb ki pehle k nodes hain and rverse k baad same point kr rh hain
+                if(head == temp)
+                {
+                    head = kthHead;
+                }else
+                {
+                    // mtlb k koi beech k k pair of nodes hain 
+                    prevLast.next = kthHead;
+                }
+
+                prevLast = temp;
+                temp = nextToKth;
+
+            }
+            return head;
+        }
+
+    public void reverseList(ListNode temp)
+    {
+        // Initialize three pointers: curr, prev and next
+        ListNode curr = temp, prev = null, next;
+
+        // Traverse all the nodes of Linked List
+        while (curr != null) {
+            
+            // Store next
+            next = curr.next;
+            
+            // Reverse current node's next pointer
+            curr.next = prev;
+            
+            // Move pointers one position ahead
+            prev = curr;
+            curr = next;
+        }
+        
+        
+    }
+
+    // return kth node 
+    ListNode kthNodeHead(ListNode curr, int k)
+    {
+        int i = 0;
+        ListNode prev = null;
+        while(curr != null && i < k)
+        {
+            prev = curr;
+            curr = curr.next;
+            i++ ;
+        }
+
+        if(curr == null && i < k)
+        {
+            return null;
+        }
+
+        
+        return prev;
+    }
+}
