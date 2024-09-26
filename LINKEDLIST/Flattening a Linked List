@@ -1,0 +1,42 @@
+Flattening a Linked List :: https://www.geeksforgeeks.org/problems/flattening-a-linked-list/1
+--------------------------------------------------------------------------------------------------
+class Solution {
+    // Function to flatten a linked list
+    Node flatten(Node root) {
+        
+        if(root == null)
+        return null ;
+        
+        Node head2 = flatten(root.next);  // this will sorted acco to botton pointer
+        
+        // now we have 1 list with head1 and another list return by recursion
+        // just merge them 
+        
+        return mergeTwoLists(root , head2);
+    }
+    
+    public Node mergeTwoLists(Node list1, Node list2) {
+        
+        Node ans = new Node(0); 
+        Node tail = ans;
+        while(list1 != null && list2 != null)
+        {
+        if(list1.data < list2.data)
+        { 
+            tail.bottom = list1;
+            list1 = list1.bottom;
+            tail = tail.bottom;
+        }
+        else
+        {
+            tail.bottom = list2;
+            list2 = list2.bottom;
+            tail = tail.bottom;
+        }
+
+        }
+
+        tail.bottom = (list1 != null) ? list1 :list2;
+        return ans.bottom;
+    }
+}
