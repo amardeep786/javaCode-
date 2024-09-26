@@ -1,0 +1,48 @@
+61. Rotate List :: https://leetcode.com/problems/rotate-list/
+--------------------------------------------------------------------------------
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        
+        if(head == null)
+        return null;
+
+        int length = 0;
+
+        // approach -> last node ka next head s connect krdo ..ab y circular bn gya h 
+        // bss ab length - k node p jaao and uske next ko head bnaado and link break krdo 
+
+        ListNode temp = head;
+
+        while(temp.next != null)
+        {
+            length++ ;
+            temp = temp.next ;
+        }
+
+        length++ ;
+        k = k % length;
+
+        if(k == 0)
+        return head;
+
+        // last node ko first s connect krdo ..to bss ab head dhundna reh jaega 
+        temp.next = head ;
+
+        // temp ko firse start p le aao ..qki ek baar f s traverl krna h 
+        temp = temp.next;
+        int lastNode = length - k ;     // new last node yehi hona chahiye 
+
+        int i = 1 ;     // 1 node hai or ab yaha s count krna shuru krooo 
+
+        while(i < lastNode)
+        {
+            temp = temp.next;
+            i++ ;
+        }
+
+        head = temp.next;   // new haead jo h wo new tail ka next hoga 
+        temp.next = null;   // new tail ka link break krdo 
+
+        return head;
+    }
+}
