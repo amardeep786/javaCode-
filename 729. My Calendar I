@@ -1,0 +1,96 @@
+729. My Calendar I :: https://leetcode.com/problems/my-calendar-i/description/
+----------------------------------------------------------------------------------
+//Approach-1 : Brute Force 
+//T.C : O(n^2)
+//S.C : O(n)
+
+/*
+class MyCalendar {
+
+    List<int[]> calender ;
+    public MyCalendar() {
+        calender = new ArrayList<>();
+    }
+    
+    public boolean book(int start, int end) {
+        
+        for(var interval : calender)
+        {
+            if(!(start >= interval[1] || end <= interval[0]))
+            {
+                return false;
+            }
+        }
+
+        // if not overlapping then add and return true
+            calender.add(new int[]{start,end});
+            return true;
+
+        
+    }
+}
+*/
+
+// ------------------ approach 2 ----- baar baar calender m dhundne s bdia ordered set m rkhlo ---------------//
+class MyCalendar {
+
+    TreeSet<int[]> calender ; 
+    public MyCalendar() {
+        calender = new TreeSet<>((a,b)-> (a[0] != b[0])? a[0]-b[0] : a[1]-b[1]);  // sort based on start time 
+    }
+    
+    public boolean book(int start, int end) {
+        
+        int event[] = new int[]{start,end};
+        int next[] = calender.ceiling(event);
+
+
+        if(next != null && next[0] < end)
+        {
+            // overlapping 
+            return false;
+        }
+
+        // check for previous too
+        int prev[] = calender.floor(event);
+
+        if(prev != null && start < prev[1])
+        {
+            // overlap with prev 
+            return false;
+        }
+
+        calender.add(event);
+        return true;
+    }
+}
+
+
+//Approach-3 (Set : Upper bound)
+//T.C : O(nlogn)
+//S.C : O(n)
+class MyCalendar {
+
+    // TreeSet to store the booked intervals
+    TreeSet<int[]> st;
+
+    public MyCalendar() {
+        // Initialize the TreeSet with a custom comparator
+        st = new TreeSet<>((a, b) -> a[1] != b[1] ? a[1] - b[1] : a[0] - b[0]);
+    }
+
+    public boolean book(int start, int end) {
+        // Find the first event where the end time is greater than or equal to start
+        int[] event = new int[]{end, start};
+        int[] next = st.ceiling(event); // O(logN)
+
+        // Check if the next event overlaps
+        if (next != null && next[1] < end) {
+            return false;
+        }
+
+        // If no overlap, add the booking to the set
+        st.add(new int[]{end, start});
+        return true;
+    }
+}
