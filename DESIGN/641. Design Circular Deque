@@ -1,0 +1,90 @@
+641. Design Circular Deque :: https://leetcode.com/problems/design-circular-deque/
+------------------------------------------------------------------------------------
+class MyCircularDeque {
+
+    int arr[];
+    int currElements = 0 , front = 0 , rear  , size = 0;
+    public MyCircularDeque(int k) {
+        arr = new int[k];
+        size = k;
+        rear = k-1;
+    }
+    
+    public boolean insertFront(int value) {
+
+        if(isFull())
+        return false ;
+
+        front = (front-1+size)%size ;
+        arr[front] = value ;
+        
+        currElements++;
+        return true;
+    }
+    
+    public boolean insertLast(int value) {
+        if(isFull())
+        return false ;
+
+        rear = (rear+1)%size ;
+        arr[rear] = value;
+        
+        currElements++;
+        return true;
+    }
+    
+    public boolean deleteFront() {
+        if(currElements == 0)
+        return false ;
+
+        front = (front+1)%size;
+        currElements--;
+        return true;
+
+
+    }
+    
+    public boolean deleteLast() {
+        if(currElements == 0)
+        return false ;
+
+        rear = (rear-1+size)%size;
+        currElements--;
+        return true;
+    }
+    
+    public int getFront() {
+        if (isEmpty()) {
+            return -1; // Deque is empty
+        }
+        return arr[front];
+    }
+    
+    public int getRear() {
+        if (isEmpty()) {
+            return -1; // Deque is empty
+        }
+        return arr[rear];
+    }
+    
+    public boolean isEmpty() {
+        return currElements == 0;
+    }
+    
+    public boolean isFull() {
+        return currElements == size ;
+    }
+}
+
+/**
+ * Your MyCircularDeque object will be instantiated and called as such:
+ * MyCircularDeque obj = new MyCircularDeque(k);
+ * boolean param_1 = obj.insertFront(value);
+ * boolean param_2 = obj.insertLast(value);
+ * boolean param_3 = obj.deleteFront();
+ * boolean param_4 = obj.deleteLast();
+ * int param_5 = obj.getFront();
+ * int param_6 = obj.getRear();
+ * boolean param_7 = obj.isEmpty();
+ * boolean param_8 = obj.isFull();
+ */
