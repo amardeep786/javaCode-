@@ -1,0 +1,58 @@
+Allocate Minimum Pages :: https://www.geeksforgeeks.org/problems/allocate-minimum-number-of-pages0937/1
+-----------------------------------------------------------------------------------------------------------------------
+class Solution {
+    
+    public long findPages(int n, int[] arr, int m) {
+        
+        if(m > n)
+        return -1 ;
+        
+        // low to largest value hogi array ki  hoga tbhi sblog ek ek book le paege
+        long low = Long.MIN_VALUE, ans = Long.MAX_VALUE , high = 0;
+        
+        for(int i = 0;i<n;i++)
+        {
+            low = Math.max(low , arr[i]);  
+            high += arr[i] ;
+        }
+        
+        while(low <= high)
+        {
+            long mid = low+(high-low)/2 ;
+            
+            long student = noOfStudentsCanBeAllocated(mid,arr) ;
+            
+            if (student <= m) {
+                ans = mid;  // We found a valid configuration, try for a smaller maximum
+                high = mid - 1;
+            } else {
+                low = mid + 1;  // Too many students needed, increase the limit
+            }
+        }
+        
+        return ans;
+    }
+    
+    
+    // gives kk kitne students mid pages ko le skte hain 
+    private long noOfStudentsCanBeAllocated(long mid,int[] arr)
+    {
+        long students = 1 , pagesHold = 0 ;
+        
+        for(int i = 0;i<arr.length;i++)
+        {
+            if(pagesHold + arr[i] <= mid)
+            {
+                // this student can hold ye wale book bhi 
+                pagesHold += arr[i];
+            }else
+            {
+                // mtlb ye book nye bche ko do and pages uske paas ab arrr[i] h
+                students++;
+                pagesHold = arr[i] ; 
+            }
+        }
+        
+        return students;
+    }
+};
