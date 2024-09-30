@@ -1,0 +1,59 @@
+Aggressive Cows :: https://www.geeksforgeeks.org/problems/aggressive-cows/1
+------------------------------------------------------------------------------------
+class Solution {
+    public static int solve(int n, int k, int[] stalls) {
+        
+        
+        if(k == stalls.length) return 1;
+        
+        
+        Arrays.sort(stalls);  //sort array O(NLogN)
+        
+        int minDistance = 0 ;
+        
+        int ans = -1 ;
+        
+        int maxDistance = stalls[n-1] ;
+        
+        
+        while(minDistance <= maxDistance)
+        {
+            int mid = minDistance + (maxDistance-minDistance)/2 ;
+            
+            if(isPossible(mid,stalls,k,n))
+            {
+                ans = mid ;
+                minDistance = mid+1;
+            }
+            else
+            {
+                maxDistance = mid-1;
+            }
+        }
+        
+        return ans;
+     }
+     
+     
+     public static boolean isPossible(int distance,int stalls[],int k, int n)
+     {
+         
+         int count = 1 ;
+         
+         int last_position  = stalls[0];
+         
+         for(int i = 1 ;i<n;i++)
+         {
+             if(stalls[i] - last_position >= distance)
+             {
+                 last_position = stalls[i];
+                 count++ ;
+             }
+             
+             if(count == k)
+             {return true;}
+         }
+         
+         return false; 
+     }
+}
