@@ -1,0 +1,37 @@
+1497. Check If Array Pairs Are Divisible by k :: https://leetcode.com/problems/check-if-array-pairs-are-divisible-by-k/
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public boolean canArrange(int[] arr, int k) {
+        
+        int n = arr.length;
+        int remainder[] = new int[k] ; // to store possible reminaders
+
+        for(int i = 0;i<n;i++)
+        {
+            int rem = (arr[i]%k+k)%k ; // handling negative remainder too
+            remainder[rem]++ ;
+        }
+
+        // 0 remiander k liy hme k-0 = k dhundge pr remainder to k-1 tkk hoga
+        // isliy 0 remainder k liy bs y dekhna h ki uska count even times hoo
+        // to pair bn jaega 0 remainde walo ka 
+
+        if(remainder[0]%2 != 0) 
+        return false;
+
+        // baaki i kisi ka remiander h to usk liy k-i wala remiander chahiye tbhi divisible hoga
+        // bss i or k-i ki freq same hai ki nai dekhna h 
+        for(int i = 1;i<=k/2 ;i++)
+        {
+            int remainderNeeded = k - i ;
+
+            if(remainder[remainderNeeded] != remainder[i])
+            return false;
+
+
+        }
+
+        return true;
+    }
+}
