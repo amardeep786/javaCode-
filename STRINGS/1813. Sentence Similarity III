@@ -1,0 +1,86 @@
+1813. Sentence Similarity III :: https://leetcode.com/problems/sentence-similarity-iii/
+---------------------------------------------------------------------------------------------
+// -------------- using arraYList --------------------------------------------------------//
+/*
+class Solution {
+    public boolean areSentencesSimilar(String s1, String s2) {
+        
+        int m = s1.length() , n = s2.length();
+
+        String arr1[] , arr2[] ;
+
+        // assuming ki arr1 me bdi string hogi
+        if(m >= n)
+        {
+            arr1 = s1.split("\\s");
+            arr2 = s2.split("\\s");
+        }else
+        {
+            arr1 = s2.split("\\s");
+            arr2 = s1.split("\\s");
+        }
+
+        int i = 0 , j = 0 , k = arr1.length-1 , l = arr2.length-1 ;
+
+        // match prefixes
+
+        while(i <= k && j <= l)
+        {
+            if(!arr1[i].equals(arr2[j]))
+            {
+                break ;
+            }
+            i++;
+            j++;
+        }
+
+        // match suffix
+        while(l >= j)
+        {
+            if(!arr1[k].equals(arr2[l]))
+            {
+                break;
+            }
+            l--;
+            k-- ;
+        }
+
+        if(l < j)
+        {
+            return true ;
+        }
+        return false ;
+
+    }
+}
+*/
+// ---------- using DEQUE as push/pop from front-back easily --------------------------------------------//
+class Solution {
+    public boolean areSentencesSimilar(String s1, String s2) {
+        // Ensure s1 is the longer string
+        if (s1.length() < s2.length()) {
+            String temp = s1;
+            s1 = s2;
+            s2 = temp;
+        }
+
+        // Split the strings into Deques
+        Deque<String> deq1 = new LinkedList<>(Arrays.asList(s1.split(" ")));
+        Deque<String> deq2 = new LinkedList<>(Arrays.asList(s2.split(" ")));
+
+        // Remove matching words from the front
+        while (!deq1.isEmpty() && !deq2.isEmpty() && deq1.peekFirst().equals(deq2.peekFirst())) {
+            deq1.pollFirst();
+            deq2.pollFirst();
+        }
+
+        // Remove matching words from the back
+        while (!deq1.isEmpty() && !deq2.isEmpty() && deq1.peekLast().equals(deq2.peekLast())) {
+            deq1.pollLast();
+            deq2.pollLast();
+        }
+
+        // If deq2 is empty, then s2 is a sub-sequence of s1
+        return deq2.isEmpty();
+    }
+}
