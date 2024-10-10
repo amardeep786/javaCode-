@@ -1,0 +1,28 @@
+134. Gas Station :: https://leetcode.com/problems/gas-station/
+----------------------------------------------------------------------
+class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int ans = 0 ;  // hoping first pump is ans 
+	    int n = gas.length ;
+	    
+	    int total = 0 ;  // store ki total petrol kitne h and kitna chlna h uska diff   
+	                    // agr end m total neg hua to ans -1 hoga
+	           
+	   int fuel = 0 ;          
+	   for(int i = 0;i<n;i++)
+	   {
+	       fuel += gas[i] - cost[i] ;
+	       total += gas[i] - cost[i] ;
+	       if(fuel < 0)
+	       {
+	           // ans cannot be starting point as aage chlke y neg hua mtlb perol km pda
+	           
+	           fuel = 0 ; 
+	           ans = i+1 ;   // next candidate is ans
+	       }
+	   }
+	   
+	   
+	   return total < 0 ? -1 : ans ;
+    }
+}
