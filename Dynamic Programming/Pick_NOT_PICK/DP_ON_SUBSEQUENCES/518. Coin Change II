@@ -1,0 +1,49 @@
+518. Coin Change II :: https://leetcode.com/problems/coin-change-ii/
+---------------------------------------------------------------------------
+class Solution {
+    public int change(int amount, int[] coins) {
+        
+        int dp[][] = new int[coins.length+1][amount+1] ;
+        for(var t : dp)
+        {
+            Arrays.fill(t,-1);
+        }
+       int ans =  help(coins, 0 , amount,dp);
+
+        return ans == Integer.MAX_VALUE ? -1 : ans ;
+    }
+
+    public int help(int[] coins , int index , int amount,int[][] dp)
+    {
+      // ab ek element bcha h to amount agr multiple hua to count krna h to 1 return krdo as 1 way mil gya
+        if( index == coins.length-1)
+        {
+            if((amount % coins[index]) == 0 )
+            {
+                return 1 ;
+            }else
+            {
+                return 0 ;
+            }
+        }
+
+        if(dp[index][amount] != -1)
+        {
+            return dp[index][amount] ;
+        }
+
+        // pick - notpick
+
+        int pick = 0 , notpick = 0;
+
+        notpick = help(coins,index+1,amount,dp);
+        
+        if(amount >= coins[index])
+        {
+            pick =   help(coins,index,amount - coins[index],dp);
+            
+        }
+
+        return dp[index][amount] = pick + notpick;
+    }
+}
