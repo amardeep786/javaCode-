@@ -1,0 +1,57 @@
+322. Coin Change :: https://leetcode.com/problems/coin-change/
+---------------------------------------------------------------
+// greedily will not work coz there may be chance we have to go back and change some denomination again to make amount
+// so go for dp will all possibility
+
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        
+        int dp[][] = new int[coins.length+1][amount+1] ;
+        for(var t : dp)
+        {
+            Arrays.fill(t,-1);
+        }
+       int ans =  help(coins, 0 , amount,dp);
+
+        return ans == Integer.MAX_VALUE ? -1 : ans ;
+
+    }
+
+    public int help(int[] coins , int index , int amount,int[][] dp)
+    {
+        if( index == coins.length-1)
+        {
+            if((amount % coins[index]) == 0 )
+            {
+                return amount / coins[index] ;
+            }else
+            {
+                return Integer.MAX_VALUE ;
+            }
+        }
+
+        if(dp[index][amount] != -1)
+        {
+            return dp[index][amount] ;
+        }
+
+        // pick - notpick
+
+        int pick = Integer.MAX_VALUE , notpick = Integer.MAX_VALUE;
+
+        notpick = help(coins,index+1,amount,dp);
+        
+        if(amount >= coins[index])
+        {
+            pick =  help(coins,index,amount - coins[index],dp);
+
+            if(pick != Integer.MAX_VALUE)
+            {
+                pick = 1 + pick ;
+            }
+            
+        }
+
+        return dp[index][amount] = Math.min(pick,notpick);
+    }
+}
