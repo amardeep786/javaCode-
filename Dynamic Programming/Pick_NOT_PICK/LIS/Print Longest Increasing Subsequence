@@ -1,0 +1,82 @@
+Print Longest Increasing Subsequence :: https://www.geeksforgeeks.org/problems/printing-longest-increasing-subsequence/0
+---------------------------------------------------------------------------------------------------------------------------
+class pair
+{
+    int i;
+    int val;
+    
+    pair(int i,int val)
+    {
+        this.i = i;
+        this.val = val;
+    }
+}
+class Solution {
+    public ArrayList<Integer> longestIncreasingSubsequence(int n, int arr[]) {
+        
+        int dp[] = new int[n+1];
+        Arrays.fill(dp,1);
+        
+        ArrayList<Integer> list = new ArrayList<>();
+        for(int i = 1;i<n;i++)
+        {
+            for(int j = 0;j<i;j++)
+            {
+                if(arr[j] < arr[i])
+                {
+                    dp[i] = Math.max(dp[i],dp[j]+1) ;
+                }
+            }
+        }
+        
+        
+        // now in this array do reverse to get seq
+        
+        // get max Index and max value
+        
+        Deque<pair> dq = new ArrayDeque<>();
+        int maxi = Integer.MIN_VALUE ;
+        int maxIndex = -1 ;
+        
+        for(int i = 0;i<n;i++)
+        {
+            if(dp[i] > maxi)
+            {
+                maxi = dp[i];
+                maxIndex = i ;
+            }
+        }
+        
+        // for(int i = 0;i<n;i++)
+        // {
+        //     System.out.print(dp[i]+" ");
+        // }
+        
+        // System.out.println();
+        
+        dq.offer(new pair(maxIndex,dp[maxIndex]));
+        
+        
+        while(dq.size() > 0)
+        {
+            pair temp = dq.pollFirst();
+            list.add(arr[temp.i]);
+            
+            for(int i = 0;i <= temp.i-1;i++)
+            {
+                if(dp[i] == temp.val-1 && arr[i] < arr[temp.i])
+                {
+                    dq.offer(new pair(i,dp[i]));
+                    
+                    break; // we need 1 path wrna multiple path interleaved ho jaege 
+                }
+            }
+        }
+        
+        
+        Collections.reverse(list);
+        return list;
+        
+        
+    }
+}
