@@ -1,0 +1,155 @@
+2641. Cousins in Binary Tree II :: https://leetcode.com/problems/cousins-in-binary-tree-ii/description/
+---------------------------------------------------------------------------------------------------------------
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+
+ /*
+    agr hme hrek level ka sum pta rhe and sibling ka sum pta rhe 
+
+    to hm hrek node ki value easily calculate kr skte hain ie levelSum - sibling sum tp cousin ka sum aajaega
+
+ */
+class Solution {
+    public TreeNode replaceValueInTree(TreeNode root) {
+
+        Queue<TreeNode> que = new LinkedList<>();
+        que.offer(root);
+
+
+        List<Integer> levelSum = new ArrayList<>();
+
+        while(!que.isEmpty())
+        {
+            int sum = 0 ;
+            int n = que.size();
+
+            while(n-- > 0)
+            {
+                TreeNode temp = que.poll();
+
+                sum += temp.val;
+
+                if(temp.left != null)
+                {
+                    que.offer(temp.left);
+                }
+
+                if(temp.right != null)
+                {
+                    que.offer(temp.right);
+                }
+            }
+
+            levelSum.add(sum);
+        }
+
+
+        // ab hrek node k paas jaao waha s usk child ka sum krna ez hoga ie sibling sum 
+
+        que.offer(root);
+        root.val = 0 ;  // root k level p or koi nai h cousin nai h to 0
+
+        int i = 1 ; // initially hme 0th level p 1 level ka sum chahiye and so on 
+
+        while(!que.isEmpty())
+        {
+            int n = que.size();
+
+            while(n-- > 0)
+            {
+                TreeNode temp = que.poll();
+
+                int siblingSum = 0 ;
+
+                siblingSum += temp.left != null ? temp.left.val : 0 ;
+                siblingSum += temp.right != null ? temp.right.val : 0 ;
+
+                
+                // left hai toh left ki value update krdo ..us level ka sum - sibling ka sum 
+                if(temp.left != null)
+                {
+                    temp.left.val = levelSum.get(i) - siblingSum ;
+                    que.offer(temp.left);
+
+                }
+
+                if(temp.right != null)
+                {
+                    temp.right.val = levelSum.get(i) - siblingSum ;
+                    que.offer(temp.right);
+                    
+                }
+            }
+            i++ ;  // now next level
+            
+        }
+
+        return root;
+    }
+}
+
+
+//Approach-2 (1 Pass)
+//T.C : O(n)
+//S.C : O(n)
+
+// current level s hi next level ka sum nikal lege orr usk child me 
+// sibling sum update krdege 
+class Solution {
+    public TreeNode replaceValueInTree(TreeNode root) {
+        if (root == null) {
+            return root;
+        }
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int levelSum = root.val;
+
+        while (!queue.isEmpty()) {
+            int n = queue.size();
+            int nextLevelSum = 0;
+
+            for (int i = 0; i < n; i++) {
+                TreeNode curr = queue.poll();
+
+                // Update current node value
+                curr.val = levelSum - curr.val;
+
+                int siblingSum = (curr.left != null ? curr.left.val : 0) +
+                                 (curr.right != null ? curr.right.val : 0);
+
+                // Process left child
+                if (curr.left != null) {
+                    nextLevelSum += curr.left.val;
+                    curr.left.val = siblingSum;
+                    queue.add(curr.left);
+                }
+
+                // Process right child
+                if (curr.right != null) {
+                    nextLevelSum += curr.right.val;
+                    curr.right.val = siblingSum;
+                    queue.add(curr.right);
+                }
+            }
+
+            // Move to the next level
+            levelSum = nextLevelSum;
+        }
+
+        return root;
+    }
+}
