@@ -1,0 +1,88 @@
+951. Flip Equivalent Binary Trees :: https://leetcode.com/problems/flip-equivalent-binary-trees/description/
+---------------------------------------------------------------------------------------------------------------------
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+
+// method 1
+ // adjacency list ko sortd m rkho ..flipped hoga tb b sorted same hoga 
+
+ /*
+class Solution {
+    public boolean flipEquiv(TreeNode root1, TreeNode root2) {
+        
+        Map<Integer,List<Integer>> map1 = new HashMap<>();
+
+        Map<Integer,List<Integer>> map2 = new HashMap<>();
+
+        fillMap(map1,root1);
+        fillMap(map2,root2);
+
+        for(var t : map1.values())
+        {
+            Collections.sort(t);
+        }
+
+        for(var t : map2.values())
+        {
+            Collections.sort(t);
+        }
+
+        return map1.equals(map2);
+    }
+
+    void fillMap(Map<Integer,List<Integer>> map , TreeNode root)
+    {
+        if(root == null)
+        return ;
+
+        map.put(root.val , new ArrayList<>());
+        
+        if(root.left != null)
+        {
+            map.get(root.val).add(root.left.val);
+        }
+
+        if(root.right != null)
+        {
+            map.get(root.val).add(root.right.val);
+        }
+
+        fillMap(map,root.left);
+        fillMap(map,root.right);
+    }
+}
+
+*/
+
+
+class Solution {
+    public boolean flipEquiv(TreeNode root1, TreeNode root2) {
+        if (root1 == null && root2 == null) {
+            return true;
+        }
+        
+        if (root1 == null || root2 == null) {
+            return false;
+        }
+
+        if (root1.val == root2.val) {
+            return (flipEquiv(root1.left, root2.left) && flipEquiv(root1.right, root2.right)) ||
+                   (flipEquiv(root1.left, root2.right) && flipEquiv(root1.right, root2.left));
+        }
+
+        return false;
+    }
+}
