@@ -1,0 +1,118 @@
+3331. Find Subtree Sizes After Changes :: https://leetcode.com/problems/find-subtree-sizes-after-changes/
+---------------------------------------------------------------------------------------------------------
+// approach simple hai :- hm hrek character k liy wo last kis node p mila tha wo store krk rkhege 
+// then agr kisi node s char match hua uske ancestor ka to nye parent array me update kr denge ki 
+// in sbb k baaad ab nya parent current node ka wahi h jo iska ancestor tha and char b same tha uska 
+
+
+// bss baad me to fr s nyi tree bna a hrek me subtree ka size nikal lege 
+
+class Solution {
+    public int[] findSubtreeSizes(int[] parent, String s) {
+        
+        int n = parent.length;
+        List<List<Integer>> adj = new ArrayList<>();
+
+        for(int i = 0;i<n;i++)
+        {
+            adj.add(new ArrayList<>());
+        }
+
+        // making graph
+        for(int i = 1;i<n;i++)
+        {
+            adj.get(parent[i]).add(i);
+        }
+
+        Map<Character,Integer> map = new HashMap<>() ;  // to store ki koi char last time kis node p dekha tha 
+
+        int newPar[] = new int[n] ; // isme hrek nye parent ko store krege 
+
+        Arrays.fill(newPar,-1);
+
+        // ye hme nya parent array update krk de dega
+        dfs(parent,0,s,map,newPar,adj);
+
+
+        // ab new_Parent array update hogya hoga to iska graph bnaao then subtree ska size nikalna h bss
+
+        List<List<Integer>> adj1 = new ArrayList<>();
+        for(int i = 0;i<n;i++)
+        {
+            adj1.add(new ArrayList<>());
+        }
+
+        // ab fr se tree bnaayi but nye parent array  according 
+        for(int i = 1;i<n;i++)
+        {
+            adj1.get(newPar[i]).add(i);
+        }
+
+        // ab bss iss tree me subtree ka size hi nikalna h bss
+        int subtreeSize[] = new int[n];
+
+        // ye subtree array size wali array ko bhrne ka kaam krega 
+        updateSubtreeSizeArray(0,adj1,-1,subtreeSize);
+        
+        return subtreeSize;
+
+    }
+
+    // subtree size nikalne ka function 
+    int updateSubtreeSizeArray(int node,List<List<Integer>> adj1,int par,int subtreeSize[])
+    {
+        int size = 1 ;
+
+        for(var nei : adj1.get(node))
+        {
+            
+            size += updateSubtreeSizeArray(nei,adj1,node,subtreeSize);
+        }
+
+        subtreeSize[node] = size ;
+        return size;
+
+    }
+
+
+    void dfs(int[] parent,int node, String s,Map<Character,Integer> map, int newPar[],List<List<Integer>> adj)
+    {
+        // curr char lia 
+        char curr = s.charAt(node);
+
+        // agr map m pehle hi iss char k corresponding entry hai tohhh mtlb same char ka koi mila tha 
+        // to wahi ab nya parent hoga current node ka 
+        if(map.containsKey(curr))
+        {
+            newPar[node] = map.get(curr);
+        }else
+        {
+            // nai h to abhi wala parent hi nye tree m b parent rhega 
+            newPar[node] = parent[node];
+        }
+
+        // hme curr k liy closest ancestr update kren wale hain tohh prev ancestor store kr lete h qki backtrack hoga to
+        // fr s prev ancestor ki jrurt \pdegi
+        int prevAncestor = map.getOrDefault(curr , -1);
+
+        // map m update kia closest
+        map.put(curr,node);
+
+        // usk har nei p jaake fr s yehi sb ki a
+        for(var nei : adj.get(node))
+        {
+            dfs(parent,nei,s,map,newPar,adj);
+        }
+
+        // ab hm backtrack kr rhe h ie curr node ka kaam hogya ho map sn nikal k usk pihle wale 
+        // ancestor s update krdo
+        if(prevAncestor == -1)
+        {
+            map.remove(curr);
+        }else
+        {
+            map.put(curr,prevAncestor);
+        }
+
+    }
+}
