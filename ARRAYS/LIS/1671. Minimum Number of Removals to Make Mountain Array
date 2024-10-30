@@ -1,0 +1,68 @@
+1671. Minimum Number of Removals to Make Mountain Array :: https://leetcode.com/problems/minimum-number-of-removals-to-make-mountain-array/description/
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+// approach -> hrek index k liy usk left m longest increasing subsequence kitne lenght h 
+// usk right m longest decresing kitne length ka h 
+// bss hrek elemtn k liy usko peak element maan k usk left m LIS and right m LDS ka length nikal lenge 
+// to maximum mountain array bna skte hain ...and max mountain array == minimum deletion of elements 
+
+import java.util.*;
+
+// Longest Increasing Subsequence (LIS) Solution from both directions
+
+class Solution {
+    
+    public int minimumMountainRemovals(int[] arr) {
+
+        int n = arr.length;
+
+        int[] LIS = new int[n];
+        int[] LDS = new int[n];
+
+        Arrays.fill(LIS,1);
+        Arrays.fill(LDS,1);
+
+        // calculate LIS for every index
+
+        for(int i = 0;i<n;i++)
+        {
+            for(int j = i-1;j>=0;j--)
+            {
+                if(arr[i] > arr[j])
+                {
+                    LIS[i] = Math.max(LIS[i], LIS[j]+1);
+                }
+            }
+        }
+
+        // calculate LDS for every index
+
+        for(int i = n-1;i>=0;i--)
+        {
+            for(int j = i+1;j<n;j++)
+            {
+                if(arr[i] > arr[j])     // decreasing part is found
+                {
+                    LDS[i] = Math.max(LDS[i], LDS[j]+1);
+                }
+            }
+        }
+
+        // ab hme bss left s max LIS and right k max LDS for every index dekhna h
+        // removal =  (i+1) elements - LIS[i] ;  // for left side itene removal chahiye
+        // removal += (n-i)elements - LDS[i] ;
+
+        // after combining total removal formula it comes (n - LIS[i] - LDS[i] + 1)
+
+        // so we need to calculate this only
+
+        int removal = n ;  // max me sb remove kr dege 
+        for(int i = 0;i<n;i++)
+        {
+            if(LIS[i] > 1 && LDS[i] > 1)   // tbhi atleast 3 length ka mountain bn paega
+            removal = Math.min(removal , n - LIS[i] -LDS[i] + 1);
+        }
+
+        return removal;
+        
+    }
+}
