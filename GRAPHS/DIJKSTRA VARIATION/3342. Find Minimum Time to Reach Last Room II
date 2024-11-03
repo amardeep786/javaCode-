@@ -1,0 +1,60 @@
+3342. Find Minimum Time to Reach Last Room II  :: https://leetcode.com/problems/find-minimum-time-to-reach-last-room-ii/description/
+------------------------------------------------------------------------------------------------------------------------------------------------
+ // store 1 variable jo ki btaega +1 ya +1 lena h 
+class Solution {
+    int dir[][] = {{-1,0},{1,0},{0,-1},{0,1}};
+    public int minTimeToReach(int[][] moveTime) {
+        
+        int n = moveTime.length , m = moveTime[0].length;
+
+        // here 3rd will store either we reach by even move or odd move so that we have idea that 
+        // whether to do +1 or +2
+
+        int shortest[][][] = new int[n][m][2];
+
+        for(var t : shortest)
+        {
+            for(var k : t)
+                Arrays.fill(k , Integer.MAX_VALUE );
+        }
+
+        // initially we r at 0 
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->a[0]-b[0]);
+        pq.offer(new int[]{0,0,0,0}) ;  // initially 0 cost and coordinate is also {0,0}and 0th move
+        shortest[0][0][0] = 0 ;
+
+        while(!pq.isEmpty())
+        {
+            int temp[] = pq.poll();
+
+            int dist = temp[0];
+            int x = temp[1];
+            int y = temp[2];
+            int move = temp[3];
+
+            // move can take only 2 values so if it 0 so 0^1 = 1 means we r at odd moves and if we r move = 1 so we r at even move
+            int cost = ((move^1)==1 ? 1 : 2);
+
+            for(var d : dir)
+            {
+                int newX = d[0]+ x;
+                int newY = d[1] + y ;
+                
+                // ek cell s dusre p yaa to dusre cell ki value + 1 yaa to current jo b hai +1 unme s max lena h 
+                if(isValid(newX,newY,n,m) && shortest[newX][newY][move^1] > Math.max(shortest[x][y][move] + cost , moveTime[newX][newY]+cost))
+                {
+                     shortest[newX][newY][move^1] = Math.max(shortest[x][y][move] + cost , moveTime[newX][newY]+cost) ;
+
+                     pq.offer(new int[]{shortest[newX][newY][move^1],newX,newY,move^1});
+                }
+            }
+        }
+
+        return Math.min(shortest[n-1][m-1][0] ,shortest[n-1][m-1][1] );
+    }
+
+    private boolean isValid(int x,int y,int n,int m)
+    {
+        return (x>=0 && x < n && y>=0 && y<m);
+    }
+}
