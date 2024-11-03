@@ -1,0 +1,51 @@
+3341. Find Minimum Time to Reach Last Room I :: https://leetcode.com/problems/find-minimum-time-to-reach-last-room-i/
+-----------------------------------------------------------------------------------------------------------------------
+class Solution {
+    int dir[][] = {{-1,0},{1,0},{0,-1},{0,1}};
+    public int minTimeToReach(int[][] moveTime) {
+        
+        int n = moveTime.length , m = moveTime[0].length;
+
+        int shortest[][] = new int[n][m];
+
+        for(var t : shortest)
+        {
+            Arrays.fill(t , Integer.MAX_VALUE );
+        }
+
+        // initially we r at 0 
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->a[0]-b[0]);
+        pq.offer(new int[]{0,0,0}) ;  // initially 0 cost and coordinate is also {0,0}
+        shortest[0][0] = 0 ;
+
+        while(!pq.isEmpty())
+        {
+            int temp[] = pq.poll();
+
+            int cost = temp[0];
+            int x = temp[1];
+            int y = temp[2];
+
+            for(var d : dir)
+            {
+                int newX = d[0]+x;
+                int newY = d[1] + y ;
+                
+                // ek cell s dusre p yaa to dusre cell ki value + 1 yaa to current jo b hai +1 unme s max lena h 
+                if(isValid(newX,newY,n,m) && shortest[newX][newY] > Math.max(shortest[x][y]+1 , moveTime[newX][newY]+1))
+                {
+                     shortest[newX][newY] = Math.max(shortest[x][y]+1 , moveTime[newX][newY]+1);
+
+                     pq.offer(new int[]{shortest[newX][newY],newX,newY});
+                }
+            }
+        }
+
+        return shortest[n-1][m-1];
+    }
+
+    private boolean isValid(int x,int y,int n,int m)
+    {
+        return (x>=0 && x < n && y>=0 && y<m);
+    }
+}
