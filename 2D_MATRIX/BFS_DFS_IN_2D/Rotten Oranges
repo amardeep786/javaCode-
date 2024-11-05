@@ -1,0 +1,74 @@
+Rotten Oranges :: https://www.geeksforgeeks.org/problems/rotten-oranges2536/1
+-------------------------------------------------------------------------------------
+
+
+class Solution {
+    
+    int dir[][] = {{-1,0},{1,0},{0,-1},{0,1}};
+    public int orangesRotting(int[][] mat) {
+        
+        int rows = mat.length;
+        int cols = mat[0].length;
+        
+        Queue<int[]> que = new LinkedList<>();
+        
+        // put all starting point ie rotten oranges in queue
+        for(int i = 0;i<rows;i++)
+        {
+            for(int j = 0;j<cols;j++)
+            {
+                if(mat[i][j] == 2)
+                {
+                    que.offer(new int[]{i,j,0});
+                }
+            }
+        }
+        
+        int time = 0 ;
+        
+        while(!que.isEmpty())
+        {
+             int n = que.size();
+             
+             while(n-- > 0)
+             {
+                 int temp[] = que.poll();
+                 int x = temp[0];
+                 int y = temp[1];
+                 time = temp[2];
+                 
+                 for(var d : dir)
+                 {
+                     int newX = x + d[0];
+                     int newY = y + d[1];
+                     
+                     if(isValid(newX,newY,rows,cols) && mat[newX][newY] == 1)
+                     {
+                         mat[newX][newY] = 2;   // mark visited 
+                         que.offer(new int[]{newX,newY,time+1});
+                     }
+                 }
+             }
+        }
+        
+        // check ki kya koi fresh bcha h jo unreachable tha 
+        for(int i = 0;i<rows;i++)
+        {
+            for(int j = 0;j<cols;j++)
+            {
+                if(mat[i][j] == 1)
+                {
+                    return -1;
+                }
+            }
+        }
+        
+        return time;
+        
+    }
+    
+    private boolean isValid(int x,int y , int m,int n)
+    {
+        return (x>= 0 && x < m && y>=0 && y<n);
+    }
+}
