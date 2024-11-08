@@ -1,0 +1,42 @@
+686. Repeated String Match :: https://leetcode.com/problems/repeated-string-match/description/
+----------------------------------------------------------------------------------------------------
+// brute force --> make length of s1 to s2
+// check for 1 more append as s2 at max can start from last index of s1 
+// to 1 more append will work
+
+class Solution {
+    public int repeatedStringMatch(String s1, String s2) {
+     int m = s1.length() , n = s2.length();
+     
+     // agr koi s2 k char s1 me nahi h to return -1
+     for(int i = 0;i<n;i++)
+     {
+         if(!s1.contains(String.valueOf(s2.charAt(i))))
+         return -1;
+     }
+     int count = 1;   
+     
+     StringBuilder sb = new StringBuilder(s1);
+     
+    // first make s1 >= length of s2
+    while(m<n)
+    {
+        sb.append(s1);
+        count++;
+        m = sb.length();
+    }
+    
+    if(sb.toString().contains(s2))
+    return count;
+    
+    
+    sb.append(s1);  // do 1 more concatenation
+    count++;
+    
+    if(sb.toString().contains(s2))
+    return count;
+    
+        
+    return -1;      
+    }
+}
