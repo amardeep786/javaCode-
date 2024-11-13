@@ -1,0 +1,79 @@
+2563. Count the Number of Fair Pairs :: https://leetcode.com/problems/count-the-number-of-fair-pairs/
+-----------------------------------------------------------------------------------------------------------
+class Solution {
+    public long countFairPairs(int[] nums, int lower, int upper) {
+        
+        // sorting will not affect even though constraint i<j but nums[i]+nums[j] is commute so we can sort 
+        Arrays.sort(nums);
+        int n = nums.length;
+        // if we have no of pairs whose sum < X and no of pairs whose sum <= Y
+        // and if we subtract Y-X then we can find all pairs whose sum >= X and <= Y
+
+        // 1. count all pairs whose sum is < lower
+        long pairs = 0;
+
+        for(int i = 0;i<n;i++ )
+        {
+            int lessThanLower = lowerBound(nums,i+1,lower - nums[i]);
+            int lessThanEqualToUpper = upperBound(nums,i+1,upper - nums[i]);
+
+
+            //  no  of another element of curr index to which it form pair st sum < lower
+            // lessThanLower it contains no of elements which are less than lower but we need pair so we 
+            // subtract curr index to so that we get no of pairs less then lower
+
+             int pairsLessThanLower = lessThanLower - 1 - i ;
+             int pairsLessThanEqualToUpper = lessThanEqualToUpper  - 1 - i ;  // -1 is for pos -1 gives last valid elemnt 
+
+             pairs += (pairsLessThanEqualToUpper-pairsLessThanLower);
+
+        }
+
+        return pairs;
+
+    }
+
+    // return pehla index jo ki element k bra bar nai h 
+    int lowerBound(int[] nums , int idx , int element)
+    {
+        
+        int low = idx ;
+        int high = nums.length;
+
+        while(low < high)
+        {
+            int mid = low + (high-low)/2 ;
+
+            if(nums[mid] < element)
+            {
+                low = mid + 1;
+            }else
+            {
+                high = mid  ;
+            }
+        }
+        return low ;
+    }
+
+    // upperBound
+    int upperBound(int[] nums , int idx , int element)
+    {
+        
+        int low = idx ;
+        int high = nums.length;
+
+        while(low < high)
+        {
+            int mid = low + (high-low)/2 ;
+
+            if(nums[mid] <= element)
+            {
+                low = mid + 1;
+            }else
+            {
+                high = mid  ;
+            }
+        }
+        return low ;
+    }
+}
