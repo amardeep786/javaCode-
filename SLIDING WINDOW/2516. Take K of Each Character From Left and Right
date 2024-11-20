@@ -1,0 +1,103 @@
+2516. Take K of Each Character From Left and Right :: https://leetcode.com/problems/take-k-of-each-character-from-left-and-right/
+--------------------------------------------------------------------------------------------------------------------------------------
+// method 1 -> pick / notPick from left and right at every state -- TLE as O(2^n)
+
+/*
+class Solution {
+    int res = Integer.MAX_VALUE;
+    public int takeCharacters(String s, int k) {
+
+        int n = s.length();
+        int i = 0 , j = n-1;
+        int[]freq = new int[]{0,0,0};  // to store freq of a,b,c
+        help(s,k,i,j,0,freq);
+
+        return res==Integer.MAX_VALUE ? -1 : res;
+    }
+
+    private void help(String s, int k,int i,int j, int min , int[]freq)
+    {
+        if(freq[0] >= k && freq[1] >= k && freq[2] >= k)
+        {
+            res = Math.min(res,min);
+            return ;
+        }
+
+        if(i>j)
+        {
+            return;
+        }
+
+        // left s element delete kia 
+
+        int[]deleteFromLeft = freq.clone();
+        deleteFromLeft[s.charAt(i)-'a']++ ;
+        help(s,k,i+1,j,min+1,deleteFromLeft);
+
+
+        // right delete krege 
+
+        int[]deleteFromRight = freq.clone();
+        deleteFromRight[s.charAt(j)-'a']++ ;
+        help(s,k,i,j-1,min+1,deleteFromRight);
+
+    }
+}
+
+*/
+// method 2 -> SLIDING WINDOW 
+
+// we will try to find maximum window that is not deleted so that rem will be deleted 
+class Solution {
+    
+    public int takeCharacters(String s, int k) {
+
+        int n = s.length();
+        int ans = n ; // assume that all char deleted and we find our ans
+
+        // store all freq
+        int[]freq = new int[3];
+
+        for(char ch : s.toCharArray())
+        {
+            freq[ch-'a']++ ;
+        }
+
+        if(freq[0] < k || freq[1] < k || freq[2]<k)
+        {
+            return -1 ;
+        }
+
+        int i = 0 , j = 0;
+        int notDeletedWindowSize = 0;
+        while(j<n)
+        {
+            // suppose jth char not deleted 
+            char ch = s.charAt(j);
+
+            freq[ch-'a']-- ;
+
+            if(isValid(freq , k))
+            {
+                notDeletedWindowSize = Math.max(notDeletedWindowSize , j-i+1);
+            }else
+            {
+                while(i<=j && (freq[0] < k || freq[1] < k || freq[2] < k))
+                {
+                    // try to make valid ie every freq again k
+                    freq[s.charAt(i) - 'a']++;
+                    i++;
+                }
+            }
+            j++;
+        }
+
+        return n - notDeletedWindowSize;
+
+    }
+
+    private boolean isValid(int[]freq,int k)
+    {
+        return  freq[0] >= k && freq[1]>=k && freq[2] >= k ;
+    }
+}
