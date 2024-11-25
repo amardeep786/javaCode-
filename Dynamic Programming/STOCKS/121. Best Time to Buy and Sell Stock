@@ -1,0 +1,43 @@
+121. Best Time to Buy and Sell Stock :: https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/
+-------------------------------------------------------------------------------------------------------------------------
+
+// class Solution {
+//     public int maxProfit(int[] prices) {
+       
+
+//         int maxRight = prices[prices.length-1];
+//         int maxProfit=0;
+//         int i=0,j=0;
+//         for( i=prices.length-2;i>=0;i--)
+//         {           
+//                 maxProfit=Math.max(maxProfit,maxRight-prices[i]);  // maxium of right m s ghtaaate jaao
+//                 maxRight = Math.max(maxRight,prices[i]);
+//         }
+
+//         return maxProfit;
+//    }
+// }
+
+
+// ------------- intuitive approach --------------------------------------------------------------------------------------------//
+
+// pehle din hi khreeda to usi din becha to profit 0 
+// baaki hum hrek din ko assume krege ki becha hmne to hume usk left jo minium hoga maanege ki us din khreeda hoga for maximum 
+// profit 
+
+class Solution {
+    public int maxProfit(int[] prices) {
+
+        int profit = 0 ; //assuming sell on 0th day
+        int mini = prices[0];
+        for(int i = 1;i<prices.length;i++)
+        {
+            profit = Math.max(profit , prices[i] - mini) ;  // pehle profit , currprofit
+            mini = Math.min(mini , prices[i]);
+
+        }
+
+        return profit;
+
+    }
+}
