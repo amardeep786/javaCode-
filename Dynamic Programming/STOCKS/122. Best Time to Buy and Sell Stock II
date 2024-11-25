@@ -1,0 +1,32 @@
+122. Best Time to Buy and Sell Stock II :: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/description/
+----------------------------------------------------------------------------------------------------------------------------
+// simple intuitive approach..khreedo and jb tk prices bdh rhe h bdhte jao and then bech do then again shuru kro buy 
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        int n = prices.length;
+
+        int bd = 0 , sd = 0 ;   // bd-> buy date , sd = sell date
+        int profit = 0;
+        for(int i = 1;i<n;i++)
+        {
+            if(prices[i] >= prices[i-1])
+            {
+                sd++;
+                continue;
+            }else
+            {
+                
+                profit += prices[sd]-prices[bd];
+                sd = i;
+                bd = i ;
+               
+            }
+        }
+
+        if(sd < n)
+        profit += prices[sd]-prices[bd];  // for last value
+
+        return profit;
+    }
+}
