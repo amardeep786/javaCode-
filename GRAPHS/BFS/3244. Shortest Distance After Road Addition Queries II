@@ -1,0 +1,45 @@
+3244. Shortest Distance After Road Addition Queries II :: https://leetcode.com/problems/shortest-distance-after-road-addition-queries-ii/
+-----------------------------------------------------------------------------------------------------------------------------------------------
+// initially tohh ek chain hai ie graph 1->2->3->4 like this 
+// ab jb b kuj edge add ho rhi h to wo ya to kuj nodes ko skip kregi ya nai kregi agr ek length ki query hui
+// eg making a flyover over houses 
+// ab initially 0-1-2 sb sorted hai to isey treeset m rkh lege
+// qki jb b query aayegi to it is always beneficial to use that query over nodes 
+// like  1-2-3-4-5 tha orr query aai ki 3-5 k beech edge daalo to ab hum 
+// 3-5 wala rsta hi lege naaki 4 ko delete krdege uski jrurt nai h
+
+// or fr s ye chain bn jaegi ie 1-2-3-5 and jo b iss chain ki length h ussey ek less hmara shortest path hoga chain me 
+
+class Solution {
+    public int[] shortestDistanceAfterQueries(int n, int[][] queries) {
+        
+        TreeSet<Integer> set = new TreeSet<>();
+        for(int i = 0 ;i<n-1;i++)
+        {
+            set.add(i);  // bhle hi nodes add kr rhe h but hme pta h ek node ka agle s ek edge h
+        }
+        int[] res = new int[queries.length];
+        int  i = 0;
+        for(var q : queries)
+        {
+            int u = q[0];
+            int v = q[1];
+
+            // since hum u se v kk beech wale sbhi ko delete krna chahte hain to u ko presevre rkho
+            // to [u+1 , v) ko delete krege as in java u is inclusive and v is not 
+
+            removeBetweenUandV(set,u+1,v);
+
+            res[i++] = set.size();
+
+        }
+
+        return res;
+    }
+
+    private void removeBetweenUandV(TreeSet<Integer> set , int u,int v)
+    {
+        List<Integer> toBeRemoved = new ArrayList<>(set.subSet(u,true,v,false));
+        set.removeAll(toBeRemoved);
+    }
+}
