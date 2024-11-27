@@ -1,0 +1,52 @@
+188. Best Time to Buy and Sell Stock IV :: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/description/
+-----------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int maxProfit(int k, int[] prices) {
+        int n = prices.length;
+
+        int[][][] dp = new int[n+1][2][k+1];
+
+
+        for(var t : dp)
+        {
+            for(var q : t)
+            {
+                Arrays.fill(q,-1);
+            }
+        }
+
+        return help(prices,0,n,true,0,dp,k);
+    }
+
+    private int help(int[] prices,int day,int n, boolean canBuy,int totalTransActions,int[][][] dp,int k)
+    {
+        if(day >= n)    return 0;
+
+        if(totalTransActions >= k)    return 0;
+
+        if(dp[day][canBuy==true ? 1 : 0][totalTransActions] != -1)
+        return dp[day][canBuy==true ? 1 : 0][totalTransActions] ;
+
+
+        int profit = 0;
+
+        if(canBuy)
+        {
+            // whether buy or not on that day
+            int buy = help(prices,day+1,n,false,totalTransActions,dp,k) - prices[day];
+            int notBuy = help(prices,day+1,n,true,totalTransActions,dp,k) ;
+
+            profit = Math.max(buy,notBuy);
+        }else
+        {
+            int sell = prices[day] + help(prices,day+1,n,true,totalTransActions+1,dp,k);
+            int notSell = help(prices,day+1,n,false,totalTransActions,dp,k);
+
+            profit = Math.max(sell,notSell);
+        }
+
+        return dp[day][canBuy==true ? 1 : 0][totalTransActions] = profit;
+
+
+    }
+}
