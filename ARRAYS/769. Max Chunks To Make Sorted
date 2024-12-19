@@ -1,0 +1,24 @@
+769. Max Chunks To Make Sorted :: https://leetcode.com/problems/max-chunks-to-make-sorted/
+--------------------------------------------------------------------------------------------
+class Solution {
+    public int maxChunksToSorted(int[] arr) {
+        int n = arr.length;
+
+        // hme bs ye dekhna h ki koi element kaha tkk impact daal skta h ya wo sorted hota ho kaha aata
+        int chunks = 0;
+        int maxImpact = 0;
+        for(int i = 0;i<n;i++)
+        {
+            maxImpact = Math.max(maxImpact,arr[i]);
+
+            if(i == maxImpact)
+            {
+                // mtlb hum uss index tkk phich chuke h jaha p hrek elemnt yehi tk khtm ho rha h
+                // mtlb ek chunk mil gya h 
+                chunks++;
+            }
+        }
+
+        return chunks;
+    }
+}
