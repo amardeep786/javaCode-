@@ -1,0 +1,42 @@
+768. Max Chunks To Make Sorted II :: https://leetcode.com/problems/max-chunks-to-make-sorted-ii/description/
+----------------------------------------------------------------------------------------------------------------
+// iske first part m element hmesa range m the to help kr rhe the 
+class Solution {
+    public int maxChunksToSorted(int[] arr) {
+        int n = arr.length;
+
+        // isme b hme agr ye pta lg jaaye ki koi value right m mini kaha tkk jaaegi and left m kaha tkk max 
+        // jaa skty hai 
+
+        // ek array bnata hu jo ki ye btaega ki hrek point ka minimum dega 
+        int rmin[] = new int[n+1];
+        rmin[n] = Integer.MAX_VALUE ;
+
+        for(int i = n-1;i>=0;i--)
+        {
+            rmin[i] = Math.min(rmin[i+1],arr[i]);
+            
+        }
+
+
+        int leftMax = Integer.MIN_VALUE ;
+        int chunks = 0 ;
+
+        for(int i = 0;i<n;i++)
+        {
+            // current elemnt tkk maximum hum leftmax index tkk jaa skte h
+            leftMax = Math.max(leftMax , arr[i]);
+
+            // isiliy n+1 ka right min bnaya tha 
+            if(leftMax <= rmin[i+1])
+            {
+                // agle element ka minimum jaada ya brabr h current partition k max s 
+                // mtlb yaha tkk 1 chunk bn skta  h
+                chunks++ ; 
+            }
+        }
+
+        return chunks;
+        
+    }
+}
